@@ -1,0 +1,196 @@
+/////////////////////////////////////////////////////////////////////////////
+//                                                                         //
+//  NppSnippets - Code Snippets plugin for Notepad++                       //
+//  Copyright (C) 2010-2012 Frank Fesevur                                  //
+//                                                                         //
+//  This program is free software; you can redistribute it and/or modify   //
+//  it under the terms of the GNU General Public License as published by   //
+//  the Free Software Foundation; either version 2 of the License, or      //
+//  (at your option) any later version.                                    //
+//                                                                         //
+//  This program is distributed in the hope that it will be useful,        //
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of         //
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           //
+//  GNU General Public License for more details.                           //
+//                                                                         //
+//  You should have received a copy of the GNU General Public License      //
+//  along with this program; if not, write to the Free Software            //
+//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              //
+//                                                                         //
+/////////////////////////////////////////////////////////////////////////////
+
+#include <windows.h>
+#include <commctrl.h>
+#include "Resource.h"
+#include "sqlite3.h"
+#include "Version.h"
+
+/////////////////////////////////////////////////////////////////////////////
+// Version Information
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION	VERSION_NUMBER
+PRODUCTVERSION	VERSION_NUMBER
+FILEFLAGSMASK	0x3fL
+FILEFLAGS 0
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+	BLOCK	"VarFileInfo"
+	BEGIN
+		VALUE	"Translation",	0x409,	1200
+	END
+	BLOCK	"StringFileInfo"
+	BEGIN
+		BLOCK "040904b0"
+		BEGIN
+			VALUE	"CompanyName",			"Frank Fesevur"
+			VALUE	"FileDescription",		"Code Snippets plug-in for Notepad++"
+			VALUE	"FileVersion",			VERSION_NUMBER_STR
+			VALUE	"InternalName",			"NppSnippets.dll"
+			VALUE	"LegalCopyright",		COPYRIGHT_STR
+			VALUE	"OriginalFilename",		"NppSnippets.dll"
+			VALUE	"ProductName",			"NppSnippets"
+			VALUE	"ProductVersion",		VERSION_NUMBER_STR
+		END
+	END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+// Dialogs
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 224, 187
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_BORDER | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+	GROUPBOX		"Code Snippets plug-in",IDC_STATIC,10,9,201,154,BS_CENTER
+	LTEXT			"Author:",IDC_STATIC,30,23,35,8
+	LTEXT			"Frank Fesevur",IDC_STATIC,75,23,74,8
+	LTEXT			"Version:",IDC_STATIC,30,38,31,8
+	LTEXT			VERSION_NUMBER_STR,IDC_STATIC,75,38,19,8
+	LTEXT			"Using SQLite:",IDC_STATIC,30,52,43,8
+	LTEXT			SQLITE_VERSION,IDC_STATIC,75,52,43,8
+	LTEXT			"Licence:",IDC_STATIC,30,67,43,8
+	LTEXT			"GPL-2",IDC_STATIC,75,67,43,8
+	LTEXT			"Site:",IDC_STATIC,30,84,27,8
+	CONTROL			"<a href=""http://www.fesevur.com/nppsnippets"">http://www.fesevur.com/nppsnippets</a>",IDC_SYSLINK,"SysLink",NOT WS_TABSTOP,75,84,130,8
+	EDITTEXT		IDC_CHANGELOG,29,97,175,61,ES_MULTILINE | ES_AUTOVSCROLL | NOT ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | WS_VSCROLL | NOT WS_TABSTOP
+	PUSHBUTTON		"Close",IDCANCEL,86,167,50,14
+END
+
+IDD_SNIPPETS DIALOGEX 0, 0, 190, 90
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Snippets"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+	COMBOBOX		IDC_NAME, 0, 0, 77, 30, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+	LISTBOX			IDC_LIST, 0, 7, 186, 90, LBS_NOTIFY | WS_VSCROLL | WS_BORDER
+END
+
+IDD_EDIT_SNIPPET DIALOGEX 0, 0, 274, 185
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit Snippet"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "Snippet &name:",IDC_STATIC,7,5,55,8
+    EDITTEXT        IDC_NAME,75,5,192,14,ES_AUTOVSCROLL | ES_AUTOHSCROLL
+    CONTROL         "&Replace selection",IDC_REPLACE_SEL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,75,21,71,10
+    LTEXT           "&Before selection:",IDC_BEFORE_SEL_TXT,7,31,55,8
+    EDITTEXT        IDC_BEFORE_SEL,75,31,192,45,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN
+    LTEXT           "&After selection:",IDC_AFTER_SEL_TXT,7,79,55,8
+    EDITTEXT        IDC_AFTER_SEL,75,79,192,45,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN
+    CONTROL         "Start &new document",IDC_NEW_DOC,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,75,127,81,10
+    LTEXT           "&Language for doc:",IDC_STATIC,7,142,70,8
+    COMBOBOX        IDC_NEW_DOC_LANG,75,142,100,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,77,164,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,145,164,50,14
+END
+
+IDD_EDIT_LIBRARY DIALOGEX 0, 0, 223, 135
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit library"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+	LTEXT			"Library &name:",IDC_STATIC,7,5,55,8
+	EDITTEXT		IDC_NAME,75,5,128,14,ES_AUTOVSCROLL | ES_AUTOHSCROLL
+	LTEXT			"&Created by:",IDC_STATIC,7,23,55,8
+	EDITTEXT		IDC_CREATED_BY,75,23,128,14,ES_AUTOVSCROLL | ES_AUTOHSCROLL
+	LTEXT			"C&omments:",IDC_STATIC,7,43,55,8
+	EDITTEXT		IDC_COMMENTS,75,43,128,39,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN
+	CONTROL			"Sort &alphabetic",IDC_SORT_ALPHABET,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,75,100,81,10
+	DEFPUSHBUTTON	"OK",IDOK,51,115,50,14
+	PUSHBUTTON		"Cancel",IDCANCEL,121,115,50,14
+END
+
+IDD_EDIT_LANGUAGES DIALOGEX 0, 0, 223, 255
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+CAPTION "Edit langauges"
+BEGIN
+	LTEXT			"Library &name:",IDC_STATIC,7,5,55,8
+	LTEXT			"", IDC_NAME,75,5,128,14
+	CONTROL			"List1",IDC_LANG_LIST,"SysListView32", LVS_REPORT | WS_BORDER | WS_TABSTOP,7,23,203,200
+	DEFPUSHBUTTON	"OK",IDOK,51,235,50,14
+	PUSHBUTTON		"Cancel",IDCANCEL,121,235,50,14
+END
+
+IDD_IMPORT_LIBRARY DIALOGEX 0, 0, 223, 70
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+CAPTION "Edit langauges"
+BEGIN
+	LTEXT			"Library &name:",IDC_STATIC,7,5,55,8
+	COMBOBOX		IDC_NAME, 75,5,128,14, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+	DEFPUSHBUTTON	"&Import",IDOK,51,55,50,14
+	PUSHBUTTON		"Cancel",IDCANCEL,121,55,50,14
+END
+
+/////////////////////////////////////////////////////////////////////////////
+// Context Menus
+
+IDCM_SNIPPET MENU PRELOAD DISCARDABLE
+BEGIN
+	POPUP "_POPUP_"
+	BEGIN
+		MENUITEM "&Insert",						IDC_SNIPPET_INSERT
+		MENUITEM SEPARATOR
+		MENUITEM "&Add...",						IDC_SNIPPET_ADD
+		MENUITEM "&Edit...",					IDC_SNIPPET_EDIT
+		MENUITEM "&Delete...",					IDC_SNIPPET_DELETE
+		MENUITEM "Dup&licate...",				IDC_SNIPPET_DUPLICATE
+		MENUITEM SEPARATOR
+		MENUITEM "Add from &selection...",		IDC_SNIPPET_ADD_SELECTION
+		MENUITEM "Add from &clipboard...",		IDC_SNIPPET_ADD_CLIPBOARD
+		//MENUITEM SEPARATOR
+		//MENUITEM "Copy to another library...",	IDC_SNIPPET_COPY_TO_LIB
+		//MENUITEM "Paste from another library...",	IDC_SNIPPET_PASTE_FROM_LIB
+		MENUITEM SEPARATOR
+		MENUITEM "Move &up...",					IDC_SNIPPET_MOVE_UP
+		MENUITEM "Move d&own...",				IDC_SNIPPET_MOVE_DOWN
+	END
+END
+
+IDCM_LIBRARY MENU PRELOAD DISCARDABLE
+BEGIN
+	POPUP "_POPUP_"
+	BEGIN
+		MENUITEM "&New library...",				IDC_LIB_NEW
+		MENUITEM "&Edit library...",			IDC_LIB_EDIT
+		MENUITEM "&Delete library...",			IDC_LIB_DELETE
+		MENUITEM SEPARATOR
+		MENUITEM "&Languages...",				IDC_LIB_LANGUAGES
+		MENUITEM SEPARATOR
+		MENUITEM "&Import library...",			IDC_LIB_IMPORT
+	END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+// Bitmaps
+
+IDB_SNIPPETS  	BITMAP	DISCARDABLE		"Res\\MainToolbar_Snippets.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+// Icons
+
+IDI_SNIPPETS	ICON	DISCARDABLE		"Res\\Snippets.ico"

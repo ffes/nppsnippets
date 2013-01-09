@@ -1,0 +1,14 @@
+__*
+*.LNK
+*.lnk
+*.suo
+*.user
+*.opensdf
+*.sdf
+!__Docs
+!__SQL
+!__SampleDB
+[Rr]elease/
+[Dd]ebug/
+ipch/
+*.deps
