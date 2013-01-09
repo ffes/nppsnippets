@@ -2,6 +2,7 @@ __*
 *.LNK
 *.lnk
 *.suo
+*.ncb
 *.user
 *.opensdf
 *.sdf
