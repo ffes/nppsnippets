@@ -52,7 +52,7 @@ public:
 	Snippet(sqlite3_stmt* stmt);
 	Snippet(const Snippet&);
 
-	~Snippet();
+	virtual ~Snippet();
 
 	Snippet& operator=(const Snippet&);
 	Snippet& operator=(sqlite3_stmt* stmt);

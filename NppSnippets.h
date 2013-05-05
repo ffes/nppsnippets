@@ -48,6 +48,7 @@ extern Options *g_Options;
 
 #ifdef _MSC_VER
 #define snprintf _snprintf
+#define snwprintf swprintf
 #endif
 
 #endif // __NPPSNIPPETS_H__
