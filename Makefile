@@ -70,8 +70,8 @@ depend: $(PROGRAM_SRCS_CPP)
 	$(CXX) -MM $^ > Makefile.deps
 
 clean:
-	del $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) $(PROGRAM).dll $(PROGRAM).dll.map $(PROGRAM).a tags Makefile.deps
-	type nul > Makefile.deps
+	rm -f $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) $(PROGRAM).dll $(PROGRAM).dll.map $(PROGRAM).a tags Makefile.deps
+	touch Makefile.deps
 
 ### code dependencies ###
 
