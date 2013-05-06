@@ -8,15 +8,19 @@
 
 .SUFFIXES: .exe .res .a .o .gch .c .cpp .cc .cxx .m .rc .p .f .F .r .y .l .s .S .def .h
 
-CC = gcc
-CXX = g++
-AR = ar
-RANLIB = ranlib
+ARCH = i686-w64-mingw32
+CC = $(ARCH)-gcc
+CXX = $(ARCH)-g++
+AR = $(ARCH)-ar
+RANLIB = $(ARCH)-ranlib
+WINDRES = $(ARCH)-windres
 
 #
-CFLAGS = -c -O2 -DUNICODE
-CXXFLAGS = $(CFLAGS) -Wall -Wunused -Wunused-parameter
-LDFLAGS = -lstdc++ -lgdi32 -lkernel32 -luuid -lshlwapi -lwinmm -lcomdlg32 -lole32 -loleaut32 -lcomctl32 -luuid -lwininet -lwsock32
+CFLAGS = -c -O2 -DUNICODE -mtune=i686
+CXXFLAGS = $(CFLAGS) -W -Wall -Wno-write-strings -gstabs -mwindows
+RESFLAGS = -O coff
+LIBS = -lws2_32 -lm -Wl,-Map,$@.map,--cref -static-libgcc -lshlwapi -lgdi32 -lkernel32 -luuid -lwinmm -lcomdlg32 -lole32 -loleaut32 -lcomctl32 -luuid -lwininet -lwsock32
+LDFLAGS = -Wl,--out-implib,$(TARGET) -shared -mthreads
 
 .c.o:
 	$(CC) $(CFLAGS) -o $@ $<
@@ -25,11 +29,12 @@ LDFLAGS = -lstdc++ -lgdi32 -lkernel32 -luuid -lshlwapi -lwinmm -lcomdlg32 -lole3
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
 .rc.o:
-	windres -o $@ -i $<
+	$(WINDRES) $(RESFLAGS) -o $@ -i $<
 
-PROGRAM=NppSnippets
+PROGRAM = NppSnippets
+TARGET = $(PROGRAM).dll
 
-now: $(PROGRAM).dll
+now: $(TARGET)
 
 all: clean depend now
 
@@ -42,6 +47,7 @@ PROGRAM_SRCS_CPP = \
 	DlgEditLibrary.cpp \
 	DlgImportLibrary.cpp \
 	NppSnippets.cpp \
+	Language.cpp \
 	Library.cpp \
 	Snippets.cpp \
 	Options.cpp \
@@ -58,17 +64,14 @@ PROGRAM_RC=$(PROGRAM)_res.rc
 PROGRAM_OBJS_RC=$(PROGRAM_RC:.rc=.o)
 
 $(PROGRAM).dll: $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC)
-	$(CXX) -shared -o $@ $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) $(LDFLAGS) -mthreads -Wl,--out-implib,$(PROGRAM).a
+	$(CXX) -o $@ $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) $(LDFLAGS) $(LIBS)
 
 depend: $(PROGRAM_SRCS_CPP)
-	$(CXX) $(WX_CFLAGS) -MM $^ > Makefile.deps
-
-#$(PROGRAM).h.gch: $(PROGRAM).h Version.h
-#	$(CXX) -c $(CFLAGS) $(WX_CFLAGS) $(PROGRAM).h -o $(PROGRAM).h.gch
+	$(CXX) -MM $^ > Makefile.deps
 
 clean:
-	del $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) $(PROGRAM).h.gch $(PROGRAM).dll $(PROGRAM).a tags Makefile.deps
-	type nul > Makefile.deps
+	rm -f $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) $(PROGRAM).dll $(PROGRAM).dll.map $(PROGRAM).a tags Makefile.deps
+	touch Makefile.deps
 
 ### code dependencies ###
 

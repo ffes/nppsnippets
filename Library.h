@@ -33,7 +33,7 @@ class Library : public SnippetBase
 public:
 	Library();
 	Library(sqlite3_stmt* stmt);
-	~Library();
+	virtual ~Library();
 
 	WCHAR* WGetCreatedBy() { return _CreatedBy; }
 	WCHAR* WGetComments() { return _Comments; }

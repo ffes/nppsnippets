@@ -188,9 +188,9 @@ END
 /////////////////////////////////////////////////////////////////////////////
 // Bitmaps
 
-IDB_SNIPPETS  	BITMAP	DISCARDABLE		"Res\\MainToolbar_Snippets.bmp"
+IDB_SNIPPETS  	BITMAP	DISCARDABLE		"Res/MainToolbar_Snippets.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 // Icons
 
-IDI_SNIPPETS	ICON	DISCARDABLE		"Res\\Snippets.ico"
+IDI_SNIPPETS	ICON	DISCARDABLE		"Res/Snippets.ico"
