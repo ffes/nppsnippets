@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+	<!ENTITY app_lic SYSTEM "gpl-2.0.xml">
+]>
+
+<article lang="en">
+
+	<articleinfo>
+		<title>NppSnippets, Snippets plug-in for Notepad++</title>
+		<titleabbrev>NppSnippets</titleabbrev>
+		<author><firstname>Frank</firstname><surname>Fesevur</surname></author>
+		<pubdate>2013-01-08</pubdate>
+	</articleinfo>
+
+	<sect1 id="introduction">
+		<title>Introduction</title>
+		<para>NppSnippets is a plug-in for <ulink url="http://notepad-plus.sourceforge.net/">Notepad++</ulink>. It adds the possibility to add code snippets to the current document by selecting it from a simple list.</para>
+	</sect1>
+
+	<sect1 id="installation">
+		<title>How to install or upgrade</title>
+		<para>The easiest way to install this plugin is by using the Plugin Manager: from the "Plugins" menu, choose the "Plugin Manager" and "Show Plugin Manager". Select the "Snippets" plugin and choose "install" and follow the instructions on the screen.</para>
+		<para>To manually install the plugin, copy <computeroutput>NppSnippets.dll</computeroutput> to the <computeroutput>plugins</computeroutput> directory and copy <computeroutput>Template.sqlite</computeroutput> to the <computeroutput>plugins/config</computeroutput> directory in the user's "Application Data" directory and name it <computeroutput>NppSnippets.sqlite</computeroutput>. On my Windows&nbsp;7 machine this directory is <computeroutput>C:\Users\Frank\AppData\Roaming\Notepad++\plugins\config</computeroutput>. Then (re)start Notepad++.</para>
+		<para>You can place the database in the <computeroutput>plugins/config</computeroutput> directory in the Notepad++ installation directory typically in the "Program Files" directory, but this could result in a read-only database due to file permissions and/or User Account Control (UAC). Therefore it is advised to put it in your "Application Data" directory.</para>
+		<para>You can also specify a custom path (like a shared network path or your Dropbox directory) for your database by manually editing the <computeroutput>NppSnippets.ini</computeroutput> file and adding a <computeroutput>DBFile</computeroutput> entry pointing to the full path name of the database.</para>
+		<para>When you automatically upgrade through the Plugin Manager your database is not touched. If you are manually upgrading at least replace the existing dll. It is up to you if you override your own database with the template database provided in the archive. If you have not changed existing snippets or added your own, it is recommended to use the database in the archive.</para>
+		<para>Note that this is a Unicode plug-in, so it doesn't work with an ANSI versions of Notepad++. The <ulink url="http://www.microsoft.com/downloads/details.aspx?familyid=200b2fd9-ae1a-4a14-984d-389c36f85647">Microsoft Visual C++ 2005 Redistributable Package</ulink> needs to be installed on the computer as well.</para>
+	</sect1>
+
+	<sect1 id="howtouse">
+		<title>How to use</title>
+		<para>To open the Snippets window, click on the "S" button on the toolbar, or via the menu "Plugins", "Snippets", "Snippets".</para>
+		<para>The window consists of two parts. A combo-box where you can select the library and underneath it is the list of snippets in the chosen library. To insert a snippet simply double-click on the item in the list and the snippet is inserted at the current cursor position.</para>
+		<para>When you switch to a document with another language the snippets for that new language are read from the database.</para>
+	</sect1>
+
+	<sect1 id="edit">
+		<title>How to add or edit libraries or snippets</title>
+		<para>To add or edit a snippet, right-click the snippet in the list and edit. To add or edit a library right-click the combo-box where you select the current library. You can also import a library from another database via this context menu.</para>
+		<para>To add a lot of snippets, I suggest that you look at the section below that describes the database structure and import your data with you favorite SQLite management tool.</para>
+	</sect1>
+
+	<sect1 id="database">
+		<title>Database</title>
+		<para>NppSnippets uses a <ulink url="http://www.sqlite.org/">SQLite</ulink> database to store the content. In the archive is a file named NppSnippets.sql. With this you can generate a new (almost empty) SQLite database. At least SQLite 3.6.19 is needed because a foreign key constrains are used and the plug-in will need this when the editing the data through the GUI. So be sure not to create the database with an older SQLite management tool that breaks this.</para>
+		<para>You should only update, insert or delete records and not modify the structure of the database. That can cause the plug-in (and as a result of that Notepad++ itself) to crash.</para>
+		<para>The database structure is quite simple. There are four tables Library, LibraryLang, Snippets and LangLastUsed. There is a one-to-many relation between Library and LibraryLang, between Library and Snippets and between Library and LangLastUsed. They are all linked to each other with the LibraryID field. It is possible to have multiple libraries per language and one library can be used for many languages.</para>
+		<para>For every library at least one record in the LibraryLang and Snippets tables is needed.</para>
+
+		<table id="table_library">
+			<title>Table Library</title>
+			<tgroup cols="2">
+				<thead>
+					<row>
+						<entry><para>Field</para></entry>
+						<entry><para>Description</para></entry>
+					</row>
+				</thead>
+				<tbody>
+					<row>
+						<entry><para>LibraryID</para></entry>
+						<entry><para>The unique identifier of this library</para></entry>
+					</row>
+					<row>
+						<entry><para>Name</para></entry>
+						<entry><para>Name of the library</para></entry>
+					</row>
+					<row>
+						<entry><para>CreatedBy</para></entry>
+						<entry><para>Who created this library</para></entry>
+					</row>
+					<row>
+						<entry><para>Comments</para></entry>
+						<entry><para>Comments about this library</para></entry>
+					</row>
+					<row>
+						<entry><para>SortBy</para></entry>
+						<entry><para>Which fields of Snippets are used to sort 0 = "Name, Sort" 1 = "Sort, Name"</para></entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+
+		<table id="table_librarylang">
+			<title>Table LibraryLang</title>
+			<tgroup cols="2">
+				<thead>
+					<row>
+						<entry><para>Field</para></entry>
+						<entry><para>Description</para></entry>
+					</row>
+				</thead>
+				<tbody>
+					<row>
+						<entry><para>LibraryID</para></entry>
+						<entry><para>The library this item is part of</para></entry>
+					</row>
+					<row>
+						<entry><para>Lang</para></entry>
+						<entry>
+							<para>LangType from Notepad_plus_msgs.h. There are two special cases:</para>
+							<itemizedlist>
+								<listitem><para>Libs with Lang = -1 are shown when there is no library for the current language</para></listitem>
+								<listitem><para>Libs with Lang = -2 are shown for every language</para></listitem>
+							</itemizedlist>
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+
+		<table id="table_snippets">
+			<title>Table Snippets</title>
+			<tgroup cols="2">
+				<thead>
+					<row>
+						<entry><para>Field</para></entry>
+						<entry><para>Description</para></entry>
+					</row>
+				</thead>
+				<tbody>
+					<row>
+						<entry><para>SnippetID</para></entry>
+						<entry><para>The unique identifier of this snippet</para></entry>
+					</row>
+					<row>
+						<entry><para>LibraryID</para></entry>
+						<entry><para>The library this item is part of</para></entry>
+					</row>
+					<row>
+						<entry><para>Name</para></entry>
+						<entry><para>The name of the snippet</para></entry>
+					</row>
+					<row>
+						<entry><para>BeforeSelection</para></entry>
+						<entry><para>The text inserted before the current cursor / selection</para></entry>
+					</row>
+					<row>
+						<entry><para>AfterSelection</para></entry>
+						<entry><para>The text inserted after the current cursor / selection</para></entry>
+					</row>
+					<row>
+						<entry><para>ReplaceSelection</para></entry>
+						<entry><para>Replace a selection or ignore the selection and insert</para></entry>
+					</row>
+					<row>
+						<entry><para>NewDocument</para></entry>
+						<entry><para>Create a new document before inserting this snippet?</para></entry>
+					</row>
+					<row>
+						<entry><para>NewDocumentLang</para></entry>
+						<entry><para>Change the language of the new document to this language</para></entry>
+					</row>
+					<row>
+						<entry><para>Sort</para></entry>
+						<entry><para>Can determine the order of the snipping in the list. Depends on Library(SortBy) how the list is sorted</para></entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+
+		<table id="table_langlastused">
+			<title>Table LangLastUsed</title>
+			<tgroup cols="2">
+				<thead>
+					<row>
+						<entry><para>Field</para></entry>
+						<entry><para>Description</para></entry>
+					</row>
+				</thead>
+				<tbody>
+					<row>
+						<entry><para>Lang</para></entry>
+						<entry><para>LangType from Notepad_plus_msgs.h</para></entry>
+					</row>
+					<row>
+						<entry><para>LibraryID</para></entry>
+						<entry><para>This library is the last one used for this language</para></entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+
+		<para>The current schema <computeroutput>user_version</computeroutput> of the database is 3.</para>
+
+	</sect1>
+
+	<sect1 id="sqlite">
+		<title>Why a SQLite database and not plain text files?</title>
+		<para>All the snippets are in one <ulink url="http://www.sqlite.org/">SQLite</ulink> database. SQLite is fast and easy to use. With SQLite most of the file and storage handling is taken care of. This is much more efficient then designing my own (complex) file format and implementing a parser and a writer, although I understand that editing a SQLite database is not as easy to edit for some as editing plain text files. But there is a user interface for editing the snippets.</para>
+	</sect1>
+
+	<sect1 id="libraries">
+		<title>Provided Snippets Libraries</title>
+		<para>At this moment the template database is filled with these libraries. If you upgrade from a previous version your databases is not changed. If you want to try any of the new libraries, you must manually import those libraries from the template database.</para>
+		<informaltable>
+			<!--title>Libraries</title-->
+			<tgroup cols="3">
+				<thead>
+					<row>
+						<entry><para>Library Name</para></entry>
+						<entry><para>Languages</para></entry>
+						<entry><para>By</para></entry>
+					</row>
+				</thead>
+				<tbody>
+					<row>
+						<entry><para>ANSI Characters</para></entry>
+						<entry><para>All</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>Templates</para></entry>
+						<entry><para>All</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>HTML Tags</para></entry>
+						<entry><para>HTML, PHP, ASP</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>HTML Characters</para></entry>
+						<entry><para>HTML, PHP, ASP</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>Greek Characters</para></entry>
+						<entry><para>HTML, PHP, ASP</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>W3C Doctypes</para></entry>
+						<entry><para>HTML</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>CSS2 Tags</para></entry>
+						<entry><para>CSS, HTML</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>CSS2 Tags &amp; Values</para></entry>
+						<entry><para>CSS, HTML</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>JavaScript - Basic</para></entry>
+						<entry><para>JavaScript, HTML</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>JavaScript - Date</para></entry>
+						<entry><para>JavaScript, HTML</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>JavaScript - Math</para></entry>
+						<entry><para>JavaScript, HTML</para></entry>
+						<entry><para>FFes</para></entry>
+					</row>
+					<row>
+						<entry><para>PHP Language</para></entry>
+						<entry><para>PHP</para></entry>
+						<entry><para>jvdanilo</para></entry>
+					</row>
+					<row>
+						<entry><para>XML Tags</para></entry>
+						<entry><para>XML</para></entry>
+						<entry><para>jvdanilo</para></entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</informaltable>
+	</sect1>
+
+	<sect1 id="userlibs">
+		<title>User generated libraries</title>
+		<para>From version 0.7 it is possible to import libraries from another NppSnippets database. This way redistributing user generated libraries becomes easy. If you have created your own library and think it can be useful for others, send it to me and I will put them on <ulink url="http://www.fesevur.com/nppsnippets">my website</ulink>.</para>
+	</sect1>
+
+	<sect1 id="whislist">
+		<title>Wish List</title>
+		<itemizedlist>
+			<listitem><para>Real template handling: variables in the snippets</para></listitem>
+			<listitem><para>Select a text, right-click that selection and add as new snippet.</para></listitem>
+			<listitem><para>If anyone can fix the MinGW compatible makefile, I can eliminate the need for the Visual C++ Redistributable Package.</para></listitem>
+			<listitem><para>If possible, drag-and-drop from the list to the active document.</para></listitem>
+			<listitem><para>Add keyboard shortcut keys to a snippet. It seems to be impossible to change shortcut keys on the fly. If anybody know how to get this to work, let me know!</para></listitem>
+			<listitem><para>Remember the last select snippet from the list. Useful when switching between different languages.</para></listitem>
+			<listitem><para>Add support for multiple selections.</para></listitem>
+			<listitem><para>Easier sorting for non-alphabetic libraries. (move to top, move to bottom, dragging?)</para></listitem>
+			<listitem><para>Copy a certain snippet to another library.</para></listitem>
+			<listitem><para>Properly indent the snippet.</para></listitem>
+			<listitem><para>Options dialog to edit the location of the database.</para></listitem>
+		</itemizedlist>
+	</sect1>
+
+	<sect1 id="knownissues">
+		<title>Known Issues</title>
+		<itemizedlist>
+			<listitem><para>Closing the snippets window with the 'x' does not update toolbar icon and menu item. And as a result of that the state is not remembered properly. I need to find the notification that is send to the window on clicking the 'x'.</para></listitem>
+			<listitem><para>Text coding (like ANSI, UTF-8, UCS-2) are not always properly converted. When the coding of the text document is different from the coding used in the snippets strange characters can appear.</para></listitem>
+			<listitem><para>When a library is not alphabetic sorted, and you move an item up or down, this is slow. This is because the "Sort"-field of all the snippets of that library need to be updated in the database.</para></listitem>
+			<listitem><para>On Windows XP disabling context menu items like the "Move Up" and "Move Down" menu items is not visible. They don't turn gray but they are really disabled.</para></listitem>
+			<listitem><para>The icon on the docking tab is inverted for some strange reason.</para></listitem>
+			<listitem><para>When there is no write-access to the database, this is not properly handled.</para></listitem>
+		</itemizedlist>
+	</sect1>
+
+	<sect1 id="license">
+		<title>License</title>
+		<para>This plug-in is published under the GPL-2 license. See <xref linkend="gpl"/> for the full license agreement. You can download the sources of the latest version from <ulink url="http://code.google.com/p/nppsnippets/">http://code.google.com/p/nppsnippets/</ulink>.</para>
+	</sect1>
+
+	<sect1 id="compile">
+		<title>How to compile</title>
+		<para>To compile NppSnippets you need Visual Studio. Project files for VS 2005 and VS 2010 are provided and actively used. The release dll-file is compiled with VS 2005. To compile with VS 2008 you can convert the VS 2005 project files.</para>
+		<para>There is also a <ulink url="http://mingw-w64.sourceforge.net/">MinGW-w64</ulink> makefile, using their 32-bit compilers. It can be used from <ulink url="http://www.cygwin.com/">Cygwin</ulink> and MSys. The makefile compiles the sources and it generates a dll file, however at the moment that dll does not work. But when the MinGW compilation works, maybe I can use it as the compiler for the releases, because this eliminates the need for the VC++ Redistributable Package to be installed on the machine. Patches are welcome! When you compile with MinGW, you need to create an empty file named <computeroutput>Makefile.deps</computeroutput>.</para>
+	</sect1>
+
+	<sect1 id="contact">
+		<title>Contact</title>
+		<para>The project's web page can be found at <ulink url="http://www.fesevur.com/nppsnippets">http://www.fesevur.com/nppsnippets</ulink>. The downloads and issue tracker can be found at <ulink url="https://code.google.com/p/nppsnippets/">https://code.google.com/p/nppsnippets/</ulink>. The git repository is at <ulink url="https://github.com/ffes/nppsnippets">https://github.com/ffes/nppsnippets</ulink>.</para>
+		<para>If you have problems with, questions about or suggestions for NppSnippets you can contact me at <ulink url="mailto:fesevur@gmail.com">fesevur@gmail.com</ulink>.</para>
+	</sect1>
+
+	<sect1 id="releasehistory">
+		<title>Release history</title>
+
+		<sect2 id="v1_x_x">
+			<title>Version 1.x.x (xx xxxxx 2013)</title>
+			<itemizedlist>
+				<listitem><para>Fixed wrong title of Import Library dialog.</para></listitem>
+				<listitem><para>Fixed some potential bugs found when trying to fix GCC compilation.</para></listitem>
+				<listitem><para>Converted the documentation from ODT to DocBook.</para></listitem>
+				<listitem><para>Upgrade to SQLite version 3.7.xx</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v1_2_0">
+			<title>Version 1.2.0 (8 January 2013)</title>
+			<itemizedlist>
+				<listitem><para>There was an inconsistency between the documentation and code about the name of the option to specify your custom path for the database. Use DBFile from now on. For backwards compatibility the DBPath entry will still be recognized.</para></listitem>
+				<listitem><para>When a snippets creates a new document and the current document is empty, it reuses the current one and does not start a new.</para></listitem>
+				<listitem><para>Added Duplicate snippet function to context menu.</para></listitem>
+				<listitem><para>New (simple) templates library.</para></listitem>
+				<listitem><para>Upgrade to SQLite version 3.7.15.1</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v1_1_0">
+			<title>Version 1.1.0 (13 December 2011)</title>
+			<itemizedlist>
+				<listitem><para>You can now add a new snippet to a library based upon the current selection or based upon the content of the clipboard. Right-click the snippets list to use these items.</para></listitem>
+				<listitem><para>Installation has been improved. A template database is provided and when the plug-in tries to find an existing database and it can't find it, it copies this template database to the AppData plugin-config directory.</para></listitem>
+				<listitem><para>The About dialog now shows the change-log.</para></listitem>
+				<listitem><para>When you upgrade the very first time the change-log for the current version will be shown.</para></listitem>
+				<listitem><para>When you didn't select a specific library for a certain language, the automatic selection of the library is improved. The first language specific library is preferred over the first general library.</para></listitem>
+				<listitem><para>Resized the edit snippet dialog.</para></listitem>
+				<listitem><para>Upgrade to SQLite version 3.7.9</para></listitem>
+				<listitem><para>Moved the download to <ulink url="https://code.google.com/p/nppsnippets/">Google code</ulink>. This gives me statistics about downloads and an issue tracker. The project's <ulink url="http://www.fesevur.com/nppsnippets">web page</ulink> stays where it is.</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v1_0_0">
+			<title>Version 1.0.0 (6 September 2011)</title>
+			<itemizedlist>
+				<listitem><para>The selection or cursor position are now restored after inserting a snippet.</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v0_7_1">
+			<title>Version 0.7.1 (28 August 2011)</title>
+			<itemizedlist>
+				<listitem><para>Fixed a bug in the dialog to edit the languages for a certain library. This bug could cause a problem that libraries turn invisible, since all the records in LibraryLang table for that library were deleted and no new records were added.</para></listitem>
+				<listitem><para>Added a JavaScript - Math library.</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v0_7_0">
+			<title>Version 0.7.0 (1 August 2011)</title>
+			<itemizedlist>
+				<listitem><para>A user interface for editing the language selection for libraries has been added. You need at least Notepad++ version 5.93 for this feature.</para></listitem>
+				<listitem><para>You can import a library from another NppSnippet database.</para></listitem>
+				<listitem><para>Start a new document for a certain snippets, and allow that snippet to set the language of that new document. There were already fields in the database for this. It can be very useful to start a new CSS-file or JavaScript-file from HTML, etc.</para></listitem>
+				<listitem><para>Added an option DBPath to the ini-file to override the default location of the database. Made this mainly for my own testing, but maybe it is useful for others as well (corporate database). You need to manually edit the ini-file to use this.</para></listitem>
+				<listitem><para>Added an icon to the tab of the docking interface.</para></listitem>
+				<listitem><para>Upgrade to SQLite version 3.7.7.1</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v0_6_0">
+			<title>Version 0.6.0 (15 June 2011)</title>
+			<itemizedlist>
+				<listitem><para>It is now possible to add, edit or delete the snippets and the libraries from within Notepad++. It is not yet possible to edit the languages for a library.</para></listitem>
+				<listitem><para>Added a new ANSI-characters library for all languages.</para></listitem>
+				<listitem><para>Deleted the useless General library.</para></listitem>
+				<listitem><para>Upgrade to SQLite version 3.7.6.3</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v0_5_0">
+			<title>Version 0.5.0 (21 December 2010)</title>
+			<itemizedlist>
+				<listitem><para>Upgrade to SQLite version 3.7.4</para></listitem>
+				<listitem><para>The focus is returned to the Scintilla window at start-up and after inserting a snippet.</para></listitem>
+				<listitem><para>The plug-in remembers if it is shown.</para></listitem>
+				<listitem><para>Added another special language to the table LibraryLang: Lang = -2. Libraries with this language will always be shown for all languages.</para></listitem>
+				<listitem><para>The languages last used is now stored in a separate table. The database schema version is 3. With this the libraries with special languages (negative language ID's) can be remembered as last used as well.</para></listitem>
+				<listitem><para>Error message when the database can not be opened.</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v0_4_0">
+			<title>Version 0.4.0 (8 April 2010)</title>
+			<itemizedlist>
+				<listitem><para>The database schema is updated and is now at version 2. The most important difference is that the "language" and "last used" field of the library are now in a separate table, allowing it to be one-to-many. Existing databases will be converted automatically to the new schema.</para></listitem>
+				<listitem><para>When there are multiple libraries for a language, changing to another library works and the last used library is remembered.</para></listitem>
+				<listitem><para>The plug-in now first tries to find the database in the user's plug-in config directory. On my Windows XP machine that is C:\Documents and Settings\Frank\Application Data\Notepad++\plugins\config. If the database can't be found there it looks in the plugin\config directory in the Notepad++ installation directory, in my case C:\Program Files\Notepad++\plugins\Config.</para></listitem>
+				<listitem><para>Small improvements to the About dialog.</para></listitem>
+				<listitem><para>There are now 4 HTML libraries, 1 PHP libraries, 1 XML library and 1 (rather useless) General library</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v0_3_0">
+			<title>Version 0.3.0 (10 February 2010)</title>
+			<itemizedlist>
+				<listitem><para>First alpha version, released under the GPL2 license.</para></listitem>
+				<listitem><para>The basics work, no User Interface yet to edit the snippets</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+		<sect2 id="v0_1_0">
+			<title>Version 0.1.0 (22 January 2010)</title>
+			<itemizedlist>
+				<listitem><para>Internal proof of concept.</para></listitem>
+			</itemizedlist>
+		</sect2>
+
+	</sect1>
+
+	&app_lic;
+
+</article>
