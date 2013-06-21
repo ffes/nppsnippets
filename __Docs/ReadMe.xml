@@ -292,7 +292,7 @@
 			<listitem><para>Add support for multiple selections.</para></listitem>
 			<listitem><para>Easier sorting for non-alphabetic libraries. (move to top, move to bottom, dragging?)</para></listitem>
 			<listitem><para>Copy a certain snippet to another library.</para></listitem>
-			<listitem><para>Properly indent the snippet.</para></listitem>
+			<listitem><para>Properly indent the snippet when inserting.</para></listitem>
 			<listitem><para>Options dialog to edit the location of the database.</para></listitem>
 		</itemizedlist>
 	</sect1>
@@ -301,7 +301,6 @@
 		<title>Known Issues</title>
 		<itemizedlist>
 			<listitem><para>Closing the snippets window with the 'x' does not update toolbar icon and menu item. And as a result of that the state is not remembered properly. I need to find the notification that is send to the window on clicking the 'x'.</para></listitem>
-			<listitem><para>Text coding (like ANSI, UTF-8, UCS-2) are not always properly converted. When the coding of the text document is different from the coding used in the snippets strange characters can appear.</para></listitem>
 			<listitem><para>When a library is not alphabetic sorted, and you move an item up or down, this is slow. This is because the "Sort"-field of all the snippets of that library need to be updated in the database.</para></listitem>
 			<listitem><para>On Windows XP disabling context menu items like the "Move Up" and "Move Down" menu items is not visible. They don't turn gray but they are really disabled.</para></listitem>
 			<listitem><para>The icon on the docking tab is inverted for some strange reason.</para></listitem>
@@ -329,13 +328,14 @@
 	<sect1 id="releasehistory">
 		<title>Release history</title>
 
-		<sect2 id="v1_x_x">
-			<title>Version 1.x.x (xx xxxxx 2013)</title>
+		<sect2 id="v1_3_0">
+			<title>Version 1.3.0 (xx XXXXX 2013)</title>
 			<itemizedlist>
+				<listitem><para>Fixed problem with inserting UTF snippets.</para></listitem>
 				<listitem><para>Fixed wrong title of Import Library dialog.</para></listitem>
 				<listitem><para>Fixed some potential bugs found when trying to fix GCC compilation.</para></listitem>
 				<listitem><para>Converted the documentation from ODT to DocBook.</para></listitem>
-				<listitem><para>Upgrade to SQLite version 3.7.xx</para></listitem>
+				<listitem><para>Upgrade to SQLite version 3.7.17</para></listitem>
 			</itemizedlist>
 		</sect2>
 
