@@ -149,11 +149,12 @@ void Snippet::SetBeforeSelection(LPCSTR txt)
 		WSetBeforeSelection(NULL);
 		return;
 	}
-	size_t size = sizeof(WCHAR) * (len + 3);
 
+	// Convert from UTF-8 to WCHAR and store
+    size_t size = MultiByteToWideChar(CP_UTF8, 0, txt, (int) len, NULL, 0);
 	WCHAR* wBuffer = (WCHAR*) malloc(size);
 	ZeroMemory(wBuffer, size);
-	Ansi2Unicode(wBuffer, txt, len);
+    MultiByteToWideChar(CP_UTF8, 0, txt, (int) len, wBuffer, size);
 	WSetBeforeSelection(wBuffer);
 	free(wBuffer);
 }

@@ -509,6 +509,17 @@ static void OnClose(HWND hWnd)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// Convert a wide Unicode string to an UTF8 string
+
+static std::string utf8_encode(const std::wstring &wstr)
+{
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), NULL, 0, NULL, NULL);
+    std::string strTo(size_needed, 0);
+    WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), &strTo[0], size_needed, NULL, NULL);
+    return strTo;
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // Insert the snippet (selected from the context menu item) into the text
 // in the Scintilla window. Double clicking get redirected to here as well.
 
@@ -547,7 +558,9 @@ static void OnSnippetInsert(HWND hWnd)
 	}
 
 	// Insert the first part of the snippet
-	SendMsg(SCI_REPLACESEL, 0, (LPARAM) snip.GetBeforeSelection());
+	std::wstring wstr = snip.WGetBeforeSelection();
+	std::string strTo = utf8_encode(wstr);
+	SendMsg(SCI_REPLACESEL, 0, (LPARAM) strTo.c_str());
 
 	int beforeSel = (int) SendMsg(SCI_GETCURRENTPOS);
 
@@ -566,7 +579,11 @@ static void OnSnippetInsert(HWND hWnd)
 	{
 		size_t len = wcslen(snip.WGetAfterSelection());
 		if (len > 0)
-			SendMsg(SCI_ADDTEXT, len, (LPARAM) snip.GetAfterSelection());
+		{
+			std::wstring wstr = snip.WGetAfterSelection();
+			std::string strTo = utf8_encode(wstr);
+			SendMsg(SCI_REPLACESEL, 0, (LPARAM) strTo.c_str());
+		}
 	}
 
 	// Restore the cursor position and selection
