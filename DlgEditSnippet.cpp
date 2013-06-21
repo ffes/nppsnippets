@@ -26,6 +26,7 @@
 #include "Snippets.h"
 #include "Language.h"
 #include "Resource.h"
+#include "WaitCursor.h"
 
 static Snippet* s_pSnippet = NULL;
 
@@ -103,8 +104,12 @@ static BOOL OnOK(HWND hDlg)
 	}
 
 	// Save the snippet to the database
+	WaitCursor wait;
 	if (!s_pSnippet->SaveToDB())
+	{
+		wait.Hide();
 		MsgBox("Failed to save the snippet to the database!");
+	}
 
 	// We're done
 	CleanItems(hDlg);
