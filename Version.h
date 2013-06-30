@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //  NppSnippets - Code Snippets plugin for Notepad++                       //
-//  Copyright (C) 2010-2012 Frank Fesevur                                  //
+//  Copyright (C) 2010-2013 Frank Fesevur                                  //
 //                                                                         //
 //  This program is free software; you can redistribute it and/or modify   //
 //  it under the terms of the GNU General Public License as published by   //
@@ -22,9 +22,9 @@
 #ifndef __VERSION_H__
 #define __VERSION_H__
 
-#define VERSION_NUMBER        1,2,0,0
-#define VERSION_NUMBER_STR   "1.2.0"
-#define VERSION_NUMBER_WSTR	L"1.2.0"
+#define VERSION_NUMBER        1,3,0,0
+#define VERSION_NUMBER_STR   "1.3.0"
+#define VERSION_NUMBER_WSTR	L"1.3.0"
 #define COPYRIGHT_STR        "Copyright 2010-2013 by Frank Fesevur"
 
 #define VERSION_DIGITS 4

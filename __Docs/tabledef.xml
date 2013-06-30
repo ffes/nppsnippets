@@ -1,0 +1,133 @@
+<appendix id="tabledefs">
+	<title>Table definitions</title>
+	<table id="table_library">
+		<title>Table Library</title>
+		<tgroup cols="2">
+			<thead>
+				<row>
+					<entry><para>Field</para></entry>
+					<entry><para>Description</para></entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry><para>LibraryID</para></entry>
+					<entry><para>The unique identifier of this library</para></entry>
+				</row>
+				<row>
+					<entry><para>Name</para></entry>
+					<entry><para>Name of the library</para></entry>
+				</row>
+				<row>
+					<entry><para>CreatedBy</para></entry>
+					<entry><para>Who created this library</para></entry>
+				</row>
+				<row>
+					<entry><para>Comments</para></entry>
+					<entry><para>Comments about this library</para></entry>
+				</row>
+				<row>
+					<entry><para>SortBy</para></entry>
+					<entry><para>Which fields of Snippets are used to sort 0 = "Name, Sort" 1 = "Sort, Name"</para></entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</table>
+	<table id="table_librarylang">
+		<title>Table LibraryLang</title>
+		<tgroup cols="2">
+			<thead>
+				<row>
+					<entry><para>Field</para></entry>
+					<entry><para>Description</para></entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry><para>LibraryID</para></entry>
+					<entry><para>The library this item is part of</para></entry>
+				</row>
+				<row>
+					<entry><para>Lang</para></entry>
+					<entry>
+						<para>LangType from Notepad_plus_msgs.h. There are two special cases:</para>
+						<itemizedlist>
+							<listitem><para>Libs with Lang = -1 are shown when there is no library for the current language</para></listitem>
+							<listitem><para>Libs with Lang = -2 are shown for every language</para></listitem>
+						</itemizedlist>
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</table>
+	<table id="table_snippets">
+		<title>Table Snippets</title>
+		<tgroup cols="2">
+			<thead>
+				<row>
+					<entry><para>Field</para></entry>
+					<entry><para>Description</para></entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry><para>SnippetID</para></entry>
+					<entry><para>The unique identifier of this snippet</para></entry>
+				</row>
+				<row>
+					<entry><para>LibraryID</para></entry>
+					<entry><para>The library this item is part of</para></entry>
+				</row>
+				<row>
+					<entry><para>Name</para></entry>
+					<entry><para>The name of the snippet</para></entry>
+				</row>
+				<row>
+					<entry><para>BeforeSelection</para></entry>
+					<entry><para>The text inserted before the current cursor / selection</para></entry>
+				</row>
+				<row>
+					<entry><para>AfterSelection</para></entry>
+					<entry><para>The text inserted after the current cursor / selection</para></entry>
+				</row>
+				<row>
+					<entry><para>ReplaceSelection</para></entry>
+					<entry><para>Replace a selection or ignore the selection and insert</para></entry>
+				</row>
+				<row>
+					<entry><para>NewDocument</para></entry>
+					<entry><para>Create a new document before inserting this snippet?</para></entry>
+				</row>
+				<row>
+					<entry><para>NewDocumentLang</para></entry>
+					<entry><para>Change the language of the new document to this language</para></entry>
+				</row>
+				<row>
+					<entry><para>Sort</para></entry>
+					<entry><para>Can determine the order of the snipping in the list. Depends on Library(SortBy) how the list is sorted</para></entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</table>
+	<table id="table_langlastused">
+		<title>Table LangLastUsed</title>
+		<tgroup cols="2">
+			<thead>
+				<row>
+					<entry><para>Field</para></entry>
+					<entry><para>Description</para></entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry><para>Lang</para></entry>
+					<entry><para>LangType from Notepad_plus_msgs.h</para></entry>
+				</row>
+				<row>
+					<entry><para>LibraryID</para></entry>
+					<entry><para>This library is the last one used for this language</para></entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</table>
+</appendix>
