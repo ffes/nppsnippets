@@ -63,5 +63,6 @@
 #define IDC_LIB_DELETE				4103
 #define IDC_LIB_LANGUAGES			4104
 #define IDC_LIB_IMPORT				4105
+#define IDC_LIB_EXPORT				4106
 
 #endif // RESOURCE_H

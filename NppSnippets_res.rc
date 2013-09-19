@@ -182,6 +182,7 @@ BEGIN
 		MENUITEM "&Languages...",				IDC_LIB_LANGUAGES
 		MENUITEM SEPARATOR
 		MENUITEM "&Import library...",			IDC_LIB_IMPORT
+		MENUITEM "&Export library...",			IDC_LIB_EXPORT
 	END
 END
 

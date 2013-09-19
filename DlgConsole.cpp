@@ -1047,6 +1047,13 @@ static void OnLibraryImport(HWND hWnd)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+//
+
+static void OnLibraryExport(HWND hWnd)
+{
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // Double clicking the item inserts it as well
 
 static void OnDblClk_List(HWND hWnd)
@@ -1154,6 +1161,11 @@ static void OnCommand(HWND hWnd, int ResID, int msg)
 		case IDC_LIB_IMPORT:
 		{
 			OnLibraryImport(hWnd);
+			break;
+		}
+		case IDC_LIB_EXPORT:
+		{
+			OnLibraryExport(hWnd);
 			break;
 		}
 	}
