@@ -144,6 +144,21 @@
 		<para>From version 0.7 it is possible to import libraries from another NppSnippets database. This way redistributing user generated libraries becomes easy. If you have created your own library and think it can be useful for others, send it to me and I will put them on <ulink url="http://www.fesevur.com/nppsnippets">my website</ulink>.</para>
 	</sect1>
 
+	<sect1 id="faq">
+		<title>Frequently Asked Questions</title>
+		<qandaset>
+			<qandaentry>
+				<question id="faq_shortcutkeys"><para>
+					Can I assign a shortcut key to a certain snippet?
+				</para></question>
+				<answer>
+					<para>This is on the wish list, but I don't think it is possible. Shortcut key are assigned to menu items when the plug-ins are loaded. But individual snippets are not menu items. And shortcut keys need to be changeable on when you change the language the key assignments need to change on the fly. Consider Ctrl-B: this could be bold in HTML, but break in a c-styled languages and a begin/end block in Pascal.</para>
+					<para>But a pointer to a way to implement this is any way, or even better a patch that fixes this is much appreciated.</para>
+				</answer>
+			</qandaentry>
+		</qandaset>
+	</sect1>
+
 	<sect1 id="whislist">
 		<title>Wish List</title>
 		<itemizedlist>
@@ -151,7 +166,7 @@
 			<listitem><para>Select a text, right-click that selection and add as new snippet.</para></listitem>
 			<listitem><para>If anyone can fix the MinGW compatible makefile, I can eliminate the need for the Visual C++ Redistributable Package and provide nightly builds.</para></listitem>
 			<listitem><para>If possible, drag-and-drop from the list to the active document.</para></listitem>
-			<listitem><para>Add keyboard shortcut keys to a snippet. It seems to be impossible to change shortcut keys on the fly. If anybody know how to get this to work, let me know!</para></listitem>
+			<listitem><para>Assign keyboard shortcut keys to a snippet.</para></listitem>
 			<listitem><para>Remember the last select snippet from the list. Useful when switching between different languages.</para></listitem>
 			<listitem><para>Add support for multiple selections.</para></listitem>
 			<listitem><para>Easier sorting for non-alphabetic libraries. (move to top, move to bottom, dragging?)</para></listitem>
@@ -179,7 +194,7 @@
 
 	<sect1 id="compile">
 		<title>How to compile</title>
-		<para>To compile NppSnippets you need Visual Studio. Project files for VS 2005 and VS 2010 are provided and actively used. The release dll-file is compiled with VS 2005. To compile with VS 2008 you can convert the VS 2005 project files.</para>
+		<para>To compile NppSnippets you need Visual Studio. Project files for VS 2005 and VS 2010 are provided and actively used. The release dll-file is compiled with VS 2005. To compile with other versions of Visual Studio you can convert an existing project file, but it is not tested.</para>
 		<para>There is also a <ulink url="http://mingw-w64.sourceforge.net/">MinGW-w64</ulink> makefile, using their 32-bit compilers. It can be used from <ulink url="http://www.cygwin.com/">Cygwin</ulink> and MSys. The makefile compiles the sources and it generates a dll file, however at the moment that dll does not work. But when the MinGW compilation works, maybe I can use it as the compiler for the releases, because this eliminates the need for the VC++ Redistributable Package to be installed on the machine. Patches are welcome! When you compile with MinGW, you need to create an empty file named <computeroutput>Makefile.deps</computeroutput>.</para>
 	</sect1>
 
@@ -193,13 +208,14 @@
 		<title>Release history</title>
 
 		<sect2 id="v1_3_0">
-			<title>Version 1.3.0 (30 June 2013)</title>
+			<title>Version 1.3.0 (?? September 2013)</title>
 			<itemizedlist>
+				<listitem><para>Added option to export library for more easy sharing.</para></listitem>
 				<listitem><para>Fixed problem with inserting UTF snippets (<ulink url="http://code.google.com/p/nppsnippets/issues/detail?id=3">issue #3</ulink>).</para></listitem>
 				<listitem><para>Fixed wrong title of Import Library dialog.</para></listitem>
 				<listitem><para>Fixed some potential bugs found when trying to fix GCC compilation.</para></listitem>
 				<listitem><para>Converted the documentation from ODT to DocBook. Because of that an <ulink url="http://www.fesevur.com/docbook/nppsnippets">on-line version</ulink> of the documentation is available as well.</para></listitem>
-				<listitem><para>Upgrade to SQLite version 3.7.17</para></listitem>
+				<listitem><para>Upgrade to SQLite version 3.8.0.2</para></listitem>
 			</itemizedlist>
 		</sect2>
 
