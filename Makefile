@@ -19,8 +19,8 @@ WINDRES = $(ARCH)-windres
 CFLAGS = -c -O2 -DUNICODE -mtune=i686
 CXXFLAGS = $(CFLAGS) -W -Wall -Wno-write-strings -gstabs -mwindows
 RESFLAGS = -O coff
-LIBS = -lws2_32 -lm -Wl,-Map,$@.map,--cref -static-libgcc -lshlwapi -lgdi32 -lkernel32 -luuid -lwinmm -lcomdlg32 -lole32 -loleaut32 -lcomctl32 -luuid -lwininet -lwsock32
-LDFLAGS = -Wl,--out-implib,$(TARGET) -shared -mthreads
+LIBS = -static -lshlwapi -lgdi32 -lcomdlg32 -lcomctl32
+LDFLAGS = -Wl,--out-implib,$(TARGET) -shared
 
 .c.o:
 	$(CC) $(CFLAGS) -o $@ $<
@@ -67,14 +67,14 @@ $(PROGRAM).dll: $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC)
 	$(CXX) -o $@ $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) $(LDFLAGS) $(LIBS)
 
 depend: $(PROGRAM_SRCS_CPP)
-	$(CXX) -MM $^ > Makefile.deps
+	$(CXX) -MM $^ > Makefile.depend
 
 clean:
-	rm -f $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) $(PROGRAM).dll $(PROGRAM).dll.map $(PROGRAM).a tags Makefile.deps
-	touch Makefile.deps
+	rm -f $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) $(PROGRAM).dll $(PROGRAM).a tags tags.sqlite Makefile.depend
+	touch Makefile.depend
 
 ### code dependencies ###
 
 $(PROGRAM)_res.o: $(PROGRAM)_res.rc Version.h
 
-include Makefile.deps
+include Makefile.depend
