@@ -17,7 +17,7 @@ WINDRES = $(ARCH)-windres
 
 #
 CFLAGS = -c -O2 -DUNICODE -mtune=i686
-CXXFLAGS = $(CFLAGS) -W -Wall -Wno-write-strings -gstabs -mwindows
+CXXFLAGS = $(CFLAGS) -W -Wall -gstabs -mwindows
 RESFLAGS = -O coff
 LIBS = -static -lshlwapi -lgdi32 -lcomdlg32 -lcomctl32
 LDFLAGS = -Wl,--out-implib,$(TARGET) -shared

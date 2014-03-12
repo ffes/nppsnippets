@@ -257,14 +257,14 @@ static bool AddItem(Language* lang)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-static bool AddColumn(int col, int width, LPWSTR name)
+static bool AddColumn(int col, int width, LPCWSTR name)
 {
 	LVCOLUMN lvc;
 	lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	lvc.fmt = LVCFMT_LEFT;
 	lvc.iSubItem = col;
 	lvc.cx = width;
-	lvc.pszText = name;
+	lvc.pszText = (LPWSTR) name;
 	ListView_InsertColumn(s_hWndLangList, col, &lvc);
 	return true;
 }
