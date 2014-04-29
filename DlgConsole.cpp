@@ -24,8 +24,6 @@
 #include <stdio.h>
 #include <shlwapi.h>
 
-#include "sqlite3.h"
-
 #include "NPP/PluginInterface.h"
 #include "NPP/menuCmdID.h"
 #include "NPP/Docking.h"
@@ -33,7 +31,6 @@
 #include "Library.h"
 #include "Snippets.h"
 #include "Resource.h"
-#include "Database.h"
 #include "DlgEditSnippet.h"
 #include "DlgEditLibrary.h"
 #include "DlgEditLanguages.h"
@@ -63,33 +60,26 @@ static int s_curLang = -1;						// The LangType of the currently selected lib
 
 static bool AddLibsToCombo(long lang)
 {
-	sqlite3_stmt* stmt;
-	int rc = sqlite3_prepare_v2(g_db, "SELECT Library.*, LibraryLang.Lang FROM Library INNER JOIN LibraryLang ON Library.LibraryID = LibraryLang.LibraryID WHERE (LibraryLang.Lang = @langid OR LibraryLang.Lang = -2) ORDER BY Library.Name", -1, &stmt, 0);
-	if (rc != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
+	SqliteStatement stmt(g_db, "SELECT Library.*, LibraryLang.Lang FROM Library INNER JOIN LibraryLang ON Library.LibraryID = LibraryLang.LibraryID WHERE (LibraryLang.Lang = @langid OR LibraryLang.Lang = -2) ORDER BY Library.Name");
 
 	// Bind the language to the statement
-	if (!BindInt(stmt, "@langid", lang))
-		return false;
+	stmt.Bind("@langid", lang);
 
 	// Get the last used library for this language
 	long lastUsed = -1;
 	char szStmt[MAX_PATH];
 	snprintf(szStmt, MAX_PATH, "SELECT LibraryID FROM LangLastUsed WHERE Lang = %ld", lang);
-	GetLongResult(szStmt, lastUsed);
+	g_db->GetLongResult(szStmt, lastUsed);
 
 	// Go through the rows
-	int colLang = sqlite3_column_count(stmt) - 1;
+	int colLang = stmt.GetColumnCount() - 1;
 	bool first = true;
 	bool firstLanguage = false;
 	bool selectedUsersChoice = false;		// Did the user select a library?
-	while (sqlite3_step(stmt) == SQLITE_ROW)
+	while (stmt.GetNextRecord())
 	{
 		// Store the library data
-		Library* lib = new Library(stmt);
+		Library* lib = new Library(&stmt);
 
 		// Add the item to the combo
 		long item = (long) SendDlgItemMessage(s_hDlg, IDC_NAME, CB_ADDSTRING, (WPARAM) 0, (LPARAM) lib->WGetName());
@@ -110,7 +100,7 @@ static bool AddLibsToCombo(long lang)
 			{
 				if (!firstLanguage)
 				{
-					int libLang = sqlite3_column_int(stmt, colLang);
+					int libLang = stmt.GetIntColumn(colLang);
 					if (libLang >= 0)
 					{
 						firstLanguage = true;
@@ -128,9 +118,7 @@ static bool AddLibsToCombo(long lang)
 		}
 		first = false;
 	}
-
-	if (sqlite3_finalize(stmt) != SQLITE_OK)
-		MsgBox(sqlite3_errmsg(g_db));
+	stmt.Finalize();
 
 	return !first;
 }
@@ -173,31 +161,22 @@ static bool AddListItems()
 	strncat(szSQL, s_curLibrary->GetSortAlphabetic() ? "Name,Sort" : "Sort,Name", MAX_PATH);
 
 	// Prepare this statement
-	sqlite3_stmt* stmt;
-	int rc = sqlite3_prepare_v2(g_db, szSQL, -1, &stmt, 0);
-	if (rc != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
+	SqliteStatement stmt(g_db, szSQL);
 
 	// Bind the language-id to the statement
-	if (!BindInt(stmt, "@libid", s_curLibrary->GetLibraryID()))
-		return false;
+	stmt.Bind("@libid", s_curLibrary->GetLibraryID());
 
 	// Go through the rows
-	while (sqlite3_step(stmt) == SQLITE_ROW)
+	while (stmt.GetNextRecord())
 	{
 		// Get the snippet from the database
-		Snippet* snip = new Snippet(stmt);
+		Snippet* snip = new Snippet(&stmt);
 
 		// Put in the the list
 		long item = (long) SendDlgItemMessage(s_hDlg, IDC_LIST, LB_ADDSTRING, (WPARAM) 0, (LPARAM) snip->WGetName());
 		SendDlgItemMessage(s_hDlg, IDC_LIST, LB_SETITEMDATA, (WPARAM) item, (LPARAM) snip);
 	}
-
-	if (sqlite3_finalize(stmt) != SQLITE_OK)
-		MsgBox(sqlite3_errmsg(g_db));
+	stmt.Finalize();
 
 	return true;
 }
@@ -252,20 +231,16 @@ void UpdateSnippetsList()
 	ClearComboItems();
 	ClearListItems();
 
-	if (OpenDB())
-	{
-		AddComboItems();
-		AddListItems();
-		CloseDB();
-	}
-	else
-		MsgBox("Could not open a proper database!");
+	g_db->Open();
+	AddComboItems();
+	AddListItems();
+	g_db->Close();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
-static BOOL DbExist(UINT uMsg, LPCWSTR szExtraDir, bool bMainDB)
+static BOOL DbExist(UINT uMsg, LPWSTR g_dbFile, LPCWSTR szExtraDir, bool bMainDB)
 {
 	// Get the directory from NP++
 	SendMessage(g_nppData._nppHandle, uMsg, MAX_PATH, (LPARAM) &g_dbFile);
@@ -289,39 +264,49 @@ static BOOL DbExist(UINT uMsg, LPCWSTR szExtraDir, bool bMainDB)
 
 static bool GetDatabaseFile()
 {
+
 	// First see if there is a user-defined path for the database
 	if (PathFileExists(g_Options->GetDBFile()))
 	{
-		wcsncat(g_dbFile, g_Options->GetDBFile(), MAX_PATH);
+		g_db->SetFilename(g_Options->GetDBFile());
 		return true;
 	}
 
 	// Then try in the Plugin config dir in AppData. Best place to put the database!!!
-	if (DbExist(NPPM_GETPLUGINSCONFIGDIR, NULL, true))
+	WCHAR dbFile[MAX_PATH];
+	if (DbExist(NPPM_GETPLUGINSCONFIGDIR, dbFile, NULL, true))
+	{
+		g_db->SetFilename(dbFile);
 		return true;
+	}
 
 	// If the database is still not found, it could be in the installation directory.
 	// Putting your database there could result in read-only problems
-	if (DbExist(NPPM_GETNPPDIRECTORY, L"\\plugins\\Config", true))
+	if (DbExist(NPPM_GETNPPDIRECTORY, dbFile, L"\\plugins\\Config", true))
+	{
+		g_db->SetFilename(dbFile);
 		return true;
+	}
 
 	// If it is still not found, we most likely have a fresh installation. Look for the template database
-	if (DbExist(NPPM_GETNPPDIRECTORY, L"\\plugins\\NppSnippets", false))
+	if (DbExist(NPPM_GETNPPDIRECTORY, dbFile, L"\\plugins\\NppSnippets", false))
 	{
 		// Store the filename of the template database
 		WCHAR szFrom[MAX_PATH];
-		wcsncpy(szFrom, g_dbFile, MAX_PATH);
+		wcsncpy(szFrom, dbFile, MAX_PATH);
 
 		// Get the user's plugin-config directory
-		DbExist(NPPM_GETPLUGINSCONFIGDIR, NULL, true);
+		DbExist(NPPM_GETPLUGINSCONFIGDIR, dbFile, NULL, true);
 
 		// Copy template to "NPPM_GETPLUGINSCONFIGDIR"
-		if (CopyFile(szFrom, g_dbFile, TRUE))
+		if (CopyFile(szFrom, dbFile, TRUE))
+		{
+			g_db->SetFilename(dbFile);
 			return true;
+		}
 	}
 
 	// Still not found, clean the filename
-	g_dbFile[0] = 0;
 	return false;
 }
 
@@ -430,19 +415,19 @@ static void OnSelChange_Combo(HWND hWnd)
 	if (prevLibID == s_curLibrary->GetLibraryID())
 		return;
 
-	if (!OpenDB())
-		return;
+	// Open the database
+	g_db->Open();
 
 	// Update the database
 	char szSQL[MAX_PATH];
 	_snprintf(szSQL, MAX_PATH, "DELETE FROM LangLastUsed WHERE Lang = %d; INSERT INTO LangLastUsed(Lang,LibraryID) VALUES(%d,%d);", s_curLang, s_curLang, s_curLibrary->GetLibraryID());
-	RunSQL(szSQL);
+	g_db->Execute(szSQL);
 
 	// Update the list with snippets
 	ClearListItems();
 	AddListItems();
 
-	CloseDB();
+	g_db->Close();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -814,16 +799,13 @@ static void OnSnippetAddSelection(HWND hWnd)
 
 static void UpdateSortInDB()
 {
-	if (!OpenDB())
-		return;
+	g_db->Open();
+	g_db->BeginTransaction();
 
-	RunSQL("BEGIN TRANSACTION;");
+	SqliteStatement stmt(g_db, "UPDATE Snippets SET Sort = @sort WHERE SnippetID = @id");
 
-	sqlite3_stmt *stmt = NULL;
-	sqlite3_prepare_v2(g_db, "UPDATE Snippets SET Sort = @sort WHERE SnippetID = @id", -1, &stmt, NULL);
-
-	int colID = sqlite3_bind_parameter_index(stmt, "@id");
-	int colSort = sqlite3_bind_parameter_index(stmt, "@sort");
+	int colID = stmt.GetBindParameterIndex("@id");
+	int colSort = stmt.GetBindParameterIndex("@sort");
 
 	Snippet* snip = NULL;
 	int count = (int) SendDlgItemMessage(s_hDlg, IDC_LIST, LB_GETCOUNT, 0, 0);
@@ -831,21 +813,24 @@ static void UpdateSortInDB()
 	{
 		snip = (Snippet*) SendDlgItemMessage(s_hDlg, IDC_LIST, LB_GETITEMDATA, (WPARAM) item, 0);
 		snip->SetSort(item + 1);
-		sqlite3_bind_int(stmt, colID, snip->GetSnippetID());
-		sqlite3_bind_int(stmt, colSort, snip->GetSort());
-		if (sqlite3_step(stmt) != SQLITE_DONE)
+		stmt.Bind(colID, snip->GetSnippetID());
+		stmt.Bind(colSort, snip->GetSort());
+		try
 		{
-			MsgBox(sqlite3_errmsg(g_db));
-			RunSQL("ROLLBACK TRANSACTION;");
-			CloseDB();
+			stmt.SaveRecord();
+		}
+		catch(SqliteException e)
+		{
+			//MsgBox(sqlite3_errmsg(g_db));
+			g_db->RollbackTransaction();
+			g_db->Close();
 			return;
 		}
-		sqlite3_reset(stmt);
 	}
-	sqlite3_finalize(stmt);
+	stmt.Finalize();
 
-	RunSQL("COMMIT TRANSACTION;");
-	CloseDB();
+	g_db->CommitTransaction();
+	g_db->Close();
 }
 
 /////////////////////////////////////////////////////////////////////////////

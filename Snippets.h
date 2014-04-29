@@ -22,7 +22,7 @@
 #ifndef __SNIPPETS_H__
 #define __SNIPPETS_H__
 
-#include "Database.h"
+#include "SnippetsDB.h"
 
 class SnippetBase
 {
@@ -30,7 +30,7 @@ public:
 	long GetLibraryID() { return _LibraryID; }
 	WCHAR* WGetName() { return _Name; }
 
-	virtual void Set(sqlite3_stmt* stmt) = 0;
+	virtual void Set(SqliteStatement* stmt) = 0;
 	void SetLibraryID(long l) { _LibraryID = l; }
 	void WSetName(LPCWCH txt);
 
@@ -49,14 +49,14 @@ class Snippet : public SnippetBase
 {
 public:
 	Snippet();
-	Snippet(sqlite3_stmt* stmt);
+	Snippet(SqliteStatement* stmt);
 	Snippet(const Snippet&);
 
 	virtual ~Snippet();
 
 	Snippet& operator=(const Snippet&);
-	Snippet& operator=(sqlite3_stmt* stmt);
-	virtual void Set(sqlite3_stmt* stmt);
+	Snippet& operator=(SqliteStatement* stmt);
+	virtual void Set(SqliteStatement* stmt);
 
 	long GetSnippetID() { return _SnippetID; }
 	WCHAR* WGetBeforeSelection() { return _BeforeSelection; }

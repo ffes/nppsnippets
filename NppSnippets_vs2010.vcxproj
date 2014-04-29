@@ -99,7 +99,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Database.cpp" />
     <ClCompile Include="DlgAbout.cpp" />
     <ClCompile Include="DlgConsole.cpp" />
     <ClCompile Include="DlgEditLanguages.cpp" />
@@ -111,12 +110,13 @@
     <ClCompile Include="NppSnippets.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="Snippets.cpp" />
+    <ClCompile Include="SnippetsDB.cpp" />
     <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="SqliteDB.cpp" />
     <ClCompile Include="Version.cpp" />
     <ClCompile Include="WaitCursor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Database.h" />
     <ClInclude Include="DlgAbout.h" />
     <ClInclude Include="DlgConsole.h" />
     <ClInclude Include="DlgEditLanguages.h" />
@@ -129,7 +129,9 @@
     <ClInclude Include="Options.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Snippets.h" />
+    <ClInclude Include="SnippetsDB.h" />
     <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="SqliteDB.h" />
     <ClInclude Include="Version.h" />
     <ClInclude Include="WaitCursor.h" />
   </ItemGroup>

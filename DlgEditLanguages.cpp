@@ -28,7 +28,7 @@
 #include "Language.h"
 #include "Resource.h"
 #include "WaitCursor.h"
-#include "Database.h"
+#include "SnippetsDB.h"
 
 #ifdef _MSC_VER
 #pragma comment(lib, "comctl32.lib")
@@ -110,41 +110,15 @@ static void CleanItems(HWND hDlg)
 static bool SaveLanguages()
 {
 	// First delete all the current items
-	sqlite3_stmt* stmt;
-	int res = sqlite3_prepare_v2(g_db, "DELETE FROM LibraryLang WHERE LibraryID = @libid", -1, &stmt, 0);
-	if (res != SQLITE_OK)
-	{
-		MsgBox("DELETE-prepare() FAILED");
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
+	SqliteStatement stmt(g_db, "DELETE FROM LibraryLang WHERE LibraryID = @libid");
 
 	// Bind the language to the statement
 	int libid = s_pLibrary->GetLibraryID();
-	BindInt(stmt, "@libid", libid);
-
-	// Execute the DELETE
-	if (sqlite3_step(stmt) != SQLITE_DONE)
-	{
-		MsgBox("DELETE-step() FAILED");
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-
-	if (sqlite3_finalize(stmt) != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
+	stmt.Bind("@libid", libid);
+	stmt.SaveRecord();
 
 	// Now add records for all selected languages
-	res = sqlite3_prepare_v2(g_db, "INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@libid, @lang)", -1, &stmt, 0);
-	if (res != SQLITE_OK)
-	{
-		MsgBox("INSERT-prepare() FAILED");
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
+	stmt.Prepare("INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@libid, @lang)");
 
 	// Go through the selected items
 	int count = ListView_GetItemCount(s_hWndLangList);
@@ -162,27 +136,14 @@ static bool SaveLanguages()
 			if (lang != NULL)
 			{
 				// Bind the language-id and library-id to the statement
-				sqlite3_reset(stmt);
-				BindInt(stmt, "@libid", libid);
-				BindInt(stmt, "@lang", lang->GetLangID());
-
-				// Put the record in the database
-				if (sqlite3_step(stmt) != SQLITE_DONE)
-				{
-					MsgBox("INSERT-step() FAILED");
-					MsgBox(sqlite3_errmsg(g_db));
-					return false;
-				}
+				stmt.Bind("@libid", libid);
+				stmt.Bind("@lang", lang->GetLangID());
+				stmt.SaveRecord();
 			}
 		}
 	}
 
-	if (sqlite3_finalize(stmt) != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-
+	stmt.Finalize();
 	return true;
 }
 
@@ -197,22 +158,15 @@ static BOOL OnOK(HWND hDlg)
 	WaitCursor wait;
 
 	// Save the changes to the database
-	if (!OpenDB())
-		MsgBox("Error opening database. Changes not saved!");
+	g_db->Open();
+	g_db->BeginTransaction();
+
+	if (SaveLanguages())
+		g_db->CommitTransaction();
 	else
-	{
-		RunSQL("BEGIN TRANSACTION;");
+		g_db->RollbackTransaction();
 
-		if (SaveLanguages())
-			RunSQL("COMMIT TRANSACTION;");
-		else
-		{
-			MsgBox("Error saving changes to the database.");
-			RunSQL("ROLLBACK TRANSACTION;");
-		}
-
-		CloseDB();
-	}
+	g_db->Close();
 
 	// We're done
 	CleanItems(hDlg);
@@ -299,30 +253,19 @@ static BOOL OnInitDialog(HWND hDlg)
 		AddItem(new Language(langid));
 
 	// Set the checkboxes for the right languages
-	if (!OpenDB())
-		return TRUE;
+	g_db->Open();
 
-	sqlite3_stmt* stmt;
-	int rc = sqlite3_prepare_v2(g_db, "SELECT Lang FROM LibraryLang WHERE LibraryID = ? ORDER BY Lang", -1, &stmt, 0);
-	if (rc != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return TRUE;
-	}
+	// Create a new statement
+	SqliteStatement stmt(g_db, "SELECT Lang FROM LibraryLang WHERE LibraryID = @langid ORDER BY Lang");
 
 	// Bind the library to the statement
-	rc = sqlite3_bind_int(stmt, 1, s_pLibrary->GetLibraryID());
-	if (rc != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return TRUE;
-	}
+	stmt.Bind("@langid", s_pLibrary->GetLibraryID());
 
 	// Go through the records
 	int item = 0, count = ListView_GetItemCount(s_hWndLangList);
-	while (sqlite3_step(stmt) == SQLITE_ROW)
+	while (stmt.GetNextRecord())
 	{
-		langid = sqlite3_column_int(stmt, 0);
+		langid = stmt.GetIntColumn("Lang");
 
 		// Go through the listview items to set the checkbox
 		for (item = 0; item < count; item++)
@@ -343,11 +286,8 @@ static BOOL OnInitDialog(HWND hDlg)
 			}
 		}
 	}
-
-	if (sqlite3_finalize(stmt) != SQLITE_OK)
-		MsgBox(sqlite3_errmsg(g_db));
-
-	CloseDB();
+	stmt.Finalize();
+	g_db->Close();
 
 	// Let windows set focus
 	return TRUE;

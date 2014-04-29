@@ -26,7 +26,6 @@
 #include "NppSnippets.h"
 
 #include "Library.h"
-#include "Database.h"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -40,7 +39,7 @@ Library::Library()
 	_SortAlphabetic = true;
 }
 
-Library::Library(sqlite3_stmt* stmt)
+Library::Library(SqliteStatement* stmt)
 {
 	_Name = NULL;
 	_CreatedBy = NULL;
@@ -80,16 +79,13 @@ void Library::WSetComments(LPCWCH txt)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-void Library::Set(sqlite3_stmt* stmt)
+void Library::Set(SqliteStatement* stmt)
 {
-	// Map the column names to column numbers
-	std::map<string,int> cNames = ResolveColumnNames(stmt);
-
-	_LibraryID = sqlite3_column_int(stmt, cNames["LibraryID"]);
-	WSetName((LPCWSTR) sqlite3_column_text16(stmt, cNames["Name"]));
-	WSetCreatedBy((LPCWSTR) sqlite3_column_text16(stmt, cNames["CreatedBy"]));
-	WSetComments((LPCWSTR) sqlite3_column_text16(stmt, cNames["Comments"]));
-	SetSortAlphabetic(sqlite3_column_int(stmt, cNames["SortBy"]));
+	_LibraryID = stmt->GetIntColumn("LibraryID");
+	//WSetName((LPCWSTR) sqlite3_column_text16(stmt, cNames["Name"]));
+	//WSetCreatedBy((LPCWSTR) sqlite3_column_text16(stmt, cNames["CreatedBy"]));
+	//WSetComments((LPCWSTR) sqlite3_column_text16(stmt, cNames["Comments"]));
+	//SetSortAlphabetic(sqlite3_column_int(stmt, cNames["SortBy"]));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -98,49 +94,42 @@ void Library::Set(sqlite3_stmt* stmt)
 bool Library::SaveToDB(bool autoOpen)
 {
 	// Try to open the database
-	if (autoOpen)
-	{
-		if (!OpenDB())
-		{
-			MsgBox("Could not open the database");
-			return false;
-		}
-	}
+	g_db->Open();
 
 	// Saving a new record or updating an existing?
-	sqlite3_stmt *stmt = NULL;
+	SqliteStatement stmt(g_db);
 	if (_LibraryID == 0)
 	{
-		// Determine the last used SnippetID
-		long maxID;
-		GetLongResult("SELECT MAX(LibraryID) FROM Library", maxID);
-		_LibraryID = maxID + 1;
+		// Determine the last used LibraryID
+		SqliteStatement stmt2(g_db, "SELECT MAX(LibraryID) FROM Library");
+		stmt2.GetNextRecord();
+		_LibraryID = stmt2.GetIntColumn(1) + 1;
+		stmt2.Finalize();
 
 		// Prepare the statement
-		sqlite3_prepare_v2(g_db, "INSERT INTO Library(LibraryID, Name, CreatedBy, Comments, SortBy) VALUES (@id, @name, @createdby, @comments, @sortby)", -1, &stmt, NULL);
+		stmt.Prepare("INSERT INTO Library(LibraryID, Name, CreatedBy, Comments, SortBy) VALUES (@id, @name, @createdby, @comments, @sortby)");
 	}
 	else
 	{
 		// Prepare the statement
-		sqlite3_prepare_v2(g_db, "UPDATE Library SET Name = @name, CreatedBy = @createdby, Comments = @comments, SortBy = @sortby WHERE LibraryID = @id", -1, &stmt, NULL);
+		stmt.Prepare("UPDATE Library SET Name = @name, CreatedBy = @createdby, Comments = @comments, SortBy = @sortby WHERE LibraryID = @id");
 	}
 
 	// Bind the values to the parameters
-	BindInt(stmt, "@id", _LibraryID);
-	BindText(stmt, "@name", _Name);
-	BindText(stmt, "@createdby", _CreatedBy);
-	BindText(stmt, "@comments", _Comments);
-	BindInt(stmt, "@sortby", GetSortBy());
+	stmt.Bind("@id", _LibraryID);
+	stmt.Bind("@name", _Name);
+	stmt.Bind("@createdby", _CreatedBy);
+	stmt.Bind("@comments", _Comments);
+	stmt.Bind("@sortby", GetSortBy());
 
-	bool ret = (sqlite3_step(stmt) == SQLITE_DONE);
-	sqlite3_finalize(stmt);
-
-	if (!ret)
-		MsgBox(sqlite3_errmsg(g_db));
+	// Save the record
+	stmt.SaveRecord();
+	stmt.Finalize();
 
 	if (autoOpen)
-		CloseDB();
-	return ret;
+		g_db->Close();
+
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -148,21 +137,13 @@ bool Library::SaveToDB(bool autoOpen)
 
 bool Library::DeleteFromDB()
 {
-	// Try to open the database
-	if (!OpenDB())
-	{
-		MsgBox("Could not open the database");
-		return false;
-	}
-
-	sqlite3_stmt *stmt = NULL;
-	sqlite3_prepare_v2(g_db, "DELETE FROM Library WHERE LibraryID = @id", -1, &stmt, NULL);
-	sqlite3_bind_int(stmt, sqlite3_bind_parameter_index(stmt, "@id"), _LibraryID);
-	bool ret = (sqlite3_step(stmt) == SQLITE_DONE);
-	sqlite3_finalize(stmt);
-
-	CloseDB();
-	return ret;
+	g_db->Open();
+	SqliteStatement stmt(g_db, "DELETE FROM Library WHERE LibraryID = @id");
+	stmt.Bind("@id", _LibraryID);
+	stmt.SaveRecord();
+	stmt.Finalize();
+	g_db->Close();
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -186,20 +167,12 @@ bool Library::DeleteLanguageFromDB(int lang)
 
 bool Library::LanguageDBHelper(LPCSTR sql, int lang)
 {
-	// Try to open the database
-	if (!OpenDB())
-	{
-		MsgBox("Could not open the database");
-		return false;
-	}
-
-	sqlite3_stmt *stmt = NULL;
-	sqlite3_prepare_v2(g_db, sql, -1, &stmt, NULL);
-	BindInt(stmt, "@id", _LibraryID);
-	BindInt(stmt, "@lang", lang);
-	bool ret = (sqlite3_step(stmt) == SQLITE_DONE);
-	sqlite3_finalize(stmt);
-
-	CloseDB();
-	return ret;
+	g_db->Open();
+	SqliteStatement stmt(g_db, sql);
+	stmt.Bind("@id", _LibraryID);
+	stmt.Bind("@lang", lang);
+	stmt.SaveRecord();
+	stmt.Finalize();
+	g_db->Close();
+	return true;
 }

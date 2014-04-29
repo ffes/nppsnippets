@@ -26,7 +26,7 @@
 #include "Library.h"
 #include "Resource.h"
 #include "WaitCursor.h"
-#include "Database.h"
+#include "SnippetsDB.h"
 
 static LPCWSTR s_databaseFile = NULL;
 
@@ -66,62 +66,23 @@ static void CleanItems(HWND hDlg)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-static bool AttachDatabase()
-{
-	sqlite3_stmt* stmt = NULL;
-	int res = sqlite3_prepare_v2(g_db, "ATTACH DATABASE @file AS Import", -1, &stmt, 0);
-	if (res != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-
-	// Bind the library to the statement
-	BindText(stmt, "@file", s_databaseFile);
-
-	if (sqlite3_step(stmt) != SQLITE_DONE)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-
-	if (sqlite3_finalize(stmt) != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-
-	return true;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-
 static bool AddLibraryToCombo(HWND hDlg)
 {
 	WaitCursor wait;
 
-	if (!OpenDB())
-		return false;
-
-	AttachDatabase();
+	g_db->Open();
+	g_db->Attach(s_databaseFile, L"Import");
 
 	// Add the libraries in the attached database to the combobox
-	sqlite3_stmt* stmt = NULL;
-	int res = sqlite3_prepare_v2(g_db, "SELECT * FROM Import.Library ORDER BY Name", -1, &stmt, 0);
-	if (res != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
+	SqliteStatement stmt(g_db, "SELECT * FROM Import.Library ORDER BY Name");
 
 	// Go through the records
 	long item = 0;
 	bool first = true;
-	while (sqlite3_step(stmt) == SQLITE_ROW)
+	while (stmt.GetNextRecord())
 	{
 		// Store the library data
-		Library* lib = new Library(stmt);
+		Library* lib = new Library(&stmt);
 
 		// Add the item to the combo
 		item = (long) SendDlgItemMessage(hDlg, IDC_NAME, CB_ADDSTRING, (WPARAM) 0, (LPARAM) lib->WGetName());
@@ -134,12 +95,10 @@ static bool AddLibraryToCombo(HWND hDlg)
 			first = false;
 		}
 	}
+	stmt.Finalize();
 
-	if (sqlite3_finalize(stmt) != SQLITE_OK)
-		MsgBox(sqlite3_errmsg(g_db));
-
-	RunSQL("DETACH DATABASE Import");
-	CloseDB();
+	g_db->Detach(L"Import");
+	g_db->Close();
 
 	return true;
 }
@@ -150,33 +109,19 @@ static bool AddLibraryToCombo(HWND hDlg)
 static bool ImportSnippets(long orgLibID, long newLibID)
 {
 	// Get all the snippets from the attached database
-	sqlite3_stmt* stmt = NULL;
-	int res = sqlite3_prepare_v2(g_db, "SELECT * FROM Import.Snippets WHERE LibraryID = @libid", -1, &stmt, 0);
-	if (res != SQLITE_OK)
-	{
-		//MsgBox("INSERT-prepare() FAILED");
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-
-	BindInt(stmt, "@libid", orgLibID);
+	SqliteStatement stmt(g_db, "SELECT * FROM Import.Snippets WHERE LibraryID = @libid");
+	stmt.Bind("@libid", orgLibID);
 
 	// Go through the records and save them to the database
 	Snippet snip;
-	while (sqlite3_step(stmt) == SQLITE_ROW)
+	while (stmt.GetNextRecord())
 	{
-		snip.Set(stmt);
+		snip.Set(&stmt);
 		snip.SetSnippetID(0);
 		snip.SetLibraryID(newLibID);
 		snip.SaveToDB(false);
 	}
-
-	if (sqlite3_finalize(stmt) != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-
+	stmt.Finalize();
 	return true;
 }
 
@@ -186,54 +131,23 @@ static bool ImportSnippets(long orgLibID, long newLibID)
 static bool ImportLanguages(long orgLibID, long newLibID)
 {
 	// Get all the languages for this library from the attached database
-	sqlite3_stmt* smtmSelect = NULL;
-	int res = sqlite3_prepare_v2(g_db, "SELECT Lang FROM Import.LibraryLang WHERE LibraryID = @libid", -1, &smtmSelect, 0);
-	if (res != SQLITE_OK)
-	{
-		//MsgBox("INSERT-prepare() FAILED");
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-	BindInt(smtmSelect, "@libid", orgLibID);
+	SqliteStatement stmtSelect(g_db, "SELECT Lang FROM Import.LibraryLang WHERE LibraryID = @libid");
+	stmtSelect.Bind("@libid", orgLibID);
 
 	// Open a select stmt to store the new data in the table
-	sqlite3_stmt* stmtInsert = NULL;
-	res = sqlite3_prepare_v2(g_db, "INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@libid, @lang)", -1, &stmtInsert, 0);
-	if (res != SQLITE_OK)
-	{
-		//MsgBox("INSERT-prepare() FAILED");
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
+	SqliteStatement stmtInsert(g_db, "INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@libid, @lang)");
 
 	// Go through the attached records and save them to the database
-	while (sqlite3_step(smtmSelect) == SQLITE_ROW)
+	while (stmtSelect.GetNextRecord())
 	{
-		sqlite3_reset(stmtInsert);
-		BindInt(stmtInsert, "@libid", newLibID);
-		BindInt(stmtInsert, "@lang", sqlite3_column_int(smtmSelect, 0));
+		stmtInsert.Bind("@libid", newLibID);
+		stmtInsert.Bind("@lang", stmtSelect.GetIntColumn(0));
 
 		// Put the record in the database
-		if (sqlite3_step(stmtInsert) != SQLITE_DONE)
-		{
-			//MsgBox("INSERT-step() FAILED");
-			MsgBox(sqlite3_errmsg(g_db));
-			return false;
-		}
+		stmtInsert.SaveRecord();
 	}
-
-	if (sqlite3_finalize(smtmSelect) != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-
-	if (sqlite3_finalize(stmtInsert) != SQLITE_OK)
-	{
-		MsgBox(sqlite3_errmsg(g_db));
-		return false;
-	}
-
+	stmtSelect.Finalize();
+	stmtInsert.Finalize();
 	return true;
 }
 
@@ -244,22 +158,18 @@ static bool ImportLibrary(Library* lib)
 {
 	WaitCursor wait;
 
-	if (!OpenDB())
-	{
-		MsgBox("Error opening database. Changes not saved");
-		return false;
-	}
+	g_db->Open();
 
 	// First save the selected library as a new library
 	long orgLibID = lib->GetLibraryID();
 	lib->SetLibraryID(0);
 	lib->SaveToDB(false);
 
-	AttachDatabase();
+	g_db->Attach(s_databaseFile, L"Import");
 	ImportSnippets(orgLibID, lib->GetLibraryID());
 	ImportLanguages(orgLibID, lib->GetLibraryID());
-	RunSQL("DETACH DATABASE Import");
-	CloseDB();
+	g_db->Detach(L"Import");
+	g_db->Close();
 
 	return true;
 }

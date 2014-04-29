@@ -32,6 +32,7 @@
 #include "DlgAbout.h"
 #include "DlgConsole.h"
 #include "Options.h"
+#include "SnippetsDB.h"
 
 #ifdef _MSC_VER
 #pragma comment(lib, "comctl32.lib")
@@ -100,6 +101,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 		{
 			// Initialize the options
 			g_Options = new Options();
+			g_db = new SnippetsDB();
 
 			if (g_Options->showConsoleDlg)
 				SnippetsConsole();
@@ -345,6 +347,9 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
 
 			// Clean up the options
 			delete g_Options;
+
+			// Clean up the database
+			delete g_db;
 		}
 		break;
 

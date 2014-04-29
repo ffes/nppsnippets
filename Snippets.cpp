@@ -26,7 +26,6 @@
 #include "NppSnippets.h"
 
 #include "Snippets.h"
-#include "Database.h"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -55,7 +54,7 @@ Snippet::Snippet()
 	_Sort = 0;
 }
 
-Snippet::Snippet(sqlite3_stmt* stmt)
+Snippet::Snippet(SqliteStatement* stmt)
 {
 	_Name = NULL;
 	_BeforeSelection = NULL;
@@ -94,7 +93,7 @@ Snippet& Snippet::operator=(const Snippet& copy)
 	return(*this);
 }
 
-Snippet& Snippet::operator=(sqlite3_stmt* stmt)
+Snippet& Snippet::operator=(SqliteStatement* stmt)
 {
 	Set(stmt);
 	return(*this);
@@ -179,32 +178,29 @@ LPSTR Snippet::Unicode2Ansi(LPCWSTR wszStr)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-void Snippet::Set(sqlite3_stmt* stmt)
+void Snippet::Set(SqliteStatement* stmt)
 {
-	// Map the column names to column numbers
-	map<string,int> cNames = ResolveColumnNames(stmt);
-
 	// First get the texts and convert their newlines to Windows standards
-	wstring before = ConvertNewLines((LPCWSTR) sqlite3_column_text16(stmt, cNames["BeforeSelection"]));
-	wstring after = ConvertNewLines((LPCWSTR) sqlite3_column_text16(stmt, cNames["AfterSelection"]));
+	wstring before = ConvertNewLines(stmt->GetWTextColumn("BeforeSelection").c_str());
+	wstring after = ConvertNewLines(stmt->GetWTextColumn("AfterSelection").c_str());
 
-	_SnippetID = sqlite3_column_int(stmt, cNames["SnippetID"]);
-	_LibraryID = sqlite3_column_int(stmt, cNames["LibraryID"]);
-	WSetName((LPCWSTR) sqlite3_column_text16(stmt, cNames["Name"]));
+	_SnippetID = stmt->GetIntColumn("SnippetID");
+	_LibraryID = stmt->GetIntColumn("LibraryID");
+	WSetName(stmt->GetWTextColumn("Name").c_str());
 	WSetBeforeSelection(before.c_str());
 	WSetAfterSelection(after.c_str());
-	SetReplaceSelection(sqlite3_column_int(stmt, cNames["ReplaceSelection"]));
-	SetNewDocument(sqlite3_column_int(stmt, cNames["NewDocument"]));
-	SetSort(sqlite3_column_int(stmt, cNames["Sort"]));
+	SetReplaceSelection(stmt->GetIntColumn("ReplaceSelection"));
+	SetNewDocument(stmt->GetIntColumn("NewDocument"));
+	SetSort(stmt->GetIntColumn("Sort"));
 
 	// Get the language for a new document
-	_NewDocumentLang = (LangType) sqlite3_column_int(stmt, cNames["NewDocumentLang"]);
+	_NewDocumentLang = (LangType) stmt->GetIntColumn("NewDocumentLang");
 	if (_NewDocumentLang == 0)
 	{
-		if (sqlite3_column_type(stmt, cNames["NewDocumentLang"]) == SQLITE_NULL)
-		{
-			_NewDocumentLang = L_EXTERNAL;
-		}
+		//if (sqlite3_column_type(stmt, cNames["NewDocumentLang"]) == SQLITE_NULL)
+		//{
+		//	_NewDocumentLang = L_EXTERNAL;
+		//}
 	}
 }
 
@@ -214,58 +210,50 @@ void Snippet::Set(sqlite3_stmt* stmt)
 bool Snippet::SaveToDB(bool autoOpen)
 {
 	// Try to open the database
-	if (autoOpen)
-	{
-		if (!OpenDB())
-		{
-			MsgBox("Could not open the database");
-			return false;
-		}
-	}
+	g_db->Open();
 
 	// Saving a new record or updating an existing?
-	sqlite3_stmt* stmt = NULL;
+	SqliteStatement stmt(g_db);
+
 	bool adding = false;
 	if (_SnippetID == 0)
 	{
 		adding = true;
 
 		// Determine the last used SnippetID
-		long maxID;
-		GetLongResult("SELECT MAX(SnippetID) FROM Snippets", maxID);
-		_SnippetID = maxID + 1;
+		SqliteStatement stmt2(g_db, "SELECT MAX(SnippetID) FROM Snippets");
+		stmt2.GetNextRecord();
+		_SnippetID = stmt2.GetIntColumn(1) + 1;
+		stmt2.Finalize();
 
 		// Prepare the statement
-		sqlite3_prepare_v2(g_db, "INSERT INTO Snippets(SnippetID, LibraryID, Name, BeforeSelection, AfterSelection, ReplaceSelection, NewDocument, NewDocumentLang, Sort) VALUES (@id, @libid, @name, @before, @after, @replace, @newdoc, @newdoclang, @sort)", -1, &stmt, NULL);
+		stmt.Prepare("INSERT INTO Snippets(SnippetID, LibraryID, Name, BeforeSelection, AfterSelection, ReplaceSelection, NewDocument, NewDocumentLang, Sort) VALUES (@id, @libid, @name, @before, @after, @replace, @newdoc, @newdoclang, @sort)");
 	}
 	else
 	{
 		// Prepare the statement
-		sqlite3_prepare_v2(g_db, "UPDATE Snippets SET Name = @name, BeforeSelection = @before, AfterSelection = @after, ReplaceSelection = @replace, NewDocument = @newdoc, NewDocumentLang = @newdoclang, Sort = @sort WHERE SnippetID = @id", -1, &stmt, NULL);
+		stmt.Prepare("UPDATE Snippets SET Name = @name, BeforeSelection = @before, AfterSelection = @after, ReplaceSelection = @replace, NewDocument = @newdoc, NewDocumentLang = @newdoclang, Sort = @sort WHERE SnippetID = @id");
 	}
 
 	// Bind the values to the parameters
-	BindInt(stmt, "@id", _SnippetID);
+	stmt.Bind("@id", _SnippetID);
 	if (adding)
-		BindInt(stmt, "@libid", _LibraryID);
-	BindText(stmt, "@name", _Name);
-	BindText(stmt, "@before", _BeforeSelection);
-	BindText(stmt, "@after", _AfterSelection);
-	BindInt(stmt, "@replace", GetReplaceSelectionInt());
-	BindInt(stmt, "@newdoc", GetNewDocumentInt());
-	BindInt(stmt, "@newdoclang", _NewDocumentLang, _NewDocumentLang == L_EXTERNAL);
-	BindInt(stmt, "@sort", _Sort, _Sort == 0);
+		stmt.Bind("@libid", _LibraryID);
+	stmt.Bind("@name", _Name);
+	stmt.Bind("@before", _BeforeSelection);
+	stmt.Bind("@after", _AfterSelection);
+	stmt.Bind("@replace", GetReplaceSelectionInt());
+	stmt.Bind("@newdoc", GetNewDocumentInt());
+	stmt.Bind("@newdoclang", _NewDocumentLang, _NewDocumentLang == L_EXTERNAL);
+	stmt.Bind("@sort", _Sort, _Sort == 0);
 
-	bool ret = (sqlite3_step(stmt) == SQLITE_DONE);
-	sqlite3_finalize(stmt);
-
-	if (!ret)
-		MsgBox(sqlite3_errmsg(g_db));
+	stmt.SaveRecord();
+	stmt.Finalize();
 
 	if (autoOpen)
-		CloseDB();
+		g_db->Close();
 
-	return ret;
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -274,20 +262,15 @@ bool Snippet::SaveToDB(bool autoOpen)
 bool Snippet::DeleteFromDB()
 {
 	// Try to open the database
-	if (!OpenDB())
-	{
-		MsgBox("Could not open the database");
-		return false;
-	}
+	g_db->Open();
 
-	sqlite3_stmt *stmt = NULL;
-	sqlite3_prepare_v2(g_db, "DELETE FROM Snippets WHERE SnippetID = @id", -1, &stmt, NULL);
-	BindInt(stmt, "@id", _SnippetID);
-	bool ret = (sqlite3_step(stmt) == SQLITE_DONE);
-	sqlite3_finalize(stmt);
+	SqliteStatement stmt(g_db, "DELETE FROM Snippets WHERE SnippetID = @id");
+	stmt.Bind("@id", _SnippetID);
+	stmt.SaveRecord();
+	stmt.Finalize();
 
-	CloseDB();
-	return ret;
+	g_db->Close();
+	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////

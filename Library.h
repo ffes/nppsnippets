@@ -23,7 +23,6 @@
 #define __LIBRARY_H__
 
 #include "Snippets.h"
-#include "sqlite3.h"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -32,14 +31,14 @@ class Library : public SnippetBase
 {
 public:
 	Library();
-	Library(sqlite3_stmt* stmt);
+	Library(SqliteStatement* stmt);
 	virtual ~Library();
 
 	WCHAR* WGetCreatedBy() { return _CreatedBy; }
 	WCHAR* WGetComments() { return _Comments; }
 	bool GetSortAlphabetic() { return _SortAlphabetic; }
 
-	virtual void Set(sqlite3_stmt* stmt);
+	virtual void Set(SqliteStatement* stmt);
 
 	void WSetCreatedBy(LPCWCH txt);
 	void WSetComments(LPCWCH txt);
