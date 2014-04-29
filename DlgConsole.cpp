@@ -60,16 +60,17 @@ static int s_curLang = -1;						// The LangType of the currently selected lib
 
 static bool AddLibsToCombo(long lang)
 {
-	SqliteStatement stmt(g_db, "SELECT Library.*, LibraryLang.Lang FROM Library INNER JOIN LibraryLang ON Library.LibraryID = LibraryLang.LibraryID WHERE (LibraryLang.Lang = @langid OR LibraryLang.Lang = -2) ORDER BY Library.Name");
-
-	// Bind the language to the statement
-	stmt.Bind("@langid", lang);
-
-	// Get the last used library for this language
+	// First get the last used library for this language
 	long lastUsed = -1;
-	char szStmt[MAX_PATH];
-	snprintf(szStmt, MAX_PATH, "SELECT LibraryID FROM LangLastUsed WHERE Lang = %ld", lang);
-	g_db->GetLongResult(szStmt, lastUsed);
+	SqliteStatement stmt(g_db, "SELECT LibraryID FROM LangLastUsed WHERE Lang = @langid");
+	stmt.Bind("@langid", lang);
+	if (stmt.GetNextRecord())
+		lastUsed = stmt.GetIntColumn("LibraryID");
+	stmt.Finalize();
+
+	// Get all the libraries for this language
+	stmt.Prepare("SELECT Library.*, LibraryLang.Lang FROM Library INNER JOIN LibraryLang ON Library.LibraryID = LibraryLang.LibraryID WHERE (LibraryLang.Lang = @langid OR LibraryLang.Lang = -2) ORDER BY Library.Name");
+	stmt.Bind("@langid", lang);
 
 	// Go through the rows
 	int colLang = stmt.GetColumnCount() - 1;

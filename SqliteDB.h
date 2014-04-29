@@ -78,8 +78,6 @@ public:
 	void CommitTransaction();
 	void RollbackTransaction();
 
-	bool GetLongResult(const char* sql, long& result);
-
 protected:
 	WCHAR _dbFile[MAX_PATH];
 	sqlite3* _db;

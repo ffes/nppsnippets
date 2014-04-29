@@ -226,25 +226,6 @@ void SqliteDatabase::EnableForeignKeys(bool on)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool SqliteDatabase::GetLongResult(const char* sql, long& result)
-{
-	bool ret = false;
-
-	sqlite3_stmt *stmt;
-	sqlite3_prepare(_db, sql, -1, &stmt, NULL);
-	if (sqlite3_step(stmt) == SQLITE_ROW)
-	{
-		result = sqlite3_column_int(stmt, 0);
-		ret = true;
-	}
-
-	sqlite3_finalize(stmt);
-	return ret;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-
 SqliteStatement::SqliteStatement(SqliteDatabase* db)
 {
 	_db = db->GetDB();

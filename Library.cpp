@@ -82,10 +82,10 @@ void Library::WSetComments(LPCWCH txt)
 void Library::Set(SqliteStatement* stmt)
 {
 	_LibraryID = stmt->GetIntColumn("LibraryID");
-	//WSetName((LPCWSTR) sqlite3_column_text16(stmt, cNames["Name"]));
-	//WSetCreatedBy((LPCWSTR) sqlite3_column_text16(stmt, cNames["CreatedBy"]));
-	//WSetComments((LPCWSTR) sqlite3_column_text16(stmt, cNames["Comments"]));
-	//SetSortAlphabetic(sqlite3_column_int(stmt, cNames["SortBy"]));
+	WSetName(stmt->GetWTextColumn("Name").c_str());
+	WSetCreatedBy(stmt->GetWTextColumn("CreatedBy").c_str());
+	WSetComments(stmt->GetWTextColumn("Comments").c_str());
+	SetSortAlphabetic(stmt->GetIntColumn("SortBy"));
 }
 
 /////////////////////////////////////////////////////////////////////////////
