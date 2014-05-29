@@ -115,7 +115,10 @@ static bool SaveLanguages()
 	// Bind the language to the statement
 	int libid = s_pLibrary->GetLibraryID();
 	stmt.Bind("@libid", libid);
+
+	// And save the record
 	stmt.SaveRecord();
+	stmt.Finalize();
 
 	// Now add records for all selected languages
 	stmt.Prepare("INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@libid, @lang)");
