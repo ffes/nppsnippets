@@ -53,15 +53,15 @@ static int s_iHeightCombo = 20;					// This info should come from Windows
 static bool s_bConsoleInitialized = false;		// Is the console initialized?
 static bool s_bConsoleVisible = false;			// Is the console visible?
 static Library* s_curLibrary = NULL;			// The currently selected lib
-static int s_curLang = -1;						// The LangType of the currently selected lib
+static int s_curLang = -1;						// The "LangType" of the currently selected lib
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
-static bool AddLibsToCombo(long lang)
+static bool AddLibsToCombo(int lang)
 {
 	// First get the last used library for this language
-	long lastUsed = -1;
+	int lastUsed = -1;
 	SqliteStatement stmt(g_db, "SELECT LibraryID FROM LangLastUsed WHERE Lang = @langid");
 	stmt.Bind("@langid", lang);
 	if (stmt.GetNextRecord())
