@@ -39,7 +39,6 @@ now: $(TARGET)
 all: clean depend now
 
 PROGRAM_SRCS_CPP = \
-	Database.cpp \
 	DlgAbout.cpp \
 	DlgConsole.cpp \
 	DlgEditSnippet.cpp \
@@ -50,6 +49,8 @@ PROGRAM_SRCS_CPP = \
 	Language.cpp \
 	Library.cpp \
 	Snippets.cpp \
+	SnippetsDB.cpp \
+	SqliteDB.cpp \
 	Options.cpp \
 	Version.cpp \
 	WaitCursor.cpp
