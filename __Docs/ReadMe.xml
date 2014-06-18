@@ -31,7 +31,7 @@
 
 	<sect1 id="howtouse">
 		<title>How to use</title>
-		<para>To open the Snippets window, click on the "S" button on the toolbar, or via the menu "Plugins", "Snippets", "Snippets".</para>
+		<para>To open the Snippets window, click on the "jigsaw" button on the toolbar, or via the menu "Plugins", "Snippets", "Snippets".</para>
 		<para>The window consists of two parts. A combo-box where you can select the library and underneath it is the list of snippets in the chosen library. To insert a snippet simply double-click on the item in the list and the snippet is inserted at the current cursor position.</para>
 		<para>When you switch to a document with another language the snippets for that new language are read from the database.</para>
 	</sect1>
@@ -170,6 +170,7 @@
 			<listitem><para>Remember the last select snippet from the list. Useful when switching between different languages.</para></listitem>
 			<listitem><para>Add support for multiple selections.</para></listitem>
 			<listitem><para>Easier sorting for non-alphabetic libraries. (move to top, move to bottom, dragging?)</para></listitem>
+			<listitem><para>Export one or more library.</para></listitem>
 			<listitem><para>Copy a certain snippet to another library.</para></listitem>
 			<listitem><para>Properly indent the snippet when inserting.</para></listitem>
 			<listitem><para>Options dialog to edit the location of the database.</para></listitem>
