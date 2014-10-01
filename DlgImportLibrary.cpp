@@ -106,7 +106,7 @@ static bool AddLibraryToCombo(HWND hDlg)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-static bool ImportSnippets(long orgLibID, long newLibID)
+static bool ImportSnippets(int orgLibID, int newLibID)
 {
 	// Get all the snippets from the attached database
 	SqliteStatement stmt(g_db, "SELECT * FROM Import.Snippets WHERE LibraryID = @libid");
@@ -128,7 +128,7 @@ static bool ImportSnippets(long orgLibID, long newLibID)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-static bool ImportLanguages(long orgLibID, long newLibID)
+static bool ImportLanguages(int orgLibID, int newLibID)
 {
 	// Get all the languages for this library from the attached database
 	SqliteStatement stmtSelect(g_db, "SELECT Lang FROM Import.LibraryLang WHERE LibraryID = @libid");

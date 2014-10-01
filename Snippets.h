@@ -27,18 +27,18 @@
 class SnippetBase
 {
 public:
-	long GetLibraryID() { return _LibraryID; }
+	int GetLibraryID() { return _LibraryID; }
 	WCHAR* WGetName() { return _Name; }
 
 	virtual void Set(SqliteStatement* stmt) = 0;
-	void SetLibraryID(long l) { _LibraryID = l; }
+	void SetLibraryID(int i) { _LibraryID = i; }
 	void WSetName(LPCWCH txt);
 
 	virtual bool SaveToDB(bool autoOpen = true) = 0;
 	virtual bool DeleteFromDB() = 0;	
 
 protected:
-	long _LibraryID;
+	int _LibraryID;
 	WCHAR* _Name;
 };
 
@@ -58,7 +58,7 @@ public:
 	Snippet& operator=(SqliteStatement* stmt);
 	virtual void Set(SqliteStatement* stmt);
 
-	long GetSnippetID() { return _SnippetID; }
+	int GetSnippetID() { return _SnippetID; }
 	WCHAR* WGetBeforeSelection() { return _BeforeSelection; }
 	WCHAR* WGetAfterSelection() { return _AfterSelection; }
 	char* GetBeforeSelection() { return Unicode2Ansi(_BeforeSelection); }
@@ -66,9 +66,9 @@ public:
 	bool GetReplaceSelection() { return _ReplaceSelection; }
 	bool GetNewDocument() { return _NewDocument; }
 	LangType GetNewDocumentLang() { return _NewDocumentLang; }
-	long GetSort() { return _Sort; }
+	int GetSort() { return _Sort; }
 
-	void SetSnippetID(long l) { _SnippetID = l; }
+	void SetSnippetID(int i) { _SnippetID = i; }
 	void WSetBeforeSelection(LPCWCH txt);
 	void WSetAfterSelection(LPCWCH txt);
 	void SetBeforeSelection(LPCSTR txt);
@@ -77,7 +77,7 @@ public:
 	void SetNewDocument(bool b) { _NewDocument = b; }
 	void SetNewDocument(int i) { _NewDocument = (i != 0); }
 	void SetNewDocumentLang(int i) { _NewDocumentLang = (LangType) i; }
-	void SetSort(long l) { _Sort = l; }
+	void SetSort(int i) { _Sort = i; }
 
 	virtual bool SaveToDB(bool autoOpen = true);
 	virtual bool DeleteFromDB();
@@ -85,13 +85,13 @@ public:
 	void GuessName();
 
 private:
-	long _SnippetID;
+	int _SnippetID;
 	WCHAR* _BeforeSelection;
 	WCHAR* _AfterSelection;
 	bool _ReplaceSelection;
 	bool _NewDocument;
 	LangType _NewDocumentLang;
-	long _Sort;
+	int _Sort;
 
 	void CopyValues(const Snippet&);
 	int GetReplaceSelectionInt() { return _ReplaceSelection ? 1 : 0; }
