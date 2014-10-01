@@ -52,7 +52,7 @@ class SqliteDatabase
 public:
 	SqliteDatabase();
 	SqliteDatabase(LPCWSTR file);
-	~SqliteDatabase();
+	virtual ~SqliteDatabase();
 
 	virtual void Open();
 	virtual void Open(LPCWSTR file);
@@ -88,7 +88,7 @@ class SqliteStatement
 public:
 	SqliteStatement(SqliteDatabase* db);
 	SqliteStatement(SqliteDatabase* db, const char* sql);
-	~SqliteStatement();
+	virtual ~SqliteStatement();
 
 	void Prepare(const char* sql);
 	void SaveRecord();
