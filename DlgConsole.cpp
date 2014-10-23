@@ -241,23 +241,25 @@ void UpdateSnippetsList()
 /////////////////////////////////////////////////////////////////////////////
 //
 
-static BOOL DbExist(UINT uMsg, LPWSTR g_dbFile, LPCWSTR szExtraDir, bool bMainDB)
+static BOOL DbExist(UINT uMsg, LPWSTR dbFile, LPCWSTR szExtraDir, bool bMainDB)
 {
 	// Get the directory from NP++
-	SendMessage(g_nppData._nppHandle, uMsg, MAX_PATH, (LPARAM) &g_dbFile);
+	WCHAR tmp[MAX_PATH];
+	SendMessage(g_nppData._nppHandle, uMsg, MAX_PATH, (LPARAM) &tmp);
+	wcsncpy(dbFile, tmp, MAX_PATH);
 
 	// Add the extra dictory (if any)
 	if (szExtraDir != NULL)
-		wcsncat(g_dbFile, szExtraDir, MAX_PATH);
+		wcsncat(dbFile, szExtraDir, MAX_PATH);
 
 	// Add the filename of the database
 	if (bMainDB)
-		wcsncat(g_dbFile, L"\\NppSnippets.sqlite", MAX_PATH);
+		wcsncat(dbFile, L"\\NppSnippets.sqlite", MAX_PATH);
 	else
-		wcsncat(g_dbFile, L"\\Template.sqlite", MAX_PATH);
+		wcsncat(dbFile, L"\\Template.sqlite", MAX_PATH);
 
 	// Check if the file exists
-	return PathFileExists(g_dbFile);
+	return PathFileExists(dbFile);
 }
 
 /////////////////////////////////////////////////////////////////////////////
