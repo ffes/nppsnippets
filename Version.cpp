@@ -45,12 +45,15 @@ Version::Version(BYTE version[VERSION_DIGITS])
 
 Version::Version(LPCWSTR version)
 {
-	// Spilt the version in the seperate numbers
-	int numRead = swscanf(version, L"%d.%d.%d.%d", &_version[0], &_version[1], &_version[2], &_version[3]);
+	// Split the version in the seperate numbers
+	int v0, v1, v2, v3;
+	int numRead = swscanf(version, L"%d.%d.%d.%d", &v0, &v1, &v2, &v3);
 
-	// Set the items not read to 0
-	for (int i = numRead; i < VERSION_DIGITS; i++)
-		_version[i] = 0;
+	// Copy these numbers to the corresponding member of _version
+	_version[0] = (numRead > 0 ? v0 : 0);
+	_version[1] = (numRead > 1 ? v1 : 0);
+	_version[2] = (numRead > 2 ? v2 : 0);
+	_version[3] = (numRead > 3 ? v3 : 0);
 }
 
 ///////////////////////////////////////////////////////////////////////////
