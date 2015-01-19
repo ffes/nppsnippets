@@ -30,6 +30,7 @@
 
 static WCHAR s_szOptions[]			= L"Options";
 static WCHAR s_szShow[]				= L"Show";
+static WCHAR s_szToolbarIcon[]		= L"ToolbarIcon";
 static WCHAR s_szVersion[]			= L"Version";
 static WCHAR s_szDBPath[]			= L"DBPath";
 static WCHAR s_szDBFile[]			= L"DBFile";
@@ -66,6 +67,7 @@ Options::~Options()
 void Options::Write()
 {
 	WritePrivateProfileString(s_szOptions, s_szShow, (showConsoleDlg ? L"1" : L"0"), _szIniPath);
+	WritePrivateProfileString(s_szOptions, s_szToolbarIcon, (toolbarIcon ? L"1" : L"0"), _szIniPath);
 	WritePrivateProfileString(s_szOptions, s_szVersion, VERSION_NUMBER_WSTR, _szIniPath);
 }
 
@@ -75,6 +77,7 @@ void Options::Write()
 void Options::Read()
 {
 	showConsoleDlg = (GetPrivateProfileInt(s_szOptions, s_szShow, 1, _szIniPath) > 0);
+	toolbarIcon = (GetPrivateProfileInt(s_szOptions, s_szToolbarIcon, 1, _szIniPath) > 0);
 	GetPrivateProfileString(s_szOptions, s_szVersion, L"", _szPrevVersion, MAX_PATH,  _szIniPath);
 
 	// Did the user specify a special path for the database?

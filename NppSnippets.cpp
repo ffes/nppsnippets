@@ -40,7 +40,7 @@
 
 static const TCHAR PLUGIN_NAME[] = L"Snippets";
 static const int nbFunc = 3;
-static HBITMAP hbmpToolbar;
+static HBITMAP hbmpToolbar = NULL;
 
 HINSTANCE g_hInst;
 NppData g_nppData;
@@ -99,8 +99,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 	{
 		case NPPN_READY:
 		{
-			// Initialize the options
-			g_Options = new Options();
+			// Initialize the database
 			g_db = new SnippetsDB();
 
 			if (g_Options->showConsoleDlg)
@@ -123,11 +122,19 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 
 		case NPPN_TBMODIFICATION:
 		{
-			// Add the button to the toolbar
-			toolbarIcons tbiFolder;
-			tbiFolder.hToolbarBmp = hbmpToolbar;
-			tbiFolder.hToolbarIcon = NULL;
-			SendMessage((HWND) notifyCode->nmhdr.hwndFrom, NPPM_ADDTOOLBARICON, (WPARAM) g_funcItem[0]._cmdID, (LPARAM) &tbiFolder);
+			// First initialize the options
+			g_Options = new Options();
+
+			// Do we need to load the toolbar icon?
+			if (g_Options->toolbarIcon)
+			{
+				// Add the button to the toolbar
+				toolbarIcons tbiFolder;
+				hbmpToolbar = CreateMappedBitmap(g_hInst, IDB_SNIPPETS, 0, 0, 0);
+				tbiFolder.hToolbarBmp = hbmpToolbar;
+				tbiFolder.hToolbarIcon = NULL;
+				SendMessage((HWND) notifyCode->nmhdr.hwndFrom, NPPM_ADDTOOLBARICON, (WPARAM) g_funcItem[0]._cmdID, (LPARAM) &tbiFolder);
+			}
 			break;
 		}
 
@@ -329,9 +336,6 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
 			index++;
 			assert(index == nbFunc);
 
-			// To add button to toolbar
-			hbmpToolbar = CreateMappedBitmap(g_hInst, IDB_SNIPPETS, 0, 0, 0);
-
 			// Create the console dialog
 			CreateConsoleDlg();
 		}
@@ -342,8 +346,9 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
 			// Don't forget to deallocate your shortcut here
 			delete g_funcItem[0]._pShKey;
 
-			// Delete the toolbar
-			DeleteObject(hbmpToolbar);
+			// Delete the toolbar bitmap
+			if (hbmpToolbar != NULL)
+				DeleteObject(hbmpToolbar);
 
 			// Clean up the options
 			delete g_Options;

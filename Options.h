@@ -32,6 +32,7 @@ public:
 	~Options();
 
 	bool showConsoleDlg;
+	bool toolbarIcon;
 
 	WCHAR* GetPrevVersion() { return _szPrevVersion; };
 	WCHAR* GetDBFile() { return _szDBFile; };

@@ -209,9 +209,10 @@
 		<title>Release history</title>
 
 		<sect2 id="v1_4_0">
-			<title>Version 1.4.0 (?? May 2014)</title>
+			<title>Version 1.4.0 (XX XXXXXX 2015)</title>
 			<itemizedlist>
-				<listitem><para>Internally use SqliteDB-class to communicate with the database</para></listitem>
+				<listitem><para>Internally use SqliteDB-class to communicate with the database.</para></listitem>
+				<listitem><para>Added option <computeroutput>ToolbarIcon</computeroutput> to ini-file to hide the icon from the toolbar.</para></listitem>
 			</itemizedlist>
 		</sect2>
 
