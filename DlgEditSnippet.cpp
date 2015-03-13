@@ -52,19 +52,21 @@ static void CleanItems(HWND hDlg)
 
 static bool Validate(HWND hDlg)
 {
-	// Check required fields
+	// Check if name is entered
 	if (SendMessage(GetDlgItem(hDlg, IDC_NAME), EM_LINELENGTH, 0, 0) == 0)
 	{
 		MsgBox("Name needs to be entered!");
 		return false;
 	}
 
-	//
-	if (SendMessage(GetDlgItem(hDlg, IDC_BEFORE_SEL), EM_LINELENGTH, 0, 0) == 0)
+	// Get the text entered as "Before Selection"
+	WCHAR* before = GetDlgText(hDlg, IDC_BEFORE_SEL);
+	if (before == NULL)
 	{
 		MsgBox("Before Selection needs to be entered!");
 		return false;
 	}
+	delete before;
 
 	return true;
 }
