@@ -190,7 +190,7 @@
 
 	<sect1 id="license">
 		<title>License</title>
-		<para>This plug-in is published under the GPL-2 license. See <xref linkend="gpl"/> for the full license agreement. You can download the sources of the latest version from <ulink url="http://code.google.com/p/nppsnippets/">http://code.google.com/p/nppsnippets/</ulink>.</para>
+		<para>This plug-in is published under the GPL-2 license. See <xref linkend="gpl"/> for the full license agreement. You can download the sources of the latest version from <ulink url="https://github.com/ffes/nppsnippets">https://github.com/ffes/nppsnippets</ulink>.</para>
 	</sect1>
 
 	<sect1 id="compile">
@@ -201,7 +201,7 @@
 
 	<sect1 id="contact">
 		<title>Contact</title>
-		<para>The project's web page can be found at <ulink url="http://www.fesevur.com/nppsnippets">http://www.fesevur.com/nppsnippets</ulink>. The downloads and issue tracker can be found at <ulink url="https://code.google.com/p/nppsnippets/">https://code.google.com/p/nppsnippets/</ulink>. The git repository is at <ulink url="https://github.com/ffes/nppsnippets">https://github.com/ffes/nppsnippets</ulink>.</para>
+		<para>The project's web page can be found at <ulink url="http://www.fesevur.com/nppsnippets">http://www.fesevur.com/nppsnippets</ulink>. The downloads, issue tracker and git repository can be found at <ulink url="https://github.com/ffes/nppsnippets">https://github.com/ffes/nppsnippets</ulink>.</para>
 		<para>If you have problems with, questions about or suggestions for NppSnippets you can contact me at <ulink url="mailto:fesevur@gmail.com">fesevur@gmail.com</ulink>.</para>
 	</sect1>
 
@@ -211,6 +211,7 @@
 		<sect2 id="v1_4_0">
 			<title>Version 1.4.0 (XX XXXXXX 2015)</title>
 			<itemizedlist>
+				<listitem><para>Removed all references to Google Code because that <ulink url="http://google-opensource.blogspot.nl/2015/03/farewell-to-google-code.html">service is retiring</ulink>. All things that were on Google Code moved to <ulink url="https://github.com/ffes/nppsnippets">GitHub</ulink>.</para></listitem>
 				<listitem><para>Internally use SqliteDB-class to communicate with the database.</para></listitem>
 				<listitem><para>Added option <computeroutput>ToolbarIcon</computeroutput> to ini-file to hide the icon from the toolbar.</para></listitem>
 			</itemizedlist>

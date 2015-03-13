@@ -3,8 +3,6 @@ NppSnippets
 
 NppSnippets is an easy to use snippet / template plug-in. Similarity with the TextPad Clip Library is no accident. To insert a snippet simply double click on the item in the list and the snippet is inserted at the current cursor position. To edit right-click on that item.
 
-The project page, with downloads and issue tracker, is at https://code.google.com/p/nppsnippets/
-
 Version 1.3.0 (30 June 2013)
 * Fixed problem with inserting UTF snippets.
 * Fixed wrong title of Import Library dialog.
