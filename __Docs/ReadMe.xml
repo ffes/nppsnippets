@@ -218,7 +218,7 @@
 		</sect2>
 
 		<sect2 id="v1_3_0">
-			<title>Version 1.3.0 (June 2013, never officially release)</title>
+			<title>Version <ulink url="https://github.com/ffes/nppsnippets/releases/tag/v1.3.0">1.3.0</ulink> (June 2013, never officially release)</title>
 			<itemizedlist>
 				<listitem><para>Added option to export library for more easy sharing.</para></listitem>
 				<listitem><para>Fixed problem with inserting UTF snippets (<ulink url="http://code.google.com/p/nppsnippets/issues/detail?id=3">issue #3</ulink>).</para></listitem>
@@ -230,7 +230,7 @@
 		</sect2>
 
 		<sect2 id="v1_2_0">
-			<title>Version 1.2.0 (8 January 2013)</title>
+			<title>Version <ulink url="https://github.com/ffes/nppsnippets/releases/tag/v1.2.0">1.2.0</ulink> (8 January 2013)</title>
 			<itemizedlist>
 				<listitem><para>There was an inconsistency between the documentation and code about the name of the option to specify your custom path for the database. Use DBFile from now on. For backwards compatibility the DBPath entry will still be recognized.</para></listitem>
 				<listitem><para>When a snippets creates a new document and the current document is empty, it reuses the current one and does not start a new.</para></listitem>
