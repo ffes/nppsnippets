@@ -9,3 +9,5 @@ Version 1.3.0 (30 June 2013)
 * Fixed some potential bugs found when trying to fix GCC compilation.
 * Converted the documentation from ODT to DocBook.
 * Upgrade to SQLite version 3.7.17
+
+A HTML version of the documentation can be found at http://www.fesevur.com/docbook/nppsnippets/
