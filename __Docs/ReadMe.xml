@@ -26,7 +26,7 @@
 		<para>You can place the database in the <computeroutput>plugins/config</computeroutput> directory in the Notepad++ installation directory typically in the "Program Files" directory, but this could result in a read-only database due to file permissions and/or User Account Control (UAC). Therefore it is advised to put it in your "Application Data" directory.</para>
 		<para>You can also specify a custom path (like a shared network path or your Dropbox directory) for your database by manually editing the <computeroutput>NppSnippets.ini</computeroutput> file and adding a <computeroutput>DBFile</computeroutput> entry pointing to the full path name of the database. The <computeroutput>NppSnippets.ini</computeroutput> is in your "Application Data" directory.</para>
 		<para>When you automatically upgrade through the Plugin Manager your database is not touched. If you are manually upgrading at least replace the existing dll. It is up to you if you override your own database with the template database provided in the archive. If you have not changed existing snippets or added your own, it is recommended to use the database in the archive.</para>
-		<para>Note that this is a Unicode plug-in, so it doesn't work with an ANSI versions of Notepad++. The <ulink url="http://www.microsoft.com/downloads/details.aspx?familyid=200b2fd9-ae1a-4a14-984d-389c36f85647">Microsoft Visual C++ 2005 Redistributable Package</ulink> needs to be installed on the computer as well.</para>
+		<para>Note that this is a Unicode plug-in, so it doesn't work with an ANSI versions of Notepad++.</para>
 	</sect1>
 
 	<sect1 id="howtouse">
@@ -195,8 +195,8 @@
 
 	<sect1 id="compile">
 		<title>How to compile</title>
-		<para>To compile NppSnippets you need Visual Studio. Project files for VS 2005 and VS 2010 are provided and actively used. The release dll-file is compiled with VS 2005. To compile with other versions of Visual Studio you can convert an existing project file, but it is not tested.</para>
-		<para>There is also a <ulink url="http://mingw-w64.sourceforge.net/">MinGW-w64</ulink> makefile, using their 32-bit compilers. It can be used from <ulink url="http://www.cygwin.com/">Cygwin</ulink> and MSys. The makefile compiles the sources and it generates a dll file, however at the moment that dll does not work. But when the MinGW compilation works, maybe I can use it as the compiler for the releases, because this eliminates the need for the VC++ Redistributable Package to be installed on the machine. Patches are welcome! When you compile with MinGW, you need to create an empty file named <computeroutput>Makefile.deps</computeroutput>.</para>
+		<para>To compile NppSnippets you need Visual Studio. Project files for VS 2010 and VS 2013 are provided and actively used. To compile with other versions of Visual Studio you can convert an existing project file, but it is not tested.</para>
+		<para>There is also a <ulink url="http://mingw-w64.sourceforge.net/">MinGW-w64</ulink> makefile, using their 32-bit compilers. It can be used from <ulink url="http://www.cygwin.com/">Cygwin</ulink> and MSys. The makefile compiles the sources and it generates a dll file, however at the moment that dll does not work. Pull requests are welcome! When you compile with MinGW, you need to create an empty file named <computeroutput>Makefile.deps</computeroutput>. Pull request to fix that are welcome as well.</para>
 	</sect1>
 
 	<sect1 id="contact">
