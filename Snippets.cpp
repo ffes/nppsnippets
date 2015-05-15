@@ -221,9 +221,9 @@ bool Snippet::SaveToDB(bool autoOpen)
 		adding = true;
 
 		// Determine the last used SnippetID
-		SqliteStatement stmt2(g_db, "SELECT MAX(SnippetID) FROM Snippets");
+		SqliteStatement stmt2(g_db, "SELECT MAX(SnippetID) AS MaxID FROM Snippets");
 		stmt2.GetNextRecord();
-		_SnippetID = stmt2.GetIntColumn(1) + 1;
+		_SnippetID = stmt2.GetIntColumn("MaxID") + 1;
 		stmt2.Finalize();
 
 		// Prepare the statement

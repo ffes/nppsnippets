@@ -101,9 +101,9 @@ bool Library::SaveToDB(bool autoOpen)
 	if (_LibraryID == 0)
 	{
 		// Determine the last used LibraryID
-		SqliteStatement stmt2(g_db, "SELECT MAX(LibraryID) FROM Library");
+		SqliteStatement stmt2(g_db, "SELECT MAX(LibraryID) AS MaxID FROM Library");
 		stmt2.GetNextRecord();
-		_LibraryID = stmt2.GetIntColumn(1) + 1;
+		_LibraryID = stmt2.GetIntColumn("MaxID") + 1;
 		stmt2.Finalize();
 
 		// Prepare the statement
