@@ -36,6 +36,7 @@ protected:
 	void UpgradeDatabase_1_2();
 	void UpgradeDatabase_2_3();
 	bool CheckDBVersion();
+	void CreateExportDB();
 };
 
 extern SnippetsDB* g_db;
