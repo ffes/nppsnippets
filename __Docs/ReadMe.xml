@@ -216,6 +216,7 @@
 				<listitem><para>Removed all references to Google Code because that <ulink url="http://google-opensource.blogspot.nl/2015/03/farewell-to-google-code.html">service is retiring</ulink>. All things that were on Google Code have been moved to <ulink url="https://github.com/ffes/nppsnippets">GitHub</ulink>.</para></listitem>
 				<listitem><para>Internally use SqliteDB-class to communicate with the database.</para></listitem>
 				<listitem><para>Added option <computeroutput>ToolbarIcon</computeroutput> to ini-file to hide the icon from the toolbar.</para></listitem>
+				<listitem><para>Fixed issue that sometimes new libraries and/or new snippets could not be added.</para></listitem>
 			</itemizedlist>
 		</sect2>
 
