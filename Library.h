@@ -49,6 +49,7 @@ public:
 	virtual bool DeleteFromDB();
 	bool AddLanguageToDB(int lang);
 	bool DeleteLanguageFromDB(int lang);
+	void ExportTo(LPCWCH filename);
 
 private:
 	WCHAR* _CreatedBy;

@@ -165,6 +165,20 @@ bool Library::DeleteLanguageFromDB(int lang)
 /////////////////////////////////////////////////////////////////////////////
 //
 
+void Library::ExportTo(LPCWCH filename)
+{
+	// Open the db and create/attach the new db
+	g_db->Open();
+	g_db->Attach(filename, L"export");
+
+	// Detach exported db and close the current db
+	g_db->Detach(L"export");
+	g_db->Close();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
 bool Library::LanguageDBHelper(LPCSTR sql, int lang)
 {
 	g_db->Open();
