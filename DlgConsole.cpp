@@ -1039,6 +1039,26 @@ static void OnLibraryImport(HWND hWnd)
 
 static void OnLibraryExport(HWND hWnd)
 {
+	UNREFERENCED_PARAMETER(hWnd);
+
+	// We need space to store the filename
+	WCHAR szFileName[MAX_PATH];
+	ZeroMemory(szFileName, MAX_PATH);
+
+	// Initialize the FileSave dialog
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(OPENFILENAME));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner =  g_nppData._nppHandle;
+	ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+	ofn.lpstrFilter = L"SQLite databases (*.sqlite)\0*.sqlite\0All Files (*.*)\0*.*\0\0";
+	ofn.nMaxFile = _MAX_PATH;
+	ofn.lpstrFile = szFileName;
+	ofn.lpstrDefExt = L"sqlite";
+
+	// Did we get a filename from the user?
+	if (GetSaveFileName(&ofn))
+		s_curLibrary->ExportTo(ofn.lpstrFile);
 }
 
 /////////////////////////////////////////////////////////////////////////////
