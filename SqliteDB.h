@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 // SqliteDB Classes                                                        //
-// Version 1.0.1, 30-Oct-2013                                              //
+// Version 1.1, 27-May-2015                                                //
 //                                                                         //
-// Copyright (c) 2013, Frank Fesevur <http://www.fesevur.com>              //
+// Copyright (c) 2013-2015, Frank Fesevur <http://www.fesevur.com>         //
 // All rights reserved.                                                    //
 //                                                                         //
 // Redistribution and use in source and binary forms, with or without      //
@@ -64,10 +64,10 @@ public:
 	void Detach(LPCWSTR alias);
 
 	void SetFilename(LPCWSTR file);
-	void SetUserVersion(long version);
+	void SetUserVersion(long version, const char* dbname = NULL);
 
 	LPCWSTR GetFilename() { return _dbFile; };
-	long GetUserVersion();
+	long GetUserVersion(const char* dbname = NULL);
 	bool TableExists(const char* table);
 	sqlite3* GetDB() { return _db; };
 
