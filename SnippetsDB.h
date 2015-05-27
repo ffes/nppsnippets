@@ -30,13 +30,13 @@ public:
 	SnippetsDB(LPCWSTR file);
 
 	virtual void Open();
+	void CreateExportDB();
 
 protected:
 	void SetValues();
 	void UpgradeDatabase_1_2();
 	void UpgradeDatabase_2_3();
 	bool CheckDBVersion();
-	void CreateExportDB();
 };
 
 extern SnippetsDB* g_db;

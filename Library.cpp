@@ -171,6 +171,8 @@ void Library::ExportTo(LPCWCH filename)
 	g_db->Open();
 	g_db->Attach(filename, L"export");
 
+	g_db->CreateExportDB();
+
 	// Detach exported db and close the current db
 	g_db->Detach(L"export");
 	g_db->Close();
