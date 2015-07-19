@@ -10,3 +10,6 @@ html:
 
 pdf:
 	xmlto --with-dblatex pdf ReadMe.xml
+
+clean:
+	rm -rf _html ReadMe.pdf
