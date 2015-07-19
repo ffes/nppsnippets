@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="libraries">
+	<title>Provided Snippets Libraries</title>
+	<para>At this moment the template database is filled with these libraries. If you upgrade from a previous version your databases is not changed. If you want to try any of the new libraries, you must manually import those libraries from the template database.</para>
+	<informaltable>
+		<tgroup cols="3">
+			<thead>
+				<row>
+					<entry><para>Library Name</para></entry>
+					<entry><para>Languages</para></entry>
+					<entry><para>By</para></entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry><para>ANSI Characters</para></entry>
+					<entry><para>All</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>Templates</para></entry>
+					<entry><para>All</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>HTML Tags</para></entry>
+					<entry><para>HTML, PHP, ASP</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>HTML Characters</para></entry>
+					<entry><para>HTML, PHP, ASP</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>Greek Characters</para></entry>
+					<entry><para>HTML, PHP, ASP</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>W3C Doctypes</para></entry>
+					<entry><para>HTML</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>CSS2 Tags</para></entry>
+					<entry><para>CSS, HTML</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>CSS2 Tags &amp; Values</para></entry>
+					<entry><para>CSS, HTML</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>JavaScript - Basic</para></entry>
+					<entry><para>JavaScript, HTML</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>JavaScript - Date</para></entry>
+					<entry><para>JavaScript, HTML</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>JavaScript - Math</para></entry>
+					<entry><para>JavaScript, HTML</para></entry>
+					<entry><para>FFes</para></entry>
+				</row>
+				<row>
+					<entry><para>PHP Language</para></entry>
+					<entry><para>PHP</para></entry>
+					<entry><para>jvdanilo</para></entry>
+				</row>
+				<row>
+					<entry><para>XML Tags</para></entry>
+					<entry><para>XML</para></entry>
+					<entry><para>jvdanilo</para></entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</informaltable>
+</sect1>
