@@ -546,7 +546,7 @@ static void OnSnippetInsert(HWND hWnd)
 	}
 
 	// Insert the first part of the snippet
-	std::wstring wstr = snip.WGetBeforeSelection();
+	std::wstring wstr = ConvertLineEnding(snip.WGetBeforeSelection());
 	std::string strTo = utf8_encode(wstr);
 	SendMsg(SCI_REPLACESEL, 0, (LPARAM) strTo.c_str());
 
@@ -568,7 +568,7 @@ static void OnSnippetInsert(HWND hWnd)
 		size_t len = wcslen(snip.WGetAfterSelection());
 		if (len > 0)
 		{
-			std::wstring wstr = snip.WGetAfterSelection();
+			std::wstring wstr = ConvertLineEnding(snip.WGetAfterSelection());
 			std::string strTo = utf8_encode(wstr);
 			SendMsg(SCI_REPLACESEL, 0, (LPARAM) strTo.c_str());
 		}

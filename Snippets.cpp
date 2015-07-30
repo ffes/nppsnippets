@@ -180,15 +180,11 @@ LPSTR Snippet::Unicode2Ansi(LPCWSTR wszStr)
 
 void Snippet::Set(SqliteStatement* stmt)
 {
-	// First get the texts and convert their newlines to Windows standards
-	wstring before = ConvertNewLines(stmt->GetWTextColumn("BeforeSelection").c_str());
-	wstring after = ConvertNewLines(stmt->GetWTextColumn("AfterSelection").c_str());
-
 	_SnippetID = stmt->GetIntColumn("SnippetID");
 	_LibraryID = stmt->GetIntColumn("LibraryID");
 	WSetName(stmt->GetWTextColumn("Name").c_str());
-	WSetBeforeSelection(before.c_str());
-	WSetAfterSelection(after.c_str());
+	WSetBeforeSelection(stmt->GetWTextColumn("BeforeSelection").c_str());
+	WSetAfterSelection(stmt->GetWTextColumn("AfterSelection").c_str());
 	SetReplaceSelection(stmt->GetIntColumn("ReplaceSelection"));
 	SetNewDocument(stmt->GetIntColumn("NewDocument"));
 	SetSort(stmt->GetIntColumn("Sort"));

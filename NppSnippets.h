@@ -35,7 +35,7 @@ extern bool MsgBoxYesNo(const WCHAR* msg);
 extern void MsgBoxf(const char* szFmt, ...);
 extern void CenterWindow(HWND hDlg);
 extern WCHAR* GetDlgText(HWND hDlg, UINT uID);
-extern wstring ConvertNewLines(LPCWSTR from);
+extern std::wstring ConvertLineEnding(LPCWSTR from, int toLineEnding = -1);
 
 extern HINSTANCE g_hInst;
 extern NppData g_nppData;

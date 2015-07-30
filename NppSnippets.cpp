@@ -178,28 +178,57 @@ extern "C" __declspec(dllexport) LRESULT messageProc(UINT uMsg, WPARAM wParam, L
 /////////////////////////////////////////////////////////////////////////////
 // VERY simple LF -> CRLF conversion
 
-wstring ConvertNewLines(LPCWSTR from)
+std::wstring ConvertLineEnding(LPCWSTR from, int toLineEnding)
 {
-	wstring to;
-
 	// Is there a string anyway?
-	if (from != NULL)
+	std::wstring to;
+	if (from == NULL)
+		return to;
+
+	// Get the line ending of the current document
+	if (toLineEnding < 0)
+		toLineEnding = SendMsg(SCI_GETEOLMODE);
+
+	// Determine the new line ending
+	std::wstring lineend = L"\r\n";
+	switch (toLineEnding)
 	{
-		// Iterate through the text we were given
-		size_t len = wcslen(from);
-		for (size_t i = 0; i < len; i++)
+		case SC_EOL_CRLF:
+			lineend = L"\r\n";
+			break;
+		case SC_EOL_CR:
+			lineend = L"\r";
+			break;
+		case SC_EOL_LF:
+			lineend = L"\n";
+			break;
+	}
+
+	// Iterate through the text we were given
+	size_t len = wcslen(from);
+	for (size_t i = 0; i < len; i++)
+	{
+		if (from[i] == '\r')
 		{
-			// The "\r" is simply skipped
-			if (from[i] == '\r')
+			if (i + 1 < len)
+			{
+				// is the next a \n, skip it
+				if (from[i + 1] == '\n')
+					i++;
+
+				// Add the new line ending
+				to += lineend;
 				continue;
-
-			// For every "\n", we add an extra "\r"
-			if (from[i] == '\n')
-				to += '\r';
-
-			// The character itself (all but "\r")
-			to += from[i];
+			}
 		}
+
+		if (from[i] == '\n')
+		{
+			to += lineend;
+			continue;
+		}
+
+		to += from[i];
 	}
 
 	return to;

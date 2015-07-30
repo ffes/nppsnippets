@@ -92,7 +92,7 @@ static BOOL OnInitDialog(HWND hDlg)
 		// Add the changelog
 		txt += s_info[i].text;
 	}
-	txt = ConvertNewLines(txt.c_str());
+	txt = ConvertLineEnding(txt.c_str(), SC_EOL_CRLF);
 	SetDlgItemText(hDlg, IDC_CHANGELOG, txt.c_str());
 
 	// Let windows set focus
