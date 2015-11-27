@@ -49,6 +49,7 @@ static HWND s_hDlg = NULL;						// The HWND to the dialog
 static HWND s_hList = NULL;						// The HWND to the listbox
 static HWND s_hCombo = NULL;					// The HWND to the combo
 static HICON s_hTabIcon = NULL;					// The icon on the docking tab
+static HBRUSH s_hbrBkgnd = NULL;				// The brush to paint the theme on the background of the listbox
 static int s_iHeightCombo = 20;					// This info should come from Windows
 static bool s_bConsoleInitialized = false;		// Is the console initialized?
 static bool s_bConsoleVisible = false;			// Is the console visible?
@@ -1160,6 +1161,39 @@ static void OnCommand(HWND hWnd, int ResID, int msg)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// On a theme changes, redraw the listbox so it matches the theme
+
+void InvalidateListbox()
+{
+	s_hbrBkgnd = NULL;
+	InvalidateRect(s_hList, NULL, TRUE);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+static HBRUSH OnCtlColorListbox(HWND hWnd, HWND hwndList, HDC hdc)
+{
+	UNREFERENCED_PARAMETER(hWnd);
+
+	if (hwndList != s_hList)
+		return NULL;
+
+	// Get the colors from the N++ theme
+	int fore = SendMsg(SCI_STYLEGETFORE, (WPARAM) STYLE_DEFAULT);
+	int back = SendMsg(SCI_STYLEGETBACK, (WPARAM) STYLE_DEFAULT);
+
+	// Set the colors for the items
+	SetTextColor(hdc, fore);
+	SetBkColor(hdc, back);
+
+	// Set the brush to paint the background of the listbox
+	if (s_hbrBkgnd == NULL)
+		s_hbrBkgnd = CreateSolidBrush(back);
+	return s_hbrBkgnd;
+}
+
+/////////////////////////////////////////////////////////////////////////////
 //
 
 static BOOL CALLBACK DlgProcedure(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -1206,6 +1240,10 @@ static BOOL CALLBACK DlgProcedure(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 			g_Options->showConsoleDlg = s_bConsoleVisible;
 			break;
 		}
+
+		case WM_CTLCOLORLISTBOX:
+			return (UINT_PTR) OnCtlColorListbox(hWnd, (HWND) lParam, (HDC) wParam);
+
 	}
 	return FALSE;
 }

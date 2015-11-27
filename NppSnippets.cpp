@@ -150,11 +150,17 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 			}
 			break;
 		}
+
+		case NPPN_WORDSTYLESUPDATED:
+		{
+			InvalidateListbox();
+			break;
+		}
 	}
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Here you can process the Npp Messages 
+// Here you can process the Npp Messages
 // I will make the messages accessible little by little, according to the
 // need of plugin development.
 // Please let me know if you need to access to some messages :

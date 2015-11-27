@@ -25,5 +25,6 @@
 extern void SnippetsConsole();
 extern void CreateConsoleDlg();
 extern void UpdateSnippetsList();
+extern void InvalidateListbox();
 
 #endif // __DLGCONSOLE_H__
