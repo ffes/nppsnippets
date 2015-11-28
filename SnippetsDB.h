@@ -32,7 +32,7 @@ public:
 	virtual void Open();
 	void CreateExportDB();
 
-	bool ImportLibrary(LPCWSTR db, long orgLibID);
+	bool ImportLibrary(LPCWSTR db, int orgLibID);
 
 protected:
 	void SetValues();

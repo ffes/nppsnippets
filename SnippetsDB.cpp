@@ -69,7 +69,7 @@ void SnippetsDB::Open()
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool SnippetsDB::ImportLibrary(LPCWSTR db, long orgLibID)
+bool SnippetsDB::ImportLibrary(LPCWSTR db, int orgLibID)
 {
 	// Start with attaching the database
 	Attach(db, L"Import");
