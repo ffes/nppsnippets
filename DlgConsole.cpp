@@ -1050,7 +1050,7 @@ static void OnLibraryExport(HWND hWnd)
 	ZeroMemory(&ofn, sizeof(OPENFILENAME));
 	ofn.lStructSize = sizeof(OPENFILENAME);
 	ofn.hwndOwner =  g_nppData._nppHandle;
-	ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+	ofn.Flags = OFN_HIDEREADONLY;
 	ofn.lpstrFilter = L"SQLite databases (*.sqlite)\0*.sqlite\0All Files (*.*)\0*.*\0\0";
 	ofn.nMaxFile = _MAX_PATH;
 	ofn.lpstrFile = szFileName;
