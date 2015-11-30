@@ -1,6 +1,4 @@
 __*
-*.LNK
-*.lnk
 *.suo
 *.ncb
 *.user
@@ -11,9 +9,6 @@ __*
 !__SampleDB
 [Rr]elease/
 [Dd]ebug/
-ipch/
-*.depend
-*.layout
 *.d
 *.o
 NppSnippets.dll
