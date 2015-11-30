@@ -1,13 +1,11 @@
 NppSnippets
 ===========
 
-NppSnippets is an easy to use snippet / template plug-in. Similarity with the TextPad Clip Library is no accident. To insert a snippet simply double click on the item in the list and the snippet is inserted at the current cursor position. To edit right-click on that item.
+NppSnippets is an easy to use snippet / template plug-in for [Notepad++](https://notepad-plus-plus.org/). Similarity with the TextPad Clip Library is no accident. To insert a snippet simply double click on the item in the list and the snippet is inserted at the current cursor position. To edit right-click on that item.
 
-Version 1.3.0 (30 June 2013)
-* Fixed problem with inserting UTF snippets.
-* Fixed wrong title of Import Library dialog.
-* Fixed some potential bugs found when trying to fix GCC compilation.
-* Converted the documentation from ODT to DocBook.
-* Upgrade to SQLite version 3.7.17
+The documentation of this plug-in can be found at [Read the Docs](http://nppsnippets.readthedocs.org/). This includes:
 
-A HTML version of the documentation can be found at http://www.fesevur.com/docbook/nppsnippets/
+* Instructions [how to install](http://nppsnippets.readthedocs.org/en/latest/installation.html)
+* Instructions [how to use](http://nppsnippets.readthedocs.org/en/latest/usage.html)
+* Instructions [how to build](http://nppsnippets.readthedocs.org/en/latest/compile.html)
+* A complete [release history](http://nppsnippets.readthedocs.org/en/latest/history.html)
