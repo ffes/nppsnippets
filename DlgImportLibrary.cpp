@@ -106,86 +106,20 @@ static bool AddLibraryToCombo(HWND hDlg)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-static bool ImportSnippets(int orgLibID, int newLibID)
-{
-	// Get all the snippets from the attached database
-	SqliteStatement stmt(g_db, "SELECT * FROM Import.Snippets WHERE LibraryID = @libid");
-	stmt.Bind("@libid", orgLibID);
-
-	// Go through the records and save them to the database
-	Snippet snip;
-	while (stmt.GetNextRecord())
-	{
-		snip.Set(&stmt);
-		snip.SetSnippetID(0);
-		snip.SetLibraryID(newLibID);
-		snip.SaveToDB(false);
-	}
-	stmt.Finalize();
-	return true;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-
-static bool ImportLanguages(int orgLibID, int newLibID)
-{
-	// Get all the languages for this library from the attached database
-	SqliteStatement stmtSelect(g_db, "SELECT Lang FROM Import.LibraryLang WHERE LibraryID = @libid");
-	stmtSelect.Bind("@libid", orgLibID);
-
-	// Open a select stmt to store the new data in the table
-	SqliteStatement stmtInsert(g_db, "INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@libid, @lang)");
-
-	// Go through the attached records and save them to the database
-	while (stmtSelect.GetNextRecord())
-	{
-		stmtInsert.Bind("@libid", newLibID);
-		stmtInsert.Bind("@lang", stmtSelect.GetIntColumn(0));
-
-		// Put the record in the database
-		stmtInsert.SaveRecord();
-	}
-	stmtSelect.Finalize();
-	stmtInsert.Finalize();
-	return true;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-
-static bool ImportLibrary(Library* lib)
-{
-	WaitCursor wait;
-
-	g_db->Open();
-
-	// First save the selected library as a new library
-	long orgLibID = lib->GetLibraryID();
-	lib->SetLibraryID(0);
-	lib->SaveToDB(false);
-
-	g_db->Attach(s_databaseFile, L"Import");
-	ImportSnippets(orgLibID, lib->GetLibraryID());
-	ImportLanguages(orgLibID, lib->GetLibraryID());
-	g_db->Detach(L"Import");
-	g_db->Close();
-
-	return true;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-
 static BOOL OnOK(HWND hDlg)
 {
 	if (!Validate(hDlg))
 		return TRUE;
 
-	// Get current LibraryID from the selected item
+	// Get Library from the selected item
+	WaitCursor wait;
 	int item = (int) SendDlgItemMessage(hDlg, IDC_NAME, CB_GETCURSEL, 0, 0L);
 	Library* lib = (Library*) SendDlgItemMessage(hDlg, IDC_NAME, CB_GETITEMDATA, (WPARAM) item, 0);
-	ImportLibrary(lib);
+
+	// Import the data
+	g_db->Open();
+	g_db->ImportLibrary(s_databaseFile, lib->GetLibraryID());
+	g_db->Close();
 
 	// We're done
 	CleanItems(hDlg);

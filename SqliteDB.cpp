@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 // SqliteDB Classes                                                        //
-// Version 1.0.1, 30-Oct-2013                                              //
+// Version 1.1, 27-May-2015                                                //
 //                                                                         //
-// Copyright (c) 2013, Frank Fesevur <http://www.fesevur.com>              //
+// Copyright (c) 2013-2015, Frank Fesevur <http://www.fesevur.com>         //
 // All rights reserved.                                                    //
 //                                                                         //
 // Redistribution and use in source and binary forms, with or without      //
@@ -195,19 +195,24 @@ void SqliteDatabase::Execute(LPCSTR szSQL)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-void SqliteDatabase::SetUserVersion(long version)
+void SqliteDatabase::SetUserVersion(long version, const char* dbname)
 {
 	char sql[MAX_PATH];
-	snprintf(sql, MAX_PATH, "PRAGMA user_version = %ld;", version);
+	snprintf(sql, MAX_PATH, "PRAGMA %s.user_version = %ld;", dbname == NULL ? "main" : dbname, version);
 	Execute(sql);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
-long SqliteDatabase::GetUserVersion()
+long SqliteDatabase::GetUserVersion(const char* dbname)
 {
-	SqliteStatement stmt(this, "PRAGMA user_version;");
+	char sql[MAX_PATH];
+	strncpy(sql, "PRAGMA ", MAX_PATH);
+	strncat(sql, dbname == NULL ? "main" : dbname, MAX_PATH);
+	strncat(sql, ".user_version;", MAX_PATH);
+
+	SqliteStatement stmt(this, sql);
 	stmt.GetNextRecord();
 	return stmt.GetIntColumn(0);
 }

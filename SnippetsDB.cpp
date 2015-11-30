@@ -20,7 +20,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
+#include "NPP/PluginInterface.h"
+#include "NppSnippets.h"
 #include "SnippetsDB.h"
+#include "Library.h"
 #include "WaitCursor.h"
 
 SnippetsDB* g_db = NULL;
@@ -56,11 +59,105 @@ void SnippetsDB::Open()
 	// Make sure the database has the right version
 	if (!CheckDBVersion())
 	{
-		throw SqliteException("Database has wrong version, please regenerate!");		
+		throw SqliteException("Database has wrong version, please regenerate!");
 		return;
 	}
 
 	EnableForeignKeys();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+bool SnippetsDB::ImportLibrary(LPCWSTR db, int orgLibID)
+{
+	// Start with attaching the database
+	Attach(db, L"Import");
+
+	// Get requested library from that database
+	SqliteStatement stmt(this, "SELECT * FROM Import.Library WHERE LibraryID = @id");
+	stmt.Bind("@id", orgLibID);
+
+	if (stmt.GetNextRecord())
+	{
+		Library lib(&stmt);
+
+		lib.SetLibraryID(0);
+		lib.SaveToDB(false);
+
+		ImportSnippets(orgLibID, lib.GetLibraryID());
+		ImportLanguages(orgLibID, lib.GetLibraryID());
+	}
+	stmt.Finalize();
+
+	Detach(L"Import");
+	return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+bool SnippetsDB::ImportSnippets(int orgLibID, int newLibID)
+{
+	// Get all the snippets from the attached database
+	SqliteStatement stmt(g_db, "SELECT * FROM Import.Snippets WHERE LibraryID = @libid");
+	stmt.Bind("@libid", orgLibID);
+
+	// Go through the records and save them to the database
+	Snippet snip;
+	while (stmt.GetNextRecord())
+	{
+		snip.Set(&stmt);
+		snip.SetSnippetID(0);
+		snip.SetLibraryID(newLibID);
+		snip.SaveToDB(false);
+	}
+	stmt.Finalize();
+	return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+bool SnippetsDB::ImportLanguages(int orgLibID, int newLibID)
+{
+	// Get all the languages for this library from the attached database
+	SqliteStatement stmtSelect(g_db, "SELECT Lang FROM Import.LibraryLang WHERE LibraryID = @libid");
+	stmtSelect.Bind("@libid", orgLibID);
+
+	// Open a select stmt to store the new data in the table
+	SqliteStatement stmtInsert(g_db, "INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@libid, @lang)");
+
+	// Go through the attached records and save them to the database
+	while (stmtSelect.GetNextRecord())
+	{
+		stmtInsert.Bind("@libid", newLibID);
+		stmtInsert.Bind("@lang", stmtSelect.GetIntColumn(0));
+
+		// Put the record in the database
+		stmtInsert.SaveRecord();
+	}
+	stmtSelect.Finalize();
+	stmtInsert.Finalize();
+	return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Create the export database
+
+void SnippetsDB::CreateExportDB()
+{
+	BeginTransaction();
+	Execute("CREATE TABLE IF NOT EXISTS Export.Library(LibraryID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name TEXT NOT NULL, CreatedBy TEXT, Comments TEXT, SortBy INTEGER NOT NULL DEFAULT 0);");
+	Execute("CREATE TABLE IF NOT EXISTS Export.LibraryLang(LibraryID INTEGER NOT NULL REFERENCES Library(LibraryID) ON DELETE CASCADE ON UPDATE CASCADE, Lang INTEGER NOT NULL, PRIMARY KEY (LibraryID, Lang));");
+	Execute("CREATE TABLE IF NOT EXISTS Export.Snippets(SnippetID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, LibraryID INTEGER NOT NULL REFERENCES Library(LibraryID) ON DELETE CASCADE ON UPDATE CASCADE, Name TEXT NOT NULL, BeforeSelection TEXT NOT NULL, AfterSelection TEXT, ReplaceSelection BOOL NOT NULL DEFAULT 0, NewDocument BOOL NOT NULL DEFAULT 0, NewDocumentLang INTEGER, Sort INTEGER);");
+	Execute("CREATE INDEX IF NOT EXISTS Export.SnipName ON Snippets(LibraryID, Name, Sort);");
+	Execute("CREATE INDEX IF NOT EXISTS Export.SnipSort ON Snippets(LibraryID, Sort, Name);");
+	Execute("CREATE TABLE IF NOT EXISTS Export.LangLastUsed(Lang INTEGER PRIMARY KEY NOT NULL, LibraryID INTEGER NOT NULL REFERENCES Library(LibraryID) ON DELETE CASCADE ON UPDATE CASCADE);");
+	CommitTransaction();
+
+	// We are at schema version 3
+	SetUserVersion(3, "Export");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -151,7 +248,7 @@ bool SnippetsDB::CheckDBVersion()
 
 		case 2:
 			wait.Show();
-			UpgradeDatabase_2_3();		
+			UpgradeDatabase_2_3();
 			Vacuum();
 			// fall through
 
