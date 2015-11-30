@@ -1,10 +1,9 @@
-__*
+_*
 *.suo
 *.ncb
 *.user
 *.opensdf
 *.sdf
-!__Docs
 !__SQL
 !__SampleDB
 [Rr]elease/
