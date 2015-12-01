@@ -32,6 +32,7 @@
 #define    IDM    40000
 
 #define    IDM_FILE    (IDM + 1000)
+// IMPORTANT: If list below is modified, you have to change the value of IDM_FILEMENU_LASTONE and IDM_FILEMENU_EXISTCMDPOSITION
     #define    IDM_FILE_NEW                     (IDM_FILE + 1)
     #define    IDM_FILE_OPEN                    (IDM_FILE + 2)
     #define    IDM_FILE_CLOSE                   (IDM_FILE + 3)
@@ -40,7 +41,7 @@
     #define    IDM_FILE_SAVE                    (IDM_FILE + 6) 
     #define    IDM_FILE_SAVEALL                 (IDM_FILE + 7) 
     #define    IDM_FILE_SAVEAS                  (IDM_FILE + 8)
-    //#define    IDM_FILE_ASIAN_LANG              (IDM_FILE + 9)  
+    #define    IDM_FILE_CLOSEALL_TOLEFT         (IDM_FILE + 9)
     #define    IDM_FILE_PRINT                   (IDM_FILE + 10)
     #define    IDM_FILE_PRINTNOW                1001
     #define    IDM_FILE_EXIT                    (IDM_FILE + 11)
@@ -50,9 +51,42 @@
     #define    IDM_FILE_SAVECOPYAS              (IDM_FILE + 15)
     #define    IDM_FILE_DELETE                  (IDM_FILE + 16)
     #define    IDM_FILE_RENAME                  (IDM_FILE + 17)
+    #define    IDM_FILE_CLOSEALL_TORIGHT        (IDM_FILE + 18)
+    #define    IDM_FILE_OPEN_FOLDER             (IDM_FILE + 19)
+    #define    IDM_FILE_OPEN_CMD                (IDM_FILE + 20)
+	#define    IDM_FILE_RESTORELASTCLOSEDFILE   (IDM_FILE + 21)
+// IMPORTANT: If list above is modified, you have to change the following values:
  
- // To be updated if new menu item(s) is (are) added in menu "File"
-    #define    IDM_FILEMENU_LASTONE             IDM_FILE_RENAME
+// To be updated if new menu item(s) is (are) added in menu "File"
+	#define    IDM_FILEMENU_LASTONE             IDM_FILE_RESTORELASTCLOSEDFILE
+
+	
+
+// 0 based position of command "Exit" including the bars in the file menu
+// and without counting "Recent files history" items
+
+// 0  New
+// 1  Open...
+// 2  Open Folder
+// 3  Reload from Disk
+// 4  Save
+// 5  Save As...
+// 6  Save a Copy As...
+// 7  Save All
+// 8  Rename...
+// 9  Close
+//10  Close All
+//11  Close More
+//12  Move to Recycle Bin
+//13  --------
+//14  Load Session...
+//15  Save Session...
+//16  --------
+//17  Print...
+//18  Print Now
+//19  --------
+//20  Exit
+    #define    IDM_FILEMENU_EXISTCMDPOSITION    20 
  
 #define    IDM_EDIT       (IDM + 2000)
     #define    IDM_EDIT_CUT                         (IDM_EDIT + 1) 
@@ -62,6 +96,7 @@
     #define    IDM_EDIT_PASTE                       (IDM_EDIT + 5)
     #define    IDM_EDIT_DELETE                      (IDM_EDIT + 6)
     #define    IDM_EDIT_SELECTALL                   (IDM_EDIT + 7)
+    #define    IDM_EDIT_BEGINENDSELECT              (IDM_EDIT + 20)
     
     #define    IDM_EDIT_INS_TAB                     (IDM_EDIT + 8)
     #define    IDM_EDIT_RMV_TAB                     (IDM_EDIT + 9)
@@ -73,8 +108,18 @@
     #define    IDM_EDIT_LINE_DOWN                   (IDM_EDIT + 15)
     #define    IDM_EDIT_UPPERCASE                   (IDM_EDIT + 16)
     #define    IDM_EDIT_LOWERCASE                   (IDM_EDIT + 17)
-	#define    IDM_EDIT_REMOVEEMPTYLINES            (IDM_EDIT + 55)
-	#define    IDM_EDIT_REMOVEEMPTYLINESWITHBLANK   (IDM_EDIT + 56)
+    #define    IDM_EDIT_REMOVEEMPTYLINES            (IDM_EDIT + 55)
+    #define    IDM_EDIT_REMOVEEMPTYLINESWITHBLANK   (IDM_EDIT + 56)
+    #define    IDM_EDIT_BLANKLINEABOVECURRENT       (IDM_EDIT + 57)
+    #define    IDM_EDIT_BLANKLINEBELOWCURRENT       (IDM_EDIT + 58)
+	#define    IDM_EDIT_SORTLINES_LEXICOGRAPHIC_ASCENDING	(IDM_EDIT + 59)
+	#define    IDM_EDIT_SORTLINES_LEXICOGRAPHIC_DESCENDING	(IDM_EDIT + 60)
+	#define    IDM_EDIT_SORTLINES_INTEGER_ASCENDING			(IDM_EDIT + 61)
+	#define    IDM_EDIT_SORTLINES_INTEGER_DESCENDING		(IDM_EDIT + 62)
+	#define    IDM_EDIT_SORTLINES_DECIMALCOMMA_ASCENDING	(IDM_EDIT + 63)
+	#define    IDM_EDIT_SORTLINES_DECIMALCOMMA_DESCENDING	(IDM_EDIT + 64)
+	#define    IDM_EDIT_SORTLINES_DECIMALDOT_ASCENDING		(IDM_EDIT + 65)
+	#define    IDM_EDIT_SORTLINES_DECIMALDOT_DESCENDING		(IDM_EDIT + 66)
 
 // Menu macro
     #define    IDM_MACRO_STARTRECORDINGMACRO        (IDM_EDIT + 18)
@@ -92,7 +137,7 @@
     #define    IDM_EDIT_TAB2SW                      (IDM_EDIT + 46)
     #define    IDM_EDIT_SW2TAB_LEADING              (IDM_EDIT + 53)
     #define    IDM_EDIT_SW2TAB_ALL                  (IDM_EDIT + 54)
-	#define    IDM_EDIT_STREAM_UNCOMMENT            (IDM_EDIT + 47)
+    #define    IDM_EDIT_STREAM_UNCOMMENT            (IDM_EDIT + 47)
 
 // Menu macro
     #define    IDM_MACRO_SAVECURRENTMACRO           (IDM_EDIT + 25)
@@ -113,25 +158,25 @@
     #define    IDM_EDIT_COLUMNMODE                  (IDM_EDIT + 34)
     #define    IDM_EDIT_BLOCK_COMMENT_SET           (IDM_EDIT + 35)
     #define    IDM_EDIT_BLOCK_UNCOMMENT             (IDM_EDIT + 36)
-	#define    IDM_EDIT_COLUMNMODETIP               (IDM_EDIT + 37)
-	#define    IDM_EDIT_PASTE_AS_HTML               (IDM_EDIT + 38)
-	#define    IDM_EDIT_PASTE_AS_RTF                (IDM_EDIT + 39)
-	#define    IDM_EDIT_COPY_BINARY                 (IDM_EDIT + 48)
-	#define    IDM_EDIT_CUT_BINARY                  (IDM_EDIT + 49)
-	#define    IDM_EDIT_PASTE_BINARY                (IDM_EDIT + 50)
-	#define    IDM_EDIT_CHAR_PANEL                  (IDM_EDIT + 51)
-	#define    IDM_EDIT_CLIPBOARDHISTORY_PANEL      (IDM_EDIT + 52)
+    #define    IDM_EDIT_COLUMNMODETIP               (IDM_EDIT + 37)
+    #define    IDM_EDIT_PASTE_AS_HTML               (IDM_EDIT + 38)
+    #define    IDM_EDIT_PASTE_AS_RTF                (IDM_EDIT + 39)
+    #define    IDM_EDIT_COPY_BINARY                 (IDM_EDIT + 48)
+    #define    IDM_EDIT_CUT_BINARY                  (IDM_EDIT + 49)
+    #define    IDM_EDIT_PASTE_BINARY                (IDM_EDIT + 50)
+    #define    IDM_EDIT_CHAR_PANEL                  (IDM_EDIT + 51)
+    #define    IDM_EDIT_CLIPBOARDHISTORY_PANEL      (IDM_EDIT + 52)
 
     #define    IDM_EDIT_AUTOCOMPLETE                (50000 + 0)
     #define    IDM_EDIT_AUTOCOMPLETE_CURRENTFILE    (50000 + 1)
     #define    IDM_EDIT_FUNCCALLTIP                 (50000 + 2)
+    #define    IDM_EDIT_AUTOCOMPLETE_PATH           (50000 + 6)
     
     //Belong to MENU FILE
     #define    IDM_OPEN_ALL_RECENT_FILE             (IDM_EDIT + 40)
     #define    IDM_CLEAN_RECENT_FILE_LIST           (IDM_EDIT + 41)
     
 #define    IDM_SEARCH    (IDM + 3000)
-
     #define    IDM_SEARCH_FIND                 (IDM_SEARCH + 1)
     #define    IDM_SEARCH_FINDNEXT             (IDM_SEARCH + 2)
     #define    IDM_SEARCH_REPLACE              (IDM_SEARCH + 3)
@@ -185,6 +230,13 @@
     #define    IDM_SEARCH_INVERSEMARKS         (IDM_SEARCH + 50)
 	#define    IDM_SEARCH_DELETEUNMARKEDLINES  (IDM_SEARCH + 51)
 	#define    IDM_SEARCH_FINDCHARINRANGE      (IDM_SEARCH + 52)
+	#define    IDM_SEARCH_SELECTMATCHINGBRACES (IDM_SEARCH + 53)
+	#define    IDM_SEARCH_MARK                 (IDM_SEARCH + 54)
+	
+#define    IDM_MISC    (IDM + 3500)
+	#define    IDM_FILESWITCHER_FILESCLOSE            (IDM_MISC + 1)
+	#define    IDM_FILESWITCHER_FILESCLOSEOTHERS      (IDM_MISC + 2)
+
 
 #define IDM_VIEW    (IDM + 4000)                
     //#define    IDM_VIEW_TOOLBAR_HIDE            (IDM_VIEW + 1)
@@ -267,6 +319,18 @@
 	#define    IDM_VIEW_PROJECT_PANEL_3           (IDM_VIEW + 83)
 
 	#define    IDM_VIEW_FUNC_LIST                 (IDM_VIEW + 84)
+	
+	#define	   IDM_VIEW_TAB1					  (IDM_VIEW + 86)
+	#define	   IDM_VIEW_TAB2					  (IDM_VIEW + 87)
+	#define	   IDM_VIEW_TAB3					  (IDM_VIEW + 88)
+	#define	   IDM_VIEW_TAB4					  (IDM_VIEW + 89)
+	#define	   IDM_VIEW_TAB5					  (IDM_VIEW + 90)
+	#define	   IDM_VIEW_TAB6					  (IDM_VIEW + 91)
+	#define	   IDM_VIEW_TAB7					  (IDM_VIEW + 92)
+	#define	   IDM_VIEW_TAB8					  (IDM_VIEW + 93)
+	#define	   IDM_VIEW_TAB9					  (IDM_VIEW + 94)
+	#define	   IDM_VIEW_TAB_NEXT				  (IDM_VIEW + 95)
+	#define	   IDM_VIEW_TAB_PREV				  (IDM_VIEW + 96)
 
     #define    IDM_VIEW_GOTO_ANOTHER_VIEW        10001
     #define    IDM_VIEW_CLONE_TO_ANOTHER_VIEW    10002
@@ -399,6 +463,8 @@
     #define    IDM_LANG_POWERSHELL         (IDM_LANG + 53)
     #define    IDM_LANG_R                  (IDM_LANG + 54)
     #define    IDM_LANG_JSP                (IDM_LANG + 55)
+	#define    IDM_LANG_COFFEESCRIPT       (IDM_LANG + 56)
+	#define    IDM_LANG_JSON		       (IDM_LANG + 57)
 
     #define    IDM_LANG_EXTERNAL           (IDM_LANG + 65)
     #define    IDM_LANG_EXTERNAL_LIMIT     (IDM_LANG + 79)
@@ -418,6 +484,9 @@
     #define    IDM_UPDATE_NPP       (IDM_ABOUT  + 6)
     #define    IDM_WIKIFAQ          (IDM_ABOUT  + 7)
     #define    IDM_HELP             (IDM_ABOUT  + 8)
+	#define    IDM_CONFUPDATERPROXY (IDM_ABOUT  + 9)
+	#define    IDM_CMDLINEARGUMENTS (IDM_ABOUT  + 10)
+	#define    IDM_ONLINESUPPORT    (IDM_ABOUT  + 11)
 
 
 #define    IDM_SETTING    (IDM + 8000)
