@@ -16,7 +16,6 @@ These are the default settings:
     [Options]
     Show=1
     ToolbarIcon=1
-	DBFile=
 
 When ``Show`` is set to ``0`` the tree will not be shown.
 

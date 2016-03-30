@@ -11,8 +11,8 @@ Version 1.4.0 (Yet To Be Released)
 
 -  Added option to export library for easier sharing.
 
--  Fixed bug 6 at Google Code. When a snippets had an empty first line
-   it could not be saved.
+-  Fixed `bug #6`_ at Google Code and its duplicate `issue #8`_.
+   When a snippet had an empty first line it could not be saved.
 
 -  Removed all references to Google Code because that `service is retiring`_.
    All things that were on Google Code have been moved to `GitHub`_.
@@ -28,6 +28,8 @@ Version 1.4.0 (Yet To Be Released)
 .. _Read The Docs: http://nppsnippets.readthedocs.org
 .. _service is retiring: http://google-opensource.blogspot.com/2015/03/farewell-to-google-code.html
 .. _GitHub: https://github.com/ffes/nppsnippets
+.. _bug #6: https://code.google.com/archive/p/nppsnippets/issues/6
+.. _issue #8: https://github.com/ffes/nppsnippets/issues/8
 
 
 Version `1.3.0`_ (June 2013)
