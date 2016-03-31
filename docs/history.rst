@@ -14,8 +14,8 @@ Version 1.4.0 (Yet To Be Released)
 -  Fixed `bug #6`_ at Google Code and its duplicate `issue #8`_.
    When a snippet had an empty first line it could not be saved.
 
--  Removed all references to Google Code because that `service is retiring`_.
-   All things that were on Google Code have been moved to `GitHub`_.
+-  Removed all references to Google Code because that `service has retired`_.
+   All things that were still on Google Code have been moved to `GitHub`_.
 
 -  Internally use my SqliteDB-class to communicate with the database.
 
