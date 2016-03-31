@@ -11,6 +11,8 @@ The wish list is in random order.
 
 -  Assign keyboard shortcut keys to a snippet.
 
+-  Add tooltips for the snippets (`#7`_).
+
 -  Remember the last select snippet from the list. Useful when switching
    between different languages.
 
@@ -30,3 +32,5 @@ The wish list is in random order.
 
 -  Libraries can be hard to find when there is something wrong with the
    languages that are set for this library.
+
+.. _#7: https://github.com/ffes/nppsnippets/issues/7

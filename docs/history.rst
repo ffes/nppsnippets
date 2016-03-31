@@ -4,12 +4,12 @@ Release history
 Version 1.4.0 (Yet To Be Released)
 ----------------------------------
 
+-  Added option to export library for easier sharing.
+
 -  The color of the plug-in match the current Notepad++ theme.
 
 -  Converted the documentation from DocBook to reStructuredText. The
    documentation is now hosted at `Read The Docs`_
-
--  Added option to export library for easier sharing.
 
 -  Fixed `bug #6`_ at Google Code and its duplicate `issue #8`_.
    When a snippet had an empty first line it could not be saved.
