@@ -66,4 +66,5 @@ INSERT INTO Languages VALUES (55,'JSP');
 INSERT INTO Languages VALUES (56,'CoffeeScript');
 INSERT INTO Languages VALUES (57,'JSON');
 INSERT INTO Languages VALUES (58,'JavaScript');
+INSERT INTO Languages VALUES (59,'Fortran 77');
 COMMIT;

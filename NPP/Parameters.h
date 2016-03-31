@@ -812,6 +812,8 @@ struct NppGUI final
 	MatchedPairConf _matchedPairConf;
 
 	generic_string _definedSessionExt;
+	generic_string _definedWorkspaceExt;
+	
 
 
 
@@ -866,6 +868,7 @@ struct ScintillaViewParams
 	int _borderWidth = 2;
 	bool _disableAdvancedScrolling = false;
 	bool _doSmoothFont = false;
+	bool _showBorderEdge = true;
 };
 
 const int NB_LIST = 20;
@@ -1339,6 +1342,7 @@ public:
 	bool writeHistory(const TCHAR *fullpath);
 
 	bool writeProjectPanelsSettings() const;
+	bool writeFileBrowserSettings(const std::vector<generic_string> & rootPath, const generic_string & latestSelectedItemPath) const;
 
 	TiXmlNode* getChildElementByAttribut(TiXmlNode *pere, const TCHAR *childName, const TCHAR *attributName, const TCHAR *attributVal) const;
 
@@ -1456,12 +1460,11 @@ public:
 	generic_string getContextMenuPath() const {return _contextMenuPath;};
 	const TCHAR * getAppDataNppDir() const {return _appdataNppDir.c_str();};
 	const TCHAR * getWorkingDir() const {return _currentDirectory.c_str();};
-	const TCHAR * getworkSpaceFilePath(int i) const
-	{
+	const TCHAR * getWorkSpaceFilePath(int i) const {
 		if (i < 0 || i > 2) return nullptr;
 		return _workSpaceFilePathes[i].c_str();
 	}
-
+	const std::vector<generic_string> getFileBrowserRoots() const { return _fileBrowserRoot; };
 	void setWorkSpaceFilePath(int i, const TCHAR *wsFile);
 
 	void setWorkingDir(const TCHAR * newPath);
@@ -1475,8 +1478,7 @@ public:
 	int langTypeToCommandID(LangType lt) const;
 	WNDPROC getEnableThemeDlgTexture() const {return _enableThemeDialogTextureFuncAddr;};
 
-	struct FindDlgTabTitiles final
-	{
+	struct FindDlgTabTitiles final {
 		generic_string _find;
 		generic_string _replace;
 		generic_string _findInFiles;
@@ -1487,14 +1489,14 @@ public:
 
 	bool asNotepadStyle() const {return _asNotepadStyle;};
 
-	bool reloadPluginCmds()
-	{
+	bool reloadPluginCmds() {
 		return getPluginCmdsFromXmlTree();
 	}
 
 	bool getContextMenuFromXmlTree(HMENU mainMenuHadle, HMENU pluginsMenu);
 	bool reloadContextMenuFromXmlTree(HMENU mainMenuHadle, HMENU pluginsMenu);
-	winVer getWinVersion() { return _winVersion;};
+	winVer getWinVersion() const {return _winVersion;};
+	generic_string getWinVersionStr() const;
 	FindHistory & getFindHistory() {return _findHistory;};
 	bool _isFindReplacing; // an on the fly variable for find/replace functions
 	void safeWow64EnableWow64FsRedirection(BOOL Wow64FsEnableRedirection);
@@ -1660,6 +1662,8 @@ private:
 	generic_string _currentDirectory;
 	generic_string _workSpaceFilePathes[3];
 
+	std::vector<generic_string> _fileBrowserRoot;
+
 	Accelerator *_pAccelerator;
 	ScintillaAccelerator * _pScintAccelerator;
 
@@ -1700,6 +1704,7 @@ private:
 	void feedDockingManager(TiXmlNode *node);
 	void feedFindHistoryParameters(TiXmlNode *node);
 	void feedProjectPanelsParameters(TiXmlNode *node);
+	void feedFileBrowserParameters(TiXmlNode *node);
 
 	bool feedStylerArray(TiXmlNode *node);
 	void getAllWordStyles(TCHAR *lexerName, TiXmlNode *lexerNode);
