@@ -25,6 +25,8 @@ Version 1.4.0 (Yet To Be Released)
 -  Fixed issue that sometimes new libraries and/or new snippets could
    not be added.
 
+-  Upgrade to SQLite version 3.12.0
+
 .. _Read The Docs: http://nppsnippets.readthedocs.org
 .. _service is retiring: http://google-opensource.blogspot.com/2015/03/farewell-to-google-code.html
 .. _GitHub: https://github.com/ffes/nppsnippets
