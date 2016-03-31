@@ -2,10 +2,9 @@ _*
 *.suo
 *.ncb
 *.user
+*.opendb
 *.opensdf
 *.sdf
-!__SQL
-!__SampleDB
 [Rr]elease/
 [Dd]ebug/
 *.d
