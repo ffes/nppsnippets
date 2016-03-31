@@ -68,6 +68,7 @@ PROGRAM_SRCS_CPP = \
 	DlgEditLanguages.cpp \
 	DlgEditLibrary.cpp \
 	DlgImportLibrary.cpp \
+	NppOptions.cpp \
 	NppSnippets.cpp \
 	Language.cpp \
 	Library.cpp \

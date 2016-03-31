@@ -21,27 +21,22 @@
 
 #pragma once
 
-#include "NppOptions.h"
-
 /////////////////////////////////////////////////////////////////////////////
 //
 
-class Options : public NppOptions
+class NppOptions
 {
 public:
-	Options();
-	~Options();
+	NppOptions();
 
-	bool showConsoleDlg;
-	bool toolbarIcon;
+protected:
+	bool GetBool(WCHAR* szAppName, WCHAR* szKeyName, bool def);
+	int GetInt(WCHAR* szAppName, WCHAR* szKeyName, int def);
+	void GetString(WCHAR* szAppName, WCHAR* szKeyName, WCHAR* szReturnedString, DWORD nSize, WCHAR* def);
 
-	WCHAR* GetPrevVersion() { return _szPrevVersion; };
-	WCHAR* GetDBFile() { return _szDBFile; };
+	void WriteBool(WCHAR* szAppName, WCHAR* szKeyName, bool val);
+	void WriteInt(WCHAR* szAppName, WCHAR* szKeyName, int val);
+	void WriteString(WCHAR* szAppName, WCHAR* szKeyName, WCHAR* val);
 
-	void Write();
-	void Read();
-
-private:
-	WCHAR _szPrevVersion[MAX_PATH];
-	WCHAR _szDBFile[MAX_PATH];
+	WCHAR _szIniPath[MAX_PATH];
 };

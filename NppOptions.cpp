@@ -20,66 +20,70 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
-#include "Options.h"
+#include <stdio.h>
+#include "NppOptions.h"
 #include "NPP/PluginInterface.h"
 #include "NppSnippets.h"
-#include "Version.h"
-
-/////////////////////////////////////////////////////////////////////////////
-// Strings used in the ini file
-
-static WCHAR s_szOptions[]			= L"Options";
-static WCHAR s_szShow[]				= L"Show";
-static WCHAR s_szToolbarIcon[]		= L"ToolbarIcon";
-static WCHAR s_szVersion[]			= L"Version";
-static WCHAR s_szDBPath[]			= L"DBPath";
-static WCHAR s_szDBFile[]			= L"DBFile";
 
 /////////////////////////////////////////////////////////////////////////////
 // Constructor: read the settings
 
-Options::Options() : NppOptions()
+NppOptions::NppOptions()
 {
-	// First make sure the paths are empty
-	_szPrevVersion[0] = 0;
-	_szDBFile[0] = 0;
+	// First make sure the path is empty
+	_szIniPath[0] = 0;
 
-	// Read the settings from the file
-	Read();
+	// Get the directory from NP++ and add the filename of the settings file
+	SendMessage(g_nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM) &_szIniPath);
+	wcsncat(_szIniPath, L"\\NppSnippets.ini", MAX_PATH);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Destructor: write the settings
+// Read a boolean from the ini file
 
-Options::~Options()
+bool NppOptions::GetBool(WCHAR* szAppName, WCHAR* szKeyName, bool def)
 {
-	Write();
+	return(GetPrivateProfileInt(szAppName, szKeyName, def ? 1 : 0, _szIniPath) > 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Write the options to the ini-file
+// Read a int from the ini file
 
-void Options::Write()
+int NppOptions::GetInt(WCHAR* szAppName, WCHAR* szKeyName, int def)
 {
-	WriteBool(s_szOptions, s_szShow, showConsoleDlg);
-	WriteBool(s_szOptions, s_szToolbarIcon, toolbarIcon);
-	WriteString(s_szOptions, s_szVersion, VERSION_NUMBER_WSTR);
+	return GetPrivateProfileInt(szAppName, szKeyName, def, _szIniPath);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Read the options from the ini-file
+// Read a string from the ini file
 
-void Options::Read()
+void NppOptions::GetString(WCHAR* szAppName, WCHAR* szKeyName, WCHAR* szReturnedString, DWORD nSize, WCHAR* def)
 {
-	showConsoleDlg = GetBool(s_szOptions, s_szShow, true);
-	toolbarIcon = GetBool(s_szOptions, s_szToolbarIcon, true);
-	GetString(s_szOptions, s_szVersion, _szPrevVersion, MAX_PATH, L"");
+	GetPrivateProfileString(szAppName, szKeyName, def, szReturnedString, nSize, _szIniPath);
+}
 
-	// Did the user specify a special path for the database?
-	GetString(s_szOptions, s_szDBFile, _szDBFile, MAX_PATH, L"");
-	if (wcslen(_szDBFile) == 0)
-	{
-		// Try the old name of this entry
-		GetString(s_szOptions, s_szDBPath, _szDBFile, MAX_PATH, L"");
-	}
+/////////////////////////////////////////////////////////////////////////////
+// Write a boolean to the ini file
+
+void NppOptions::WriteBool(WCHAR* szAppName, WCHAR* szKeyName, bool val)
+{
+	WritePrivateProfileString(szAppName, szKeyName, val ? L"1" : L"0", _szIniPath);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Write an integer to the ini file
+
+void NppOptions::WriteInt(WCHAR* szAppName, WCHAR* szKeyName, int val)
+{
+	WCHAR temp[256];
+	snwprintf(temp, 256, L"%d", val);
+	WritePrivateProfileString(szAppName, szKeyName, temp, _szIniPath);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Write a string to the ini file
+
+void NppOptions::WriteString(WCHAR* szAppName, WCHAR* szKeyName, WCHAR* val)
+{
+	WritePrivateProfileString(szAppName, szKeyName, val, _szIniPath);
 }
