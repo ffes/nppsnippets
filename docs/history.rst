@@ -19,8 +19,7 @@ Version 1.4.0 (Yet To Be Released)
 
 -  Internally use my SqliteDB-class to communicate with the database.
 
--  Added option ``ToolbarIcon`` to ini-file to hide the icon from the
-   toolbar.
+-  Added :ref:`option <options>` ``ToolbarIcon`` to hide the icon from the toolbar.
 
 -  Fixed issue that sometimes new libraries and/or new snippets could
    not be added.
