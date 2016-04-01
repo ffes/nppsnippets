@@ -27,7 +27,7 @@ Version 1.4.0 (Yet To Be Released)
 -  Upgrade to SQLite version 3.12.0
 
 .. _Read The Docs: http://nppsnippets.readthedocs.org
-.. _service is retiring: http://google-opensource.blogspot.com/2015/03/farewell-to-google-code.html
+.. _service has retired: http://google-opensource.blogspot.com/2015/03/farewell-to-google-code.html
 .. _GitHub: https://github.com/ffes/nppsnippets
 .. _bug #6: https://code.google.com/archive/p/nppsnippets/issues/6
 .. _issue #8: https://github.com/ffes/nppsnippets/issues/8
