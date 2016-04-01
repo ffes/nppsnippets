@@ -108,6 +108,7 @@
     <ClCompile Include="DlgImportLibrary.cpp" />
     <ClCompile Include="Language.cpp" />
     <ClCompile Include="Library.cpp" />
+    <ClCompile Include="NppOptions.cpp" />
     <ClCompile Include="NppSnippets.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="Snippets.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="DlgImportLibrary.h" />
     <ClInclude Include="Language.h" />
     <ClInclude Include="Library.h" />
+    <ClInclude Include="NppOptions.h" />
     <ClInclude Include="NppSnippets.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="Resource.h" />
