@@ -10,3 +10,4 @@ _*
 *.d
 *.o
 NppSnippets.dll
+version_git.h

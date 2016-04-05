@@ -19,13 +19,14 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __VERSION_H__
-#define __VERSION_H__
+#pragma once
 
 #define VERSION_NUMBER        1,3,0,0
 #define VERSION_NUMBER_STR   "1.3.0"
 #define VERSION_NUMBER_WSTR	L"1.3.0"
 #define COPYRIGHT_STR        "Copyright 2010-2013 by Frank Fesevur"
+
+#include "version_git.h"
 
 #define VERSION_DIGITS 4
 
@@ -46,5 +47,3 @@ public:
 private:
 	BYTE _version[VERSION_DIGITS];
 };
-
-#endif // __VERSION_H__
