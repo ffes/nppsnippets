@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-PATH=/usr/bin:/bin
-
 # Make sure there is a file, but don't touch it if not needed
 if ! [ -f version_git.h ]
 then
@@ -9,7 +7,7 @@ then
 fi
 
 # Is git installed?
-if [ -x /usr/bin/git ]
+if type git >/dev/null 2>&1
 then
 	# Get the latest git commit
 	VERSION=$(git describe --tags)
