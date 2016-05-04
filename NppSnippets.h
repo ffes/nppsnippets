@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //  NppSnippets - Code Snippets plugin for Notepad++                       //
-//  Copyright (C) 2010 Frank Fesevur                                       //
+//  Copyright (C) 2010-2016 Frank Fesevur                                  //
 //                                                                         //
 //  This program is free software; you can redistribute it and/or modify   //
 //  it under the terms of the GNU General Public License as published by   //
@@ -19,8 +19,7 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __NPPSNIPPETS_H__
-#define __NPPSNIPPETS_H__
+#pragma once
 
 #include <string>
 #include <map>
@@ -37,6 +36,10 @@ extern void CenterWindow(HWND hDlg);
 extern WCHAR* GetDlgText(HWND hDlg, UINT uID);
 extern std::wstring ConvertLineEnding(LPCWSTR from, int toLineEnding = -1);
 
+struct NppData;
+struct FuncItem;
+enum LangType;
+
 extern HINSTANCE g_hInst;
 extern NppData g_nppData;
 extern LangType g_currentLang;
@@ -50,5 +53,3 @@ extern Options *g_Options;
 #define snprintf _snprintf
 #define snwprintf swprintf
 #endif
-
-#endif // __NPPSNIPPETS_H__
