@@ -5,6 +5,7 @@ _*
 *.opendb
 *.opensdf
 *.sdf
+*.VC.db
 [Rr]elease/
 [Dd]ebug/
 *.d
