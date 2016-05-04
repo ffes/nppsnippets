@@ -23,7 +23,6 @@
 
 #include <string>
 #include <map>
-using namespace std;
 
 extern HWND getCurrentHScintilla(int which);
 extern LRESULT SendMsg(UINT Msg, WPARAM wParam = 0, LPARAM lParam = 0, int count = 1);
