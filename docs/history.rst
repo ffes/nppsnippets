@@ -9,9 +9,9 @@ Version 1.4.0 (Yet To Be Released)
 -  The color of the plug-in match the current Notepad++ theme.
 
 -  Converted the documentation from DocBook to reStructuredText. The
-   documentation is now hosted at `Read The Docs`_
+   documentation is now hosted at `Read The Docs`_.
 
--  Fixed `bug #6`_ at Google Code and its duplicate `issue #8`_.
+-  Fixed `bug #6`_ at Google Code and its GitHub duplicate `issue #8`_.
    When a snippet had an empty first line it could not be saved.
 
 -  Removed all references to Google Code because that `service has retired`_.
@@ -26,7 +26,7 @@ Version 1.4.0 (Yet To Be Released)
 
 -  Upgrade to SQLite version 3.12.0
 
-.. _Read The Docs: http://nppsnippets.readthedocs.org
+.. _Read The Docs: http://nppsnippets.readthedocs.io
 .. _service has retired: http://google-opensource.blogspot.com/2015/03/farewell-to-google-code.html
 .. _GitHub: https://github.com/ffes/nppsnippets
 .. _bug #6: https://code.google.com/archive/p/nppsnippets/issues/6
@@ -48,8 +48,8 @@ Version `1.3.0`_ (June 2013)
 -  Upgrade to SQLite version 3.8.0.2
 
 .. _1.3.0: https://github.com/ffes/nppsnippets/releases/tag/v1.3.0
-.. _issue #3: http://code.google.com/p/nppsnippets/issues/detail?id=3
-.. _on-line version: http://nppsnippets.readthedocs.org
+.. _issue #3: http://code.google.com/archive/p/nppsnippets/issues/3
+.. _on-line version: http://nppsnippets.readthedocs.io
 
 
 Version `1.2.0`_ (8 January 2013)

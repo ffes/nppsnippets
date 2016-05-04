@@ -113,7 +113,7 @@ html_theme = 'default'
 
 # See if the RTD theme is installed locally
 # Based on RTD FAQ and the RTD-theme install instruction
-# http://read-the-docs.readthedocs.org/en/latest/faq.html
+# http://read-the-docs.readthedocs.io/en/latest/faq.html
 # https://github.com/snide/sphinx_rtd_theme
 
 if not on_rtd:
