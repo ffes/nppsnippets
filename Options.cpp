@@ -21,7 +21,6 @@
 
 #include <windows.h>
 #include "Options.h"
-#include "NPP/PluginInterface.h"
 #include "NppSnippets.h"
 #include "Version.h"
 
