@@ -1200,8 +1200,8 @@ static HBRUSH OnCtlColorListbox(HWND hWnd, HWND hwndList, HDC hdc)
 		return NULL;
 
 	// Get the colors from the N++ theme
-	int fore = SendMsg(SCI_STYLEGETFORE, (WPARAM) STYLE_DEFAULT);
-	int back = SendMsg(SCI_STYLEGETBACK, (WPARAM) STYLE_DEFAULT);
+	int fore = (int) SendMsg(SCI_STYLEGETFORE, (WPARAM) STYLE_DEFAULT);
+	int back = (int) SendMsg(SCI_STYLEGETBACK, (WPARAM) STYLE_DEFAULT);
 
 	// Set the colors for the items
 	SetTextColor(hdc, fore);
@@ -1340,5 +1340,5 @@ void SnippetsConsole()
 void CreateConsoleDlg()
 {
 	// Create the console window
-	s_hDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_SNIPPETS), g_nppData._nppHandle, DlgProcedure);
+	s_hDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_SNIPPETS), g_nppData._nppHandle, (DLGPROC) DlgProcedure);
 }
