@@ -6,8 +6,8 @@ _*
 *.opensdf
 *.sdf
 *.VC.db
-[Rr]elease/
-[Dd]ebug/
+Win32/
+x64/
 *.d
 *.o
 NppSnippets.dll

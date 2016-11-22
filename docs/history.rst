@@ -4,6 +4,8 @@ Release history
 Version 1.4.0 (Yet To Be Released)
 ----------------------------------
 
+-  Provide a 64-bit version of the plug-in.
+
 -  Added option to export library for easier sharing.
 
 -  The color of the plug-in match the current Notepad++ theme.
