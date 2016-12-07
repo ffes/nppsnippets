@@ -27,9 +27,13 @@ the ``python-sphinx`` and ``make`` packages.
 Use ``make html`` in the ``docs`` directory to generate the documentation.
 Other forms of output are not used, but might work.
 
+
 If you want the local docs the look like Read The Docs:
+
 - Clone the `Sphinx RTD Theme`_.
+
 - Create a directory named ``_themes`` in the ``docs`` directory.
+
 - There you need to create a symlink to the ``sphinx_rtd_theme`` subdirectory
   in the cloned repo.
 
