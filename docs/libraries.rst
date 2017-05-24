@@ -18,6 +18,8 @@ To add a lot of snippets, I suggest that you look at the section
 data with your favorite SQLite management tool.
 
 
+.. _import_export_libs:
+
 Importing and exporting libraries
 ---------------------------------
 

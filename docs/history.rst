@@ -1,12 +1,12 @@
 Release history
 ===============
 
-Version 1.4.0 (Yet To Be Released)
-----------------------------------
+Version `1.4.0`_ (24 May 2017)
+------------------------------
 
 -  Provide a 64-bit version of the plug-in.
 
--  Added option to export library for easier sharing.
+-  Added the possibility to :ref:`export a library <import_export_libs>` for easier sharing.
 
 -  The color of the plug-in match the current Notepad++ theme.
 
@@ -23,11 +23,14 @@ Version 1.4.0 (Yet To Be Released)
 
 -  Added :ref:`option <options>` ``ToolbarIcon`` to hide the icon from the toolbar.
 
+-  Update icon on toolbar. It is now a puzzle piece.
+
 -  Fixed issue that sometimes new libraries and/or new snippets could
    not be added.
 
 -  Upgrade to SQLite version 3.19.0
 
+.. _1.4.0: https://github.com/ffes/nppsnippets/releases/tag/v1.4.0
 .. _Read The Docs: http://nppsnippets.readthedocs.io
 .. _service has retired: http://google-opensource.blogspot.com/2015/03/farewell-to-google-code.html
 .. _GitHub: https://github.com/ffes/nppsnippets

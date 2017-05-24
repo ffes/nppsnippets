@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //  NppSnippets - Code Snippets plugin for Notepad++                       //
-//  Copyright (C) 2010-2013 Frank Fesevur                                  //
+//  Copyright (C) 2010-2017 Frank Fesevur                                  //
 //                                                                         //
 //  This program is free software; you can redistribute it and/or modify   //
 //  it under the terms of the GNU General Public License as published by   //
@@ -38,10 +38,11 @@ struct VersionInfo
 	const WCHAR*	text;
 };
 
-#define MAX_VERSION_INFO 11
+#define MAX_VERSION_INFO 12
 
 static VersionInfo s_info[MAX_VERSION_INFO] =
 {
+	{	{1,4,0,0},	{2017, 5,24},	L"- Provide a 64-bit version of the plug-in\n- Added option to export library for easier sharing.\n- The color of the plug-in match the current Notepad++ theme.\n- Converted the documentation from DocBook to reStructuredText. The documentation is now hosted at Read The Docs.\n- Fixed bug #6 at Google Code and its GitHub duplicate issue #8. When a snippet had an empty first line it could not be saved.\n- Removed all references to Google Code because that service has retired. All things that were still on Google Code have been moved to GitHub.\n- Internally use my SqliteDB-class to communicate with the database.\n- Added option ToolbarIcon to hide the icon from the toolbar.\n- Fixed issue that sometimes new libraries and/or new snippets could not be added.\n- Upgrade to SQLite version 3.19.0" },
 	{	{1,3,0,0},	{2013, 6,30},	L"- Fixed problem with inserting UTF snippets.\n- Fixed wrong title of Import Library dialog.\n- Fixed some potential bugs found when trying to fix GCC compilation.\n- Converted the documentation from ODT to DocBook.\n- Upgrade to SQLite version 3.7.17" },
 	{	{1,2,0,0},	{2013, 1, 8},	L"- There was an inconsistency between the documentation and code about the name of the option to specify your custom path for the database. Use DBFile from now on. For backwards compatibility the DBPath entry will still be recognized.\n- When a snippets creates a new document and the current document is empty, it reuses the current one and does not start a new.\n- Added Duplicate snippet function to context menu.\n- New (simple) templates library.\n- Upgrade to SQLite version 3.7.15.1" },
 	{	{1,1,0,0},	{2012, 1, 2},	L"- You can now add a new snippet to a library based upon the current selection or based upon the content of the clipboard.\n- Installation has been improved. A template database is provided and when the plugin tries to find the database and it can't find it, it copies this template database to the AppData plugin-config directory.\n- The About dialog now shows the changelog.\n- When you upgrade the very first time the changelog for the current version will be shown.\n- When you didn't select a specific library for a certain language, the automatic selection of the library is improved. The first language specific library is preferred over the first general library.\n- Resized the edit snippet dialog.\n- Upgrade to SQLite version 3.7.9" },
