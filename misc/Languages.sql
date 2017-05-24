@@ -67,4 +67,8 @@ INSERT INTO Languages VALUES (56,'CoffeeScript');
 INSERT INTO Languages VALUES (57,'JSON');
 INSERT INTO Languages VALUES (58,'JavaScript');
 INSERT INTO Languages VALUES (59,'Fortran 77');
+INSERT INTO Languages VALUES (60,'BaanC');
+INSERT INTO Languages VALUES (61,'Motorola S-Record binary data');
+INSERT INTO Languages VALUES (62,'Intel HEX binary data');
+INSERT INTO Languages VALUES (63,'Tektronix extended HEX binary data');
 COMMIT;
