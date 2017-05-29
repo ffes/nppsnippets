@@ -19,5 +19,8 @@ indent_size = 2
 indent_style = space
 end_of_line = lf
 
+[*.sh]
+end_of_line = lf
+
 [sqlite3.*]
 end_of_line = lf
