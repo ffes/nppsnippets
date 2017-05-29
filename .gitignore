@@ -12,3 +12,4 @@ x64/
 *.o
 NppSnippets.dll
 version_git.h
+.vs/
