@@ -117,9 +117,9 @@ html_theme = 'default'
 # https://github.com/snide/sphinx_rtd_theme
 
 if not on_rtd:
-	if os.path.exists('_themes/sphinx_rtd_theme'):
-		html_theme_path = [ '_themes', ]
-		html_theme = 'sphinx_rtd_theme'
+    if os.path.exists('_themes/sphinx_rtd_theme'):
+        html_theme_path = [ '_themes', ]
+        html_theme = 'sphinx_rtd_theme'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -195,25 +195,25 @@ htmlhelp_basename = 'NppSnippetsdoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-	# The paper size ('letterpaper' or 'a4paper').
-	'papersize': 'a4paper',
+    # The paper size ('letterpaper' or 'a4paper').
+    'papersize': 'a4paper',
 
-	# The font size ('10pt', '11pt' or '12pt').
-	#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
 
-	# Additional stuff for the LaTeX preamble.
-	#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 
-	'classoptions': ',openany,oneside',
-	'babel': '\\usepackage[english]{babel}'
+    'classoptions': ',openany,oneside',
+    'babel': '\\usepackage[english]{babel}'
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'NppSnippets.tex', 'NppSnippets Documentation',
-   'Frank Fesevur', 'manual'),
+    ('index', 'NppSnippets.tex', 'NppSnippets Documentation',
+    'Frank Fesevur', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -243,7 +243,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'nppsnippets', 'NppSnippets Documentation',
-     ['Frank Fesevur'], 1)
+    ['Frank Fesevur'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -256,9 +256,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'NppSnippets', 'NppSnippets Documentation',
-   'Frank Fesevur', 'NppSnippets', 'A code snippets plugin for Notepad++',
-   'Miscellaneous'),
+    ('index', 'NppSnippets', 'NppSnippets Documentation',
+    'Frank Fesevur', 'NppSnippets', 'A code snippets plugin for Notepad++',
+    'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.

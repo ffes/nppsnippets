@@ -1,0 +1,23 @@
+# EditorConfig for main source directory
+
+root = true
+
+[*]
+end_of_line = crlf
+indent_size = 4
+indent_style = tab
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[{*.{vcxproj,vcxproj.user,props}}]
+indent_size = 2
+indent_style = space
+insert_final_newline = false
+
+[*.yml]
+indent_size = 2
+indent_style = space
+end_of_line = lf
+
+[sqlite3.*]
+end_of_line = lf

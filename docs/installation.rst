@@ -19,9 +19,8 @@ directory, but this could result in a read-only database due to file
 permissions and/or User Account Control (UAC). Therefore it is advised
 to put it in your ``AppData`` directory.
 
-	From `issue #9`_:
-	I noticed when I change files with different languages of my progect it takes 2-3 seconds delay when plugin load snippets for this language (for example HTML to PHP).
-
+    From `issue #9`_:
+    I noticed when I change files with different languages of my progect it takes 2-3 seconds delay when plugin load snippets for this language (for example HTML to PHP).
 
 You can also specify a custom path (like a shared network path or your
 Dropbox directory) for your database by manually editing the
@@ -38,4 +37,3 @@ database in the archive.
 
 
 .. _issue #9: https://github.com/ffes/nppsnippets/issues/9
-
