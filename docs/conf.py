@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# NppSnippets documentation build configuration file, created by
-# sphinx-quickstart on Wed Jun 10 21:36:42 2015.
+# NppSnippets documentation build configuration file
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -12,8 +11,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
-import os
+import sys, os
 
 # Check if we run on RTD or locally
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
