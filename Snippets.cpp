@@ -150,10 +150,10 @@ void Snippet::SetBeforeSelection(LPCSTR txt)
 	}
 
 	// Convert from UTF-8 to WCHAR and store
-    size_t size = MultiByteToWideChar(CP_UTF8, 0, txt, (int) len, NULL, 0);
-	WCHAR* wBuffer = (WCHAR*) malloc(size);
-	ZeroMemory(wBuffer, size);
-    MultiByteToWideChar(CP_UTF8, 0, txt, (int) len, wBuffer, size);
+    size_t sizeInChars = MultiByteToWideChar(CP_UTF8, 0, txt, (int) (len + 1), NULL, 0);
+	WCHAR* wBuffer = (WCHAR*) malloc(sizeInChars * sizeof(WCHAR));
+	ZeroMemory(wBuffer, sizeInChars * sizeof(WCHAR));
+    MultiByteToWideChar(CP_UTF8, 0, txt, (int) (len + 1), wBuffer, (int)sizeInChars);
 	WSetBeforeSelection(wBuffer);
 	free(wBuffer);
 }
