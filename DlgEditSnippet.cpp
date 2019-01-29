@@ -255,6 +255,7 @@ static BOOL CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 					{
 						return OnReplaceSelClick(hDlg);
 					}
+					break;
 				}
 
 				case IDC_NEW_DOC:
@@ -263,6 +264,7 @@ static BOOL CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 					{
 						return OnNewDocumentClick(hDlg);
 					}
+					break;
 				}
 			}
 			return FALSE;

@@ -937,7 +937,7 @@ static void OnLibraryEdit(HWND hWnd)
 {
 	UNREFERENCED_PARAMETER(hWnd);
 
-	bool oldSortAlphabetic = s_curLibrary->GetSortAlphabetic();
+	//bool oldSortAlphabetic = s_curLibrary->GetSortAlphabetic();
 	if (ShowEditLibraryDlg(s_curLibrary))
 	{
 /*
