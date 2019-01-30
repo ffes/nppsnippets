@@ -261,10 +261,8 @@ void MsgBox(const WCHAR* msg)
 
 void MsgBox(const char* msg)
 {
-	TCHAR* tmp = (TCHAR*) malloc(sizeof(TCHAR) * (strlen(msg) + 2));
-	Ansi2Unicode(tmp, msg, (int) strlen(msg) + 1);
-	::MessageBox(g_nppData._nppHandle, tmp, PLUGIN_NAME, MB_OK);
-	free(tmp);
+	std::wstring wsTmp(msg, msg + strlen(msg));
+	MessageBox(g_nppData._nppHandle, wsTmp.c_str(), PLUGIN_NAME, MB_OK);
 }
 
 bool MsgBoxYesNo(const WCHAR* msg)

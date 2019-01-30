@@ -207,12 +207,11 @@ void SqliteDatabase::SetUserVersion(long version, const char* dbname)
 
 long SqliteDatabase::GetUserVersion(const char* dbname)
 {
-	char sql[MAX_PATH];
-	strncpy(sql, "PRAGMA ", MAX_PATH);
-	strncat(sql, dbname == NULL ? "main" : dbname, MAX_PATH);
-	strncat(sql, ".user_version;", MAX_PATH);
+	string sql = "PRAGMA ";
+	sql += (dbname == NULL ? "main" : dbname);
+	sql += ".user_version;";
 
-	SqliteStatement stmt(this, sql);
+	SqliteStatement stmt(this, sql.c_str());
 	stmt.GetNextRecord();
 	return stmt.GetIntColumn(0);
 }
@@ -222,10 +221,9 @@ long SqliteDatabase::GetUserVersion(const char* dbname)
 
 void SqliteDatabase::EnableForeignKeys(bool on)
 {
-	char sql[MAX_PATH];
-	strncpy(sql, "PRAGMA foreign_keys = ", MAX_PATH);
-	strncat(sql, on ? "ON" : "OFF", MAX_PATH);
-	Execute(sql);
+	string sql = "PRAGMA foreign_keys = ";
+	sql += (on ? "ON" : "OFF");
+	Execute(sql.c_str());
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -158,12 +158,11 @@ static bool AddListItems()
 		return false;
 
 	// Create the proper SQL-statement
-	char szSQL[MAX_PATH];
-	strncpy(szSQL, "SELECT * FROM Snippets WHERE LibraryID = @libid ORDER BY ", MAX_PATH);
-	strncat(szSQL, s_curLibrary->GetSortAlphabetic() ? "Name,Sort" : "Sort,Name", MAX_PATH);
+	std::string sql = "SELECT * FROM Snippets WHERE LibraryID = @libid ORDER BY ";
+	sql += (s_curLibrary->GetSortAlphabetic() ? "Name,Sort" : "Sort,Name");
 
 	// Prepare this statement
-	SqliteStatement stmt(g_db, szSQL);
+	SqliteStatement stmt(g_db, sql.c_str());
 
 	// Bind the language-id to the statement
 	stmt.Bind("@libid", s_curLibrary->GetLibraryID());
