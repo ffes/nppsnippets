@@ -1,6 +1,6 @@
 #############################################################################
 #                                                                           #
-#           Makefile for building a MinGW-w64 NppSnippets.dll               #
+#             Makefile for building a MinGW-w64 NppSnippets.dll             #
 #                                                                           #
 #############################################################################
 
@@ -19,12 +19,12 @@ now: $(TARGET)
 all: clean now
 
 # The general compiler flags
-CFLAGS = -DUNICODE -mtune=i686
+CFLAGS = -DUNICODE
 CXXFLAGS = $(CFLAGS) -Wno-write-strings --std=c++11
 LIBS = -static -lshlwapi -lgdi32 -lcomdlg32 -lcomctl32
 LDFLAGS = -Wl,--out-implib,$(TARGET) -shared
 
-# Default target is RELEASE
+# Default target is RELEASE, otherwise DEBUG=1
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)
 	# Add DEBUG define, debug info and specific optimizations
@@ -102,6 +102,10 @@ clean:
 	$(SILENT) rm -f $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) version_git.h
 	$(SILENT) rm -f $(PROGRAM_DEP_CPP) $(PROGRAM_DEP_C) $(PROGRAM).dll
 	$(SILENT) rm -f tags tags.out tags.sqlite
+
+cppcheck:
+	@echo Running cppcheck
+	$(SILENT) cppcheck --quiet $(PROGRAM_SRCS_CPP)
 
 # The dependencies
 $(PROGRAM)_res.o: $(PROGRAM)_res.rc Version.h version_git.h
