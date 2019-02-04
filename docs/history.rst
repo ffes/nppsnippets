@@ -1,6 +1,19 @@
 Release history
 ===============
 
+Version `1.5.0`_ (XX XXX 2019)
+------------------------------
+
+-  Adapt to Notepad++ 7.6.x `#20`_
+
+-  Fixed "Creating Snippet from Selection crashes Notepad++" `#14`_
+
+-  Upgrade to SQLite version 3.26.0
+
+.. _1.5.0: https://github.com/ffes/nppsnippets/releases/tag/v1.5.0
+.. _#14: https://github.com/ffes/nppsnippets/issues/14
+.. _#20: https://github.com/ffes/nppsnippets/issues/14
+
 Version `1.4.0`_ (24 May 2017)
 ------------------------------
 
