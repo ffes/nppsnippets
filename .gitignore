@@ -1,11 +1,5 @@
-_*
-*.suo
-*.ncb
+_build/
 *.user
-*.opendb
-*.opensdf
-*.sdf
-*.VC.db
 Win32/
 x64/
 *.d
