@@ -55,6 +55,7 @@ static bool s_bConsoleInitialized = false;		// Is the console initialized?
 static bool s_bConsoleVisible = false;			// Is the console visible?
 static Library* s_curLibrary = NULL;			// The currently selected lib
 static int s_curLang = -1;						// The "LangType" of the currently selected lib
+static bool s_HasPluginHome = false;			// Does the version of N++ support NPPM_GETPLUGINHOMEPATH
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -289,6 +290,24 @@ static bool GetDatabaseFile()
 	{
 		g_db->SetFilename(dbFile);
 		return true;
+	}
+
+	if (s_HasPluginHome)
+	{
+		if (DbExist(NPPM_GETPLUGINHOMEPATH, dbFile, NULL, false))
+		{
+			std::wstring from = dbFile;
+
+			// Get the user's plugin-config directory
+			DbExist(NPPM_GETPLUGINSCONFIGDIR, dbFile, NULL, true);
+
+			// Copy template to "NPPM_GETPLUGINSCONFIGDIR"
+			if (CopyFile(from.c_str(), dbFile, TRUE))
+			{
+				g_db->SetFilename(dbFile);
+				return true;
+			}
+		}
 	}
 
 	// If it is still not found, we most likely have a fresh installation. Look for the template database
@@ -1299,7 +1318,8 @@ void SnippetsConsole()
 			// Check if we have a version of Notepad++ that supports NPPM_GETLANGUAGENAME
 			DWORD ver = (DWORD) SendMessage(g_nppData._nppHandle, NPPM_GETNPPVERSION, (WPARAM) 0, (LPARAM) 0);
 			g_HasLangMsgs = (ver >= MAKELONG(93, 5));
-			
+			s_HasPluginHome = (ver >= MAKELONG(60, 7));
+
 			// Load the icon
 			s_hTabIcon = (HICON) LoadImage(g_hInst, MAKEINTRESOURCE(IDI_SNIPPETS), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_COLOR | LR_LOADTRANSPARENT);
 
