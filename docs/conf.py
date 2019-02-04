@@ -13,9 +13,6 @@
 
 import sys, os
 
-# Check if we run on RTD or locally
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -109,15 +106,9 @@ html_theme = 'default'
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
 
-# See if the RTD theme is installed locally
-# Based on RTD FAQ and the RTD-theme install instruction
-# http://read-the-docs.readthedocs.io/en/latest/faq.html
-# https://github.com/snide/sphinx_rtd_theme
-
-if not on_rtd:
-    if os.path.exists('_themes/sphinx_rtd_theme'):
-        html_theme_path = [ '_themes', ]
-        html_theme = 'sphinx_rtd_theme'
+# Based on RTD-theme install instruction
+# https://sphinx-rtd-theme.readthedocs.io/en/latest/installing.html
+html_theme = 'sphinx_rtd_theme'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
