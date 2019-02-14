@@ -39,7 +39,7 @@
 #endif
 
 static const TCHAR PLUGIN_NAME[] = L"Snippets";
-static const int nbFunc = 3;
+static const int nbFunc = 5;
 static HBITMAP hbmpToolbar = NULL;
 
 HINSTANCE g_hInst;
@@ -334,14 +334,22 @@ WCHAR* GetDlgText(HWND hDlg, UINT uID)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// Open the on-line manual
+
+static void OpenOnlineManual()
+{
+	ShellExecute(NULL, L"open", L"https://nppsnippets.readthedocs.io", NULL, NULL, SW_SHOWNORMAL);
+}
+
+/////////////////////////////////////////////////////////////////////////////
 // The entry point of the DLL
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
 {
 	UNREFERENCED_PARAMETER(lpReserved);
 
-    switch (reasonForCall)
-    {
+	switch (reasonForCall)
+	{
 		case DLL_PROCESS_ATTACH:
 		{
 			g_hInst = (HINSTANCE) hModule;
@@ -353,6 +361,21 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
 			g_funcItem[index]._init2Check = false;
 			g_funcItem[index]._pShKey = NULL;
 			index++;
+
+			// Seperator
+			g_funcItem[index]._pFunc = NULL;
+			wcscpy(g_funcItem[index]._itemName, L"-SEPARATOR-");
+			g_funcItem[index]._init2Check = false;
+			g_funcItem[index]._pShKey = NULL;
+			index++;
+
+			// Open Online Manual
+			g_funcItem[index]._pFunc = OpenOnlineManual;
+			wcscpy(g_funcItem[index]._itemName, L"Open Online Manual");
+			g_funcItem[index]._init2Check = false;
+			g_funcItem[index]._pShKey = NULL;
+			index++;
+			assert(index == nbFunc);
 
 			// Seperator
 			g_funcItem[index]._pFunc = NULL;
@@ -396,6 +419,6 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
 
 		case DLL_THREAD_DETACH:
 			break;
-    }
-    return TRUE;
+	}
+	return TRUE;
 }
