@@ -6,15 +6,15 @@ Version `1.5.0`_ (XX XXX 2019)
 
 -  Adapt to Notepad++ 7.6.x (`issue #20`_)
 
--  Fixed "Creating Snippet from Selection crashes Notepad++" (issue `#14`_)
+-  Fixed "Creating Snippet from Selection crashes Notepad++" (`issue #14`_)
 
 -  Add entry to the plugin menu to open the online manual
 
 -  Upgrade to SQLite version 3.27.1
 
 .. _1.5.0: https://github.com/ffes/nppsnippets/releases/tag/v1.5.0
-.. _#14: https://github.com/ffes/nppsnippets/issues/14
-.. _#20: https://github.com/ffes/nppsnippets/issues/20
+.. _issue #14: https://github.com/ffes/nppsnippets/issues/14
+.. _issue #20: https://github.com/ffes/nppsnippets/issues/20
 
 Version `1.4.0`_ (24 May 2017)
 ------------------------------
