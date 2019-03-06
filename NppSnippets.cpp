@@ -375,7 +375,6 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
 			g_funcItem[index]._init2Check = false;
 			g_funcItem[index]._pShKey = NULL;
 			index++;
-			assert(index == nbFunc);
 
 			// Seperator
 			g_funcItem[index]._pFunc = NULL;
