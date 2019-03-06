@@ -108,10 +108,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 			// Check if we are running a newer version
 			Version curVer, prevVer(g_Options->GetPrevVersion());
 			if (curVer > prevVer)
-			{
-				ShowAboutDlgVersion(prevVer);
 				g_Options->Write();
-			}
 			break;
 		}
 

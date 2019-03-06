@@ -25,6 +25,5 @@
 class Version;
 
 extern void ShowAboutDlg();
-extern void ShowAboutDlgVersion(Version prevVer);
 
 #endif // __DLGABOUT_H__

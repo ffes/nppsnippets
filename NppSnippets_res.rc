@@ -60,11 +60,11 @@ END
 /////////////////////////////////////////////////////////////////////////////
 // Dialogs
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 224, 187
+IDD_ABOUTBOX DIALOGEX 0, 0, 224, 132
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_BORDER | WS_SYSMENU
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-	GROUPBOX		"Code Snippets plug-in",IDC_STATIC,10,9,201,154,BS_CENTER
+	GROUPBOX		"Code Snippets plug-in",IDC_STATIC,10,9,201,114,BS_CENTER
 	LTEXT			"Author:",IDC_STATIC,30,23,35,8
 	LTEXT			"Frank Fesevur",IDC_STATIC,75,23,74,8
 	LTEXT			"Version:",IDC_STATIC,30,38,31,8
@@ -74,9 +74,8 @@ BEGIN
 	LTEXT			"Licence:",IDC_STATIC,30,67,43,8
 	LTEXT			"GPL-2",IDC_STATIC,75,67,43,8
 	LTEXT			"Site:",IDC_STATIC,30,84,27,8
-	CONTROL			"<a href=""http://www.fesevur.com/nppsnippets"">http://www.fesevur.com/nppsnippets</a>",IDC_SYSLINK,"SysLink",NOT WS_TABSTOP,75,84,130,8
-	EDITTEXT		IDC_CHANGELOG,29,97,175,61,ES_MULTILINE | ES_AUTOVSCROLL | NOT ES_AUTOHSCROLL | ES_READONLY | ES_WANTRETURN | WS_VSCROLL | NOT WS_TABSTOP
-	PUSHBUTTON		"Close",IDCANCEL,86,167,50,14
+	CONTROL			"<a href=""https://www.fesevur.com/nppsnippets"">https://www.fesevur.com/nppsnippets</a>",IDC_SYSLINK,"SysLink",NOT WS_TABSTOP,75,84,130,8
+	PUSHBUTTON		"Close",IDCANCEL,86,102,50,14
 END
 
 IDD_SNIPPETS DIALOGEX 0, 0, 190, 90
