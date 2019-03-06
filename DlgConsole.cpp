@@ -587,8 +587,8 @@ static void OnSnippetInsert(HWND hWnd)
 		size_t len = wcslen(snip.WGetAfterSelection());
 		if (len > 0)
 		{
-			std::wstring wstr = ConvertLineEnding(snip.WGetAfterSelection());
-			std::string strTo = utf8_encode(wstr);
+			wstr = ConvertLineEnding(snip.WGetAfterSelection());
+			strTo = utf8_encode(wstr);
 			SendMsg(SCI_REPLACESEL, 0, (LPARAM) strTo.c_str());
 		}
 	}
