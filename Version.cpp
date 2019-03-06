@@ -32,7 +32,7 @@
 
 Version::Version()
 {
-	int curVer[VERSION_DIGITS] = { VERSION_NUMBER };
+	BYTE curVer[VERSION_DIGITS] = { VERSION_NUMBER };
 	for (int i = 0; i < VERSION_DIGITS; i++)
 		_version[i] = curVer[i];
 }
@@ -46,8 +46,8 @@ Version::Version(BYTE version[VERSION_DIGITS])
 Version::Version(LPCWSTR version)
 {
 	// Split the version in the seperate numbers
-	int v0, v1, v2, v3;
-	int numRead = swscanf(version, L"%d.%d.%d.%d", &v0, &v1, &v2, &v3);
+	BYTE v0, v1, v2, v3;
+	int numRead = swscanf(version, L"%hhd.%hhd.%hhd.%hhd", &v0, &v1, &v2, &v3);
 
 	// Copy these numbers to the corresponding member of _version
 	_version[0] = (numRead > 0 ? v0 : 0);
