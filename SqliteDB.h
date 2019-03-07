@@ -91,6 +91,7 @@ public:
 	virtual ~SqliteStatement();
 
 	void Prepare(const char* sql);
+	void Reset();
 	void SaveRecord();
 	bool GetNextRecord();
 	void Finalize();

@@ -261,13 +261,21 @@ void SqliteStatement::Prepare(const char* sql)
 /////////////////////////////////////////////////////////////////////////////
 //
 
+void SqliteStatement::Reset()
+{
+	if (sqlite3_reset(_stmt) != SQLITE_OK)
+		throw SqliteException(sqlite3_errmsg(_db));
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
 void SqliteStatement::SaveRecord()
 {
 	if (sqlite3_step(_stmt) != SQLITE_DONE)
 		throw SqliteException(sqlite3_errmsg(_db));
 
-	if (sqlite3_reset(_stmt) != SQLITE_OK)
-		throw SqliteException(sqlite3_errmsg(_db));
+	Reset();
 }
 
 /////////////////////////////////////////////////////////////////////////////
