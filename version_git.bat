@@ -1,10 +1,10 @@
 @echo off
 
-REM Is Cygwin installed?
-if exist C:\Cygwin\bin\bash.exe goto cygwin
-
 REM Is Git for Windows installed?
 if exist "C:\Program Files\Git\bin\bash.exe" goto git_for_win
+
+REM Is Cygwin installed?
+if exist C:\Cygwin\bin\bash.exe goto cygwin
 
 REM No Cygwin or Git for Windows installed
 REM If there is a file assume if is propperly generated
