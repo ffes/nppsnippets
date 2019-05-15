@@ -1,7 +1,7 @@
 Release history
 ===============
 
-Version `1.5.0`_ (XX XXX 2019)
+Version `1.5.0`_ (15 May 2019)
 ------------------------------
 
 -  Adapt to Notepad++ 7.6.x (`issue #20`_)
