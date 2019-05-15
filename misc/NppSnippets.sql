@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------------
--- At least SQLite 3.6.19 is needed because of foreign key support         --
--- See ReadMe.pdf for more details about the schema                        --
+-- For more details about the schema see                                   --
+-- https://nppsnippets.readthedocs.io/en/latest/database.html              --
 -----------------------------------------------------------------------------
 
 PRAGMA foreign_keys = ON;
