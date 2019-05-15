@@ -1,7 +1,7 @@
 @echo off
 
 REM Is Git for Windows installed?
-if exist "C:\Program Files\Git\bin\bash.exe" goto git_for_win
+if exist "%ProgramFiles%\Git\bin\bash.exe" goto git_for_win
 
 REM Is Cygwin installed?
 if exist C:\Cygwin\bin\bash.exe goto cygwin
@@ -25,7 +25,7 @@ goto end
 
 REM Let a Git for Windows bash script do all the work
 :git_for_win
-PATH=C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\bin
+PATH=%ProgramFiles%\Git\mingw64\bin;%ProgramFiles%\Git\bin
 bash version_git.sh
 goto end
 
