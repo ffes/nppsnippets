@@ -19,9 +19,6 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DLGEDITLIBRARY_H__
-#define __DLGEDITLIBRARY_H__
+#pragma once
 
 extern bool ShowEditLibraryDlg(Library*);
-
-#endif // __DLGEDITLIBRARY_H__

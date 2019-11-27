@@ -19,8 +19,7 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __LIBRARY_H__
-#define __LIBRARY_H__
+#pragma once
 
 #include "Snippets.h"
 
@@ -59,5 +58,3 @@ private:
 	int GetSortBy() { return _SortAlphabetic ? 0 : 1; }
 	bool LanguageDBHelper(LPCSTR sql, int lang);
 };
-
-#endif // __LIBRARY_H__

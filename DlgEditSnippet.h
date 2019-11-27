@@ -19,9 +19,6 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DLGEDITSNIPPET_H__
-#define __DLGEDITSNIPPET_H__
+#pragma once
 
 extern bool ShowEditSnippetDlg(Snippet*);
-
-#endif // __DLGEDITSNIPPET_H__

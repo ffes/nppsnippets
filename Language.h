@@ -19,8 +19,7 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __LANGUAGE_H__
-#define __LANGUAGE_H__
+#pragma once
 
 class Language
 {
@@ -37,5 +36,3 @@ private:
 	WCHAR _LangName[MAX_PATH];
 	WCHAR _LangDescr[MAX_PATH];
 };
-
-#endif // __LANGUAGE_H__

@@ -19,9 +19,6 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DLGEDITLANGUAGES_H__
-#define __DLGEDITLANGUAGES_H__
+#pragma once
 
 extern bool ShowEditLanguagesDlg(Library*);
-
-#endif // __DLGEDITLANGUAGES_H__

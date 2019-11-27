@@ -19,12 +19,9 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DLGCONSOLE_H__
-#define __DLGCONSOLE_H__
+#pragma once
 
 extern void SnippetsConsole();
 extern void CreateConsoleDlg();
 extern void UpdateSnippetsList();
 extern void InvalidateListbox();
-
-#endif // __DLGCONSOLE_H__

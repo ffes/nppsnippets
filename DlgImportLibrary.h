@@ -19,9 +19,6 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DLGIMPORTLIBRARY_H__
-#define __DLGIMPORTLIBRARY_H__
+#pragma once
 
 extern bool ImportLibraryDlg(LPCWSTR databaseFile);
-
-#endif // __DLGIMPORTLIBRARY_H__
