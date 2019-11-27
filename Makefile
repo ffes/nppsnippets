@@ -81,7 +81,6 @@ PROGRAM_SRCS_CPP = \
 	Snippets.cpp \
 	SnippetsDB.cpp \
 	SqliteDB.cpp \
-	Version.cpp \
 	WaitCursor.cpp
 
 PROGRAM_SRCS_C = \
@@ -106,14 +105,13 @@ clean:
 	@echo Cleaning
 	$(SILENT) rm -f $(PROGRAM_OBJS_CPP) $(PROGRAM_OBJS_C) $(PROGRAM_OBJS_RC) version_git.h
 	$(SILENT) rm -f $(PROGRAM_DEP_CPP) $(PROGRAM_DEP_C) $(PROGRAM).dll
-	$(SILENT) rm -f tags tags.out tags.sqlite
 
 cppcheck:
 	@echo Running cppcheck
 	$(SILENT) cppcheck --quiet $(PROGRAM_SRCS_CPP)
 
 # The dependencies
-$(PROGRAM)_res.o: $(PROGRAM)_res.rc Version.h version_git.h
+$(PROGRAM)_res.o: $(PROGRAM)_res.rc version_git.h
 
 -include $(PROGRAM_DEP_CPP)
 -include $(PROGRAM_DEP_C)

@@ -28,7 +28,6 @@
 #include "NPP/PluginInterface.h"
 #include "Resource.h"
 #include "NppSnippets.h"
-#include "Version.h"
 #include "DlgAbout.h"
 #include "DlgConsole.h"
 #include "Options.h"
@@ -104,11 +103,6 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 
 			if (g_Options->showConsoleDlg)
 				SnippetsConsole();
-
-			// Check if we are running a newer version
-			Version curVer, prevVer(g_Options->GetPrevVersion());
-			if (curVer > prevVer)
-				g_Options->Write();
 			break;
 		}
 

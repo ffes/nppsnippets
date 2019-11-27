@@ -199,7 +199,6 @@
     <ClCompile Include="SnippetsDB.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="SqliteDB.cpp" />
-    <ClCompile Include="Version.cpp" />
     <ClCompile Include="WaitCursor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -219,7 +218,6 @@
     <ClInclude Include="SnippetsDB.h" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="SqliteDB.h" />
-    <ClInclude Include="Version.h" />
     <ClInclude Include="WaitCursor.h" />
   </ItemGroup>
   <ItemGroup>

@@ -26,7 +26,6 @@
 #include "NPP/PluginInterface.h"
 #include "NppSnippets.h"
 #include "Resource.h"
-#include "Version.h"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -34,8 +33,6 @@
 static BOOL OnInitDialog(HWND hDlg)
 {
 	CenterWindow(hDlg);
-
-	// Let windows set focus
 	return TRUE;
 }
 
