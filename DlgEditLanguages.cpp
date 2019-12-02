@@ -107,13 +107,13 @@ static void CleanItems(HWND hDlg)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-static bool SaveLanguages()
+static void SaveLanguages()
 {
 	// First delete all the current items
 	SqliteStatement stmt(g_db, "DELETE FROM LibraryLang WHERE LibraryID = @libid");
 
 	// Bind the language to the statement
-	int libid = s_pLibrary->GetLibraryID();
+	const int libid = s_pLibrary->GetLibraryID();
 	stmt.Bind("@libid", libid);
 
 	// And save the record
@@ -124,7 +124,7 @@ static bool SaveLanguages()
 	stmt.Prepare("INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@libid, @lang)");
 
 	// Go through the selected items
-	int count = ListView_GetItemCount(s_hWndLangList);
+	const int count = ListView_GetItemCount(s_hWndLangList);
 	for (int i = 0; i < count; i++)
 	{
 		if (ListView_GetCheckState(s_hWndLangList, i))
@@ -147,7 +147,6 @@ static bool SaveLanguages()
 	}
 
 	stmt.Finalize();
-	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -158,18 +157,22 @@ static BOOL OnOK(HWND hDlg)
 	if (!Validate(hDlg))
 		return TRUE;
 
-	WaitCursor wait;
+	try
+	{
+		WaitCursor wait;
 
-	// Save the changes to the database
-	g_db->Open();
-	g_db->BeginTransaction();
-
-	if (SaveLanguages())
+		// Save the changes to the database
+		g_db->Open();
+		g_db->BeginTransaction();
+		SaveLanguages();
 		g_db->CommitTransaction();
-	else
+		g_db->Close();
+	}
+	catch (SqliteException ex)
+	{
 		g_db->RollbackTransaction();
-
-	g_db->Close();
+		g_db->Close();
+	}
 
 	// We're done
 	CleanItems(hDlg);
