@@ -314,14 +314,27 @@ void CenterWindow(HWND hDlg)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-WCHAR* GetDlgText(HWND hDlg, UINT uID)
+int GetDlgTextLength(HWND hDlg, UINT uID)
 {
-	int maxBufferSize = GetWindowTextLength(GetDlgItem(hDlg, uID)) + 3;
+	return GetWindowTextLength(GetDlgItem(hDlg, uID));
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+std::wstring GetDlgText(HWND hDlg, UINT uID)
+{
+	// Allocate the (temporary) memory needed to store the text
+	int maxBufferSize = GetDlgTextLength(hDlg, uID) + 3;
 	WCHAR* buffer = new WCHAR[maxBufferSize];
 	ZeroMemory(buffer, maxBufferSize);
 
+	// Get the text from the dialog item
 	GetDlgItemText(hDlg, uID, buffer, maxBufferSize);
-	return buffer;
+	std::wstring ret = buffer;
+	delete buffer;
+
+	return ret;
 }
 
 /////////////////////////////////////////////////////////////////////////////

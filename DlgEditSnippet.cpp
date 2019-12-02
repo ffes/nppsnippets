@@ -52,21 +52,19 @@ static void CleanItems(HWND hDlg)
 
 static bool Validate(HWND hDlg)
 {
-	// Check if name is entered
-	if (SendMessage(GetDlgItem(hDlg, IDC_NAME), EM_LINELENGTH, 0, 0) == 0)
+	// Check if "Name" is entered
+	if (GetDlgTextLength(hDlg, IDC_NAME) == 0)
 	{
 		MsgBox("Name needs to be entered!");
 		return false;
 	}
 
-	// Get the text entered as "Before Selection"
-	WCHAR* before = GetDlgText(hDlg, IDC_BEFORE_SEL);
-	if (before == NULL)
+	// Check if "Before Selection" is entered
+	if (GetDlgTextLength(hDlg, IDC_BEFORE_SEL) == 0)
 	{
 		MsgBox("Before Selection needs to be entered!");
 		return false;
 	}
-	delete before;
 
 	return true;
 }
@@ -80,19 +78,16 @@ static BOOL OnOK(HWND hDlg)
 		return TRUE;
 
 	// Get the new data from the dialog
-	WCHAR* name = GetDlgText(hDlg, IDC_NAME);
-	WCHAR* before = GetDlgText(hDlg, IDC_BEFORE_SEL);
-	WCHAR* after = GetDlgText(hDlg, IDC_AFTER_SEL);
+	using namespace std;
+	wstring name = GetDlgText(hDlg, IDC_NAME);
+	wstring before = GetDlgText(hDlg, IDC_BEFORE_SEL);
+	wstring after = GetDlgText(hDlg, IDC_AFTER_SEL);
 
-	s_pSnippet->WSetName(name);
-	s_pSnippet->WSetBeforeSelection(before);
-	s_pSnippet->WSetAfterSelection(after);
+	s_pSnippet->WSetName(name.c_str());
+	s_pSnippet->WSetBeforeSelection(before.c_str());
+	s_pSnippet->WSetAfterSelection(after.c_str());
 	s_pSnippet->SetReplaceSelection(IsDlgButtonChecked(hDlg, IDC_REPLACE_SEL) == BST_CHECKED);
 	s_pSnippet->SetNewDocument(IsDlgButtonChecked(hDlg, IDC_NEW_DOC) == BST_CHECKED);
-
-	delete name;
-	delete before;
-	delete after;
 
 	// Get the selected language from the combo
 	if (g_HasLangMsgs)

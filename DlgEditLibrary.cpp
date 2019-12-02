@@ -34,7 +34,7 @@ static Library* s_pLibrary = NULL;
 static bool Validate(HWND hDlg)
 {
 	// Check required fields
-	if (SendMessage(GetDlgItem(hDlg, IDC_NAME), EM_LINELENGTH, 0, 0) == 0)
+	if (GetDlgTextLength(hDlg, IDC_NAME) == 0)
 	{
 		MsgBox("Name needs to be entered!");
 		return false;
@@ -52,18 +52,15 @@ static BOOL OnOK(HWND hDlg)
 		return TRUE;
 
 	// Get the data from the dialog
-	WCHAR *name = GetDlgText(hDlg, IDC_NAME);
-	WCHAR* created = GetDlgText(hDlg, IDC_CREATED_BY);
-	WCHAR* comments = GetDlgText(hDlg, IDC_COMMENTS);
+	using namespace std;
+	wstring name = GetDlgText(hDlg, IDC_NAME);
+	wstring created = GetDlgText(hDlg, IDC_CREATED_BY);
+	wstring comments = GetDlgText(hDlg, IDC_COMMENTS);
 
-	s_pLibrary->WSetName(name);
-	s_pLibrary->WSetCreatedBy(created);
-	s_pLibrary->WSetComments(comments);
+	s_pLibrary->WSetName(name.c_str());
+	s_pLibrary->WSetCreatedBy(created.c_str());
+	s_pLibrary->WSetComments(comments.c_str());
 	s_pLibrary->SetSortAlphabetic(IsDlgButtonChecked(hDlg, IDC_SORT_ALPHABET) == BST_CHECKED);
-
-	delete name;
-	delete created;
-	delete comments;
 
 	// Save the data to the database
 	if (!s_pLibrary->SaveToDB())
