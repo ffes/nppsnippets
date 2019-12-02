@@ -5,10 +5,13 @@ Release history
 Next Version
 ------------
 
+-  Fix crash when ``Before Selection`` was left empty and a snippet was saved (`issue #16`_)
+
 -  Make the Edit Snippet dialog bigger and add scrollbars (`PR #25`_)
 
 
 .. _PR #25: https://github.com/ffes/nppsnippets/pull/25
+.. _issue #16: https://github.com/ffes/nppsnippets/issues/16
 
 
 Version `1.5.0`_ (15 May 2019)
