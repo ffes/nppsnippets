@@ -25,14 +25,14 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 
-WaitCursor::WaitCursor(bool show)
+WaitCursor::WaitCursor(bool show) noexcept
 {
-	_OldCursor = NULL;
+	_OldCursor = nullptr;
 	if (show)
 		Show();
 }
 
-WaitCursor::~WaitCursor()
+WaitCursor::~WaitCursor() noexcept
 {
 	Hide();
 }
@@ -40,20 +40,20 @@ WaitCursor::~WaitCursor()
 /////////////////////////////////////////////////////////////////////////////
 //
 
-void WaitCursor::Show()
+void WaitCursor::Show() noexcept
 {
-	if (_OldCursor == NULL)
-		_OldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
+	if (_OldCursor == nullptr)
+		_OldCursor = SetCursor(LoadCursor(nullptr, IDC_WAIT));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
-void WaitCursor::Hide()
+void WaitCursor::Hide() noexcept
 {
-	if (_OldCursor != NULL)
+	if (_OldCursor != nullptr)
 	{
 		SetCursor(_OldCursor);
-		_OldCursor = NULL;
+		_OldCursor = nullptr;
 	}
 }

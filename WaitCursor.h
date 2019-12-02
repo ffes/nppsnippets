@@ -27,11 +27,11 @@
 class WaitCursor
 {
 public:
-	WaitCursor(bool show = true);
-	~WaitCursor();
+	WaitCursor(bool show = true) noexcept;
+	~WaitCursor() noexcept;
 
-	void Show();
-	void Hide();
+	void Show() noexcept;
+	void Hide() noexcept;
 
 private:
 	HCURSOR _OldCursor;
