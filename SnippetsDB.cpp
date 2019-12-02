@@ -69,7 +69,7 @@ void SnippetsDB::Open()
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool SnippetsDB::ImportLibrary(LPCWSTR db, int orgLibID)
+void SnippetsDB::ImportLibrary(LPCWSTR db, int orgLibID)
 {
 	// Start with attaching the database
 	Attach(db, L"Import");
@@ -91,13 +91,12 @@ bool SnippetsDB::ImportLibrary(LPCWSTR db, int orgLibID)
 	stmt.Finalize();
 
 	Detach(L"Import");
-	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool SnippetsDB::ImportSnippets(int orgLibID, int newLibID)
+void SnippetsDB::ImportSnippets(int orgLibID, int newLibID)
 {
 	// Get all the snippets from the attached database
 	SqliteStatement stmt(g_db, "SELECT * FROM Import.Snippets WHERE LibraryID = @libid");
@@ -113,13 +112,12 @@ bool SnippetsDB::ImportSnippets(int orgLibID, int newLibID)
 		snip.SaveToDB(false);
 	}
 	stmt.Finalize();
-	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool SnippetsDB::ImportLanguages(int orgLibID, int newLibID)
+void SnippetsDB::ImportLanguages(int orgLibID, int newLibID)
 {
 	// Get all the languages for this library from the attached database
 	SqliteStatement stmtSelect(g_db, "SELECT Lang FROM Import.LibraryLang WHERE LibraryID = @libid");
@@ -139,7 +137,6 @@ bool SnippetsDB::ImportLanguages(int orgLibID, int newLibID)
 	}
 	stmtSelect.Finalize();
 	stmtInsert.Finalize();
-	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////

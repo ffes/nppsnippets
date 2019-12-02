@@ -32,7 +32,7 @@ public:
 	virtual void Open();
 	void CreateExportDB();
 
-	bool ImportLibrary(LPCWSTR db, int orgLibID);
+	void ImportLibrary(LPCWSTR db, int orgLibID);
 
 protected:
 	void SetValues();
@@ -40,8 +40,8 @@ protected:
 	void UpgradeDatabase_2_3();
 	bool CheckDBVersion();
 
-	bool ImportSnippets(int orgLibID, int newLibID);
-	bool ImportLanguages(int orgLibID, int newLibID);
+	void ImportSnippets(int orgLibID, int newLibID);
+	void ImportLanguages(int orgLibID, int newLibID);
 };
 
 extern SnippetsDB* g_db;
