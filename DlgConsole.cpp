@@ -686,15 +686,14 @@ static void OnSnippetDelete(HWND hWnd)
 
 	// Get the data for this item
 	Snippet* snip = (Snippet*) SendDlgItemMessage(s_hDlg, IDC_LIST, LB_GETITEMDATA, (WPARAM) item, 0);
-	if (snip == NULL)
+	if (snip == nullptr)
 		return;
 
-	WCHAR wszTmp[MAX_PATH];
-	wcsncpy(wszTmp, L"Are you sure you want to delete the snippet:\r\n", MAX_PATH);
-	wcsncat(wszTmp, snip->WGetName(), MAX_PATH);
+	std::wstring msg = L"Are you sure you want to delete the snippet:\r\n";
+	msg += snip->WGetName();
 
 	// Ask for confirmation
-	if (!MsgBoxYesNo(wszTmp))
+	if (!MsgBoxYesNo(msg.c_str()))
 		return;
 
 	// Delete from the database
@@ -721,24 +720,23 @@ static void OnSnippetDuplicate(HWND hWnd)
 
 	// Get the data for this item
 	Snippet* snip = (Snippet*) SendDlgItemMessage(s_hDlg, IDC_LIST, LB_GETITEMDATA, (WPARAM) item, 0);
-	if (snip == NULL)
+	if (snip == nullptr)
 		return;
 
-	WCHAR wszTmp[MAX_PATH];
-	wcsncpy(wszTmp, L"Are you sure you want to duplicate the snippet:\r\n", MAX_PATH);
-	wcsncat(wszTmp, snip->WGetName(), MAX_PATH);
+	std::wstring s = L"Are you sure you want to duplicate the snippet:\r\n";
+	s += snip->WGetName();
 
 	// Ask for confirmation
-	if (!MsgBoxYesNo(wszTmp))
+	if (!MsgBoxYesNo(s.c_str()))
 		return;
 
 	// Make a copy of the selected snippet
 	Snippet* pNew = new Snippet(*snip);
 
 	// Adjust the name of the duplicate
-	wcsncpy(wszTmp, snip->WGetName(), MAX_PATH);
-	wcsncat(wszTmp, L" - Dup", MAX_PATH);
-	pNew->WSetName(wszTmp);
+	s = snip->WGetName();
+	s += L" - Dup";
+	pNew->WSetName(s.c_str());
 
 	// Save to the database and refresh the list
 	pNew->SaveToDB();

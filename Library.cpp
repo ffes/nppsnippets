@@ -174,13 +174,12 @@ void Library::ExportTo(LPCWCH filename)
 	// Now use that export database as temporary "base" database
 	// and import the current lib from the temp database
 	// When all done, restore the original database filename
-	WCHAR orgFile[MAX_PATH];
-	wcsncpy(orgFile, g_db->GetFilename(), MAX_PATH);
+	std::wstring orgFile = g_db->GetFilename();
 	g_db->SetFilename(filename);
 	g_db->Open();
-	g_db->ImportLibrary(orgFile, _LibraryID);
+	g_db->ImportLibrary(orgFile.c_str(), _LibraryID);
 	g_db->Close();
-	g_db->SetFilename(orgFile);
+	g_db->SetFilename(orgFile.c_str());
 }
 
 /////////////////////////////////////////////////////////////////////////////
