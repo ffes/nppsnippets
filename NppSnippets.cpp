@@ -232,17 +232,6 @@ std::wstring ConvertLineEnding(LPCWSTR from, int toLineEnding)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Copy an Ansi string to a Unicode string
-
-void Ansi2Unicode(LPWSTR wszStr, LPCSTR szStr, int iSize)
-{
-	if (szStr != NULL)
-		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szStr, -1, wszStr, iSize);
-	else
-		*wszStr = L'\0';
-}
-
-/////////////////////////////////////////////////////////////////////////////
 // Easy access to the MessageBox functions
 
 void MsgBox(const WCHAR* msg)
