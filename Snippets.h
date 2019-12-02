@@ -19,8 +19,7 @@
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __SNIPPETS_H__
-#define __SNIPPETS_H__
+#pragma once
 
 #include "SnippetsDB.h"
 
@@ -34,8 +33,8 @@ public:
 	void SetLibraryID(int i) { _LibraryID = i; }
 	void WSetName(LPCWCH txt);
 
-	virtual bool SaveToDB(bool autoOpen = true) = 0;
-	virtual bool DeleteFromDB() = 0;	
+	virtual void SaveToDB(bool autoOpen = true) = 0;
+	virtual void DeleteFromDB() = 0;
 
 protected:
 	int _LibraryID;
@@ -56,7 +55,7 @@ public:
 
 	Snippet& operator=(const Snippet&);
 	Snippet& operator=(SqliteStatement* stmt);
-	virtual void Set(SqliteStatement* stmt);
+	void Set(SqliteStatement* stmt) override;
 
 	int GetSnippetID() { return _SnippetID; }
 	WCHAR* WGetBeforeSelection() { return _BeforeSelection; }
@@ -79,8 +78,8 @@ public:
 	void SetNewDocumentLang(int i) { _NewDocumentLang = (LangType) i; }
 	void SetSort(int i) { _Sort = i; }
 
-	virtual bool SaveToDB(bool autoOpen = true);
-	virtual bool DeleteFromDB();
+	void SaveToDB(bool autoOpen = true) override;
+	void DeleteFromDB() override;
 
 	void GuessName();
 
@@ -99,5 +98,3 @@ private:
 
 	LPSTR Unicode2Ansi(LPCWSTR wszStr);
 };
-
-#endif // __SNIPPETS_H__

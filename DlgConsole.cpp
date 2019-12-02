@@ -698,8 +698,7 @@ static void OnSnippetDelete(HWND hWnd)
 		return;
 
 	// Delete from the database
-	if (!snip->DeleteFromDB())
-		return;
+	snip->DeleteFromDB();
 
 	// Clean up the item data
 	delete snip;
@@ -997,8 +996,7 @@ static void OnLibraryDelete(HWND hWnd)
 		return;
 
 	// Delete from the database
-	if (!s_curLibrary->DeleteFromDB())
-		return;
+	s_curLibrary->DeleteFromDB();
 
 	// Fill the snippets again
 	UpdateSnippetsList();

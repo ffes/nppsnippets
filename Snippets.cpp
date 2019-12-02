@@ -203,7 +203,7 @@ void Snippet::Set(SqliteStatement* stmt)
 /////////////////////////////////////////////////////////////////////////////
 // Save the snippet to the database
 
-bool Snippet::SaveToDB(bool autoOpen)
+void Snippet::SaveToDB(bool autoOpen)
 {
 	// Try to open the database
 	g_db->Open();
@@ -248,14 +248,12 @@ bool Snippet::SaveToDB(bool autoOpen)
 
 	if (autoOpen)
 		g_db->Close();
-
-	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Delete the snippet from the database
 
-bool Snippet::DeleteFromDB()
+void Snippet::DeleteFromDB()
 {
 	// Try to open the database
 	g_db->Open();
@@ -266,7 +264,6 @@ bool Snippet::DeleteFromDB()
 	stmt.Finalize();
 
 	g_db->Close();
-	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -44,10 +44,10 @@ public:
 	void SetSortAlphabetic(bool b) { _SortAlphabetic = b; }
 	void SetSortAlphabetic(int i) { _SortAlphabetic = (i == 0); }
 
-	virtual bool SaveToDB(bool autoOpen = true);
-	virtual bool DeleteFromDB();
-	bool AddLanguageToDB(int lang);
-	bool DeleteLanguageFromDB(int lang);
+	void SaveToDB(bool autoOpen = true) override;
+	void DeleteFromDB() override;
+	void AddLanguageToDB(int lang);
+	void DeleteLanguageFromDB(int lang);
 	void ExportTo(LPCWCH filename);
 
 private:
@@ -56,5 +56,5 @@ private:
 	bool _SortAlphabetic;
 
 	int GetSortBy() { return _SortAlphabetic ? 0 : 1; }
-	bool LanguageDBHelper(LPCSTR sql, int lang);
+	void LanguageDBHelper(LPCSTR sql, int lang);
 };

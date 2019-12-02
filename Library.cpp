@@ -91,7 +91,7 @@ void Library::Set(SqliteStatement* stmt)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool Library::SaveToDB(bool autoOpen)
+void Library::SaveToDB(bool autoOpen)
 {
 	// Try to open the database
 	g_db->Open();
@@ -128,14 +128,12 @@ bool Library::SaveToDB(bool autoOpen)
 
 	if (autoOpen)
 		g_db->Close();
-
-	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool Library::DeleteFromDB()
+void Library::DeleteFromDB()
 {
 	g_db->Open();
 	SqliteStatement stmt(g_db, "DELETE FROM Library WHERE LibraryID = @id");
@@ -143,23 +141,22 @@ bool Library::DeleteFromDB()
 	stmt.SaveRecord();
 	stmt.Finalize();
 	g_db->Close();
-	return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool Library::AddLanguageToDB(int lang)
+void Library::AddLanguageToDB(int lang)
 {
-	return LanguageDBHelper("INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@id, @lang)", lang);
+	LanguageDBHelper("INSERT INTO LibraryLang(LibraryID, Lang) VALUES (@id, @lang)", lang);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool Library::DeleteLanguageFromDB(int lang)
+void Library::DeleteLanguageFromDB(int lang)
 {
-	return LanguageDBHelper("DELETE FROM LibraryLang WHERE LibraryID = @id AND Lang = @lang)", lang);
+	LanguageDBHelper("DELETE FROM LibraryLang WHERE LibraryID = @id AND Lang = @lang)", lang);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -189,7 +186,7 @@ void Library::ExportTo(LPCWCH filename)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-bool Library::LanguageDBHelper(LPCSTR sql, int lang)
+void Library::LanguageDBHelper(LPCSTR sql, int lang)
 {
 	g_db->Open();
 	SqliteStatement stmt(g_db, sql);
@@ -198,5 +195,4 @@ bool Library::LanguageDBHelper(LPCSTR sql, int lang)
 	stmt.SaveRecord();
 	stmt.Finalize();
 	g_db->Close();
-	return true;
 }
