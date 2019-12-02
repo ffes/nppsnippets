@@ -101,11 +101,16 @@ static BOOL OnOK(HWND hDlg)
 	}
 
 	// Save the snippet to the database
-	WaitCursor wait;
-	if (!s_pSnippet->SaveToDB())
+	try
 	{
-		wait.Hide();
-		MsgBox("Failed to save the snippet to the database!");
+		WaitCursor wait;
+		s_pSnippet->SaveToDB();
+	}
+	catch (SqliteException ex)
+	{
+		std::string msg = "Failed to save the snippet to the database!\n\n";
+		msg += ex.what();
+		MsgBox(msg.c_str());
 	}
 
 	// We're done

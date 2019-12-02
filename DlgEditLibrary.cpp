@@ -25,6 +25,7 @@
 #include "NppSnippets.h"
 #include "Library.h"
 #include "Resource.h"
+#include "WaitCursor.h"
 
 static Library* s_pLibrary = NULL;
 
@@ -62,9 +63,18 @@ static BOOL OnOK(HWND hDlg)
 	s_pLibrary->WSetComments(comments.c_str());
 	s_pLibrary->SetSortAlphabetic(IsDlgButtonChecked(hDlg, IDC_SORT_ALPHABET) == BST_CHECKED);
 
-	// Save the data to the database
-	if (!s_pLibrary->SaveToDB())
-		MsgBox("Save failed");
+	// Save the library to the database
+	try
+	{
+		WaitCursor wait;
+		s_pLibrary->SaveToDB();
+	}
+	catch (SqliteException ex)
+	{
+		std::string msg = "Failed to save the library to the database!\n\n";
+		msg += ex.what();
+		MsgBox(msg.c_str());
+	}
 
 	// We're done
 	EndDialog(hDlg, IDOK);
