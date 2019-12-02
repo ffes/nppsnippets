@@ -17,19 +17,6 @@ You should only update, insert or delete records and not modify the
 structure of the database. That can cause the plug-in (and as a result
 of that Notepad++ itself) to crash.
 
-The database structure is quite simple. There are four tables
-:ref:`table_library`, :ref:`table_library_lang`, :ref:`table_snippets`
-and :ref:`table_lang_last_used`. There are one-to-many relations between
-Library and LibraryLang, between Library and Snippets and between Library
-and LangLastUsed. They are all linked to each other with the LibraryID field.
-It is possible to have multiple libraries per language and one library can be
-used for many languages. For every library at least one record in the
-LibraryLang and Snippets tables is needed.
-
-The current schema ``user_version`` of the database is 3.
-
-.. _SQLite: http://www.sqlite.org/
-
 Why a SQLite database and not plain text files?
 -----------------------------------------------
 
@@ -39,6 +26,24 @@ This is much more efficient then designing my own (complex) file format and
 implementing a parser and a writer, although I understand that editing a
 SQLite database is not as easy to edit for some as editing plain text files.
 But there is a :ref:`user interface <edit>` for editing the snippets.
+
+.. _SQLite: https://www.sqlite.org/
+
+
+Database structure
+------------------
+
+The database structure is quite simple. There are four tables
+:ref:`table_library`, :ref:`table_library_lang`, :ref:`table_snippets`
+and :ref:`table_lang_last_used`. There are one-to-many relations between
+Library and LibraryLang, between Library and Snippets and between Library
+and LangLastUsed. They are all linked to each other with the LibraryID field.
+It is possible to have multiple libraries per language and one library can be
+used for many languages. For every library at least one record in the
+LibraryLang and Snippets tables is needed.
+
+The current schema version of the database is stored in  ``user_version`` and is 3.
+
 
 Table definitions
 -----------------
