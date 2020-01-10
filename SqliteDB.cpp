@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 // SqliteDB Classes                                                        //
-// Version 1.1, 27-May-2015                                                //
+// Version 1.1.1, 16-Jun-2019                                              //
 //                                                                         //
-// Copyright (c) 2013-2015, Frank Fesevur <http://www.fesevur.com>         //
+// Copyright (c) 2013-2019, Frank Fesevur <https://www.fesevur.com>        //
 // All rights reserved.                                                    //
 //                                                                         //
 // Redistribution and use in source and binary forms, with or without      //
@@ -31,10 +31,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
-#include <wchar.h>
 #include <stdio.h>
 #include "SqliteDB.h"
-using namespace std;
 
 #ifdef _MSC_VER
 #define snprintf _snprintf
@@ -47,20 +45,19 @@ using namespace std;
 
 SqliteDatabase::SqliteDatabase()
 {
-	_dbFile[0] = 0;
-	_db = NULL;
+	_db = nullptr;
 }
 
 SqliteDatabase::SqliteDatabase(LPCWSTR file)
 {
-	_db = NULL;
+	_db = nullptr;
 	SetFilename(file);
 	Open();
 }
 
 SqliteDatabase::~SqliteDatabase()
 {
-	if (_db != NULL)
+	if (_db != nullptr)
 		sqlite3_close(_db);
 }
 
@@ -69,39 +66,46 @@ SqliteDatabase::~SqliteDatabase()
 
 void SqliteDatabase::SetFilename(LPCWSTR file)
 {
-	wcsncpy(_dbFile, file, MAX_PATH);
+	_dbFile = file;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Close the database
+/**
+ * Close the database
+ */
 
 void SqliteDatabase::Close()
 {
 	if (sqlite3_close(_db) != SQLITE_OK)
 		throw SqliteException(sqlite3_errmsg(_db));
 
-	_db = NULL;
+	_db = nullptr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Open the database
+/**
+ * Open the database
+ *
+ * @pre The filename is already set
+ */
 
 void SqliteDatabase::Open()
 {
-	if (_db != NULL)
+	if (_db != nullptr)
 		throw SqliteException("Database already opened!");
 
 	// Is the filename filled?
-	if (wcslen(_dbFile) == 0)
+	if (_dbFile.length() == 0)
 		throw SqliteException("Filename not set!");
 
 	// Open the database
-	if (sqlite3_open16(_dbFile, &_db) != SQLITE_OK)
+	if (sqlite3_open16(_dbFile.c_str(), &_db) != SQLITE_OK)
 		throw SqliteException(sqlite3_errmsg(_db));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Open the database
+/**
+ * Open the database
+ *
+ * @param file The filename of the database to be opened.
+ */
 
 void SqliteDatabase::Open(LPCWSTR file)
 {
@@ -109,14 +113,15 @@ void SqliteDatabase::Open(LPCWSTR file)
 	Open();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Delete the database file
+/**
+ * Delete the database file
+ */
 
 void SqliteDatabase::Delete()
 {
-	if (!DeleteFile(_dbFile))
+	if (!DeleteFile(_dbFile.c_str()))
 	{
-		DWORD err = GetLastError();
+		const DWORD err = GetLastError();
 		if (err != ERROR_FILE_NOT_FOUND)
 			throw SqliteException("Unable to delete SqliteDatabase");
 	}
@@ -145,23 +150,25 @@ void SqliteDatabase::Detach(LPCWSTR alias)
 	stmt.Finalize();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Compress the database
+/**
+ * Compress the database
+ */
 
 void SqliteDatabase::Vacuum()
 {
 	Execute("VACUUM;");
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Check if a table exists
+/**
+ * Check if a table exists
+ */
 
 bool SqliteDatabase::TableExists(const char* table)
 {
 	SqliteStatement stmt(this, "SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = @name;");
 	stmt.Bind("@name", table);
 	stmt.GetNextRecord();
-	int count = stmt.GetIntColumn(0);
+	const int count = stmt.GetIntColumn(0);
 	return (count == 1);
 }
 
@@ -183,12 +190,13 @@ void SqliteDatabase::RollbackTransaction()
 	Execute("ROLLBACK TRANSACTION;");
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Execute an SQL statement without results (UPDATE, INSERT, DELETE, etc)
+/**
+ * Execute an SQL statement without results, like \c UPDATE, \c INSERT, \c DELETE, etc.
+ */
 
 void SqliteDatabase::Execute(LPCSTR szSQL)
 {
-	if (sqlite3_exec(_db, szSQL, NULL, NULL, NULL) != SQLITE_OK)
+	if (sqlite3_exec(_db, szSQL, nullptr, nullptr, nullptr) != SQLITE_OK)
 		throw sqlite3_errmsg(_db);
 }
 
@@ -198,7 +206,7 @@ void SqliteDatabase::Execute(LPCSTR szSQL)
 void SqliteDatabase::SetUserVersion(long version, const char* dbname)
 {
 	char sql[MAX_PATH];
-	snprintf(sql, MAX_PATH, "PRAGMA %s.user_version = %ld;", dbname == NULL ? "main" : dbname, version);
+	snprintf(sql, MAX_PATH, "PRAGMA %s.user_version = %ld;", dbname == nullptr ? "main" : dbname, version);
 	Execute(sql);
 }
 
@@ -207,8 +215,8 @@ void SqliteDatabase::SetUserVersion(long version, const char* dbname)
 
 long SqliteDatabase::GetUserVersion(const char* dbname)
 {
-	string sql = "PRAGMA ";
-	sql += (dbname == NULL ? "main" : dbname);
+	std::string sql = "PRAGMA ";
+	sql += (dbname == nullptr ? "main" : dbname);
 	sql += ".user_version;";
 
 	SqliteStatement stmt(this, sql.c_str());
@@ -221,7 +229,7 @@ long SqliteDatabase::GetUserVersion(const char* dbname)
 
 void SqliteDatabase::EnableForeignKeys(bool on)
 {
-	string sql = "PRAGMA foreign_keys = ";
+	std::string sql = "PRAGMA foreign_keys = ";
 	sql += (on ? "ON" : "OFF");
 	Execute(sql.c_str());
 }
@@ -232,19 +240,19 @@ void SqliteDatabase::EnableForeignKeys(bool on)
 SqliteStatement::SqliteStatement(SqliteDatabase* db)
 {
 	_db = db->GetDB();
-	_stmt = NULL;
+	_stmt = nullptr;
 }
 
 SqliteStatement::SqliteStatement(SqliteDatabase* db, const char* sql)
 {
 	_db = db->GetDB();
-	_stmt = NULL;
+	_stmt = nullptr;
 	Prepare(sql);
 }
 
 SqliteStatement::~SqliteStatement()
 {
-	if (_stmt != NULL)
+	if (_stmt != nullptr)
 		sqlite3_finalize(_stmt);
 }
 
@@ -253,7 +261,7 @@ SqliteStatement::~SqliteStatement()
 
 void SqliteStatement::Prepare(const char* sql)
 {
-	if (sqlite3_prepare_v2(_db, sql, -1, &_stmt, NULL) != SQLITE_OK)
+	if (sqlite3_prepare_v2(_db, sql, -1, &_stmt, nullptr) != SQLITE_OK)
 		throw SqliteException(sqlite3_errmsg(_db));
 	_colNames.clear();
 }
@@ -283,7 +291,7 @@ void SqliteStatement::SaveRecord()
 
 bool SqliteStatement::GetNextRecord()
 {
-	int rc = sqlite3_step(_stmt);
+	const int rc = sqlite3_step(_stmt);
 
 	if (rc == SQLITE_ROW)
 	{
@@ -306,7 +314,7 @@ void SqliteStatement::Finalize()
 	if (sqlite3_finalize(_stmt) != SQLITE_OK)
 		throw SqliteException(sqlite3_errmsg(_db));
 
-	_stmt = NULL;
+	_stmt = nullptr;
 	_colNames.clear();
 }
 
@@ -318,9 +326,12 @@ int SqliteStatement::GetBindParameterIndex(std::string col)
 	return sqlite3_bind_parameter_index(_stmt, col.c_str());
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Binds a wchar string to the given parameter. Empty strings are bound
-// as null
+/**
+ * Binds a wchar string to the given parameter. Empty strings are bound as null.
+ *
+ * @param param The parameter to bind to
+ * @param val The value to bind
+ */
 
 void SqliteStatement::Bind(const char* param, const WCHAR* val)
 {
@@ -330,7 +341,7 @@ void SqliteStatement::Bind(const char* param, const WCHAR* val)
 void SqliteStatement::Bind(int col, const WCHAR* val)
 {
 	int res = SQLITE_OK;
-	if (val == NULL)
+	if (val == nullptr)
 	{
 		res = sqlite3_bind_null(_stmt, col);
 	}
@@ -347,9 +358,12 @@ void SqliteStatement::Bind(int col, const WCHAR* val)
 		throw SqliteException(sqlite3_errmsg(_db));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Binds a char string to the given parameter. Empty strings are bound
-// as null
+/**
+ * Binds a char string to the given parameter. Empty strings are bound as null.
+ *
+ * @param param The parameter to bind to
+ * @param val The value to bind
+ */
 
 void SqliteStatement::Bind(const char* param, const char *val)
 {
@@ -359,7 +373,7 @@ void SqliteStatement::Bind(const char* param, const char *val)
 void SqliteStatement::Bind(int col, const char *val)
 {
 	int res = SQLITE_OK;
-	if (val == NULL)
+	if (val == nullptr)
 	{
 		res = sqlite3_bind_null(_stmt, col);
 	}
@@ -376,9 +390,12 @@ void SqliteStatement::Bind(int col, const char *val)
 		throw SqliteException(sqlite3_errmsg(_db));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Bind an integer to the given parameter. If optional "bool null" is true,
-// null is bound. Use like this: stmt.Bind("col", var, var == 0);
+/**
+ * Bind an integer to the given parameter.
+ *
+ * If the optional "bool null" is true, \c NULL is bound.
+ * It can be used like this: <tt>stmt.Bind("col", var, var == 0);</tt>
+ */
 
 void SqliteStatement::Bind(const char* param, int val, bool null)
 {
@@ -387,13 +404,14 @@ void SqliteStatement::Bind(const char* param, int val, bool null)
 
 void SqliteStatement::Bind(int col, int val, bool null)
 {
-	int res = (null ? sqlite3_bind_null(_stmt, col) : sqlite3_bind_int(_stmt, col, val));
+	const int res = (null ? sqlite3_bind_null(_stmt, col) : sqlite3_bind_int(_stmt, col, val));
 	if (res != SQLITE_OK)
 		throw SqliteException(sqlite3_errmsg(_db));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Binds 1 for true and 0 for false to the given parameter
+/**
+ * Binds \c 1 for \c true and \c 0 for \c false to the given parameter
+ */
 
 void SqliteStatement::Bind(const char* param, bool val)
 {
@@ -406,8 +424,9 @@ void SqliteStatement::Bind(int col, bool val)
 		throw SqliteException(sqlite3_errmsg(_db));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Bind NULL to the given parameter
+/**
+ * Bind \c NULL to the given parameter
+ */
 
 void SqliteStatement::Bind(const char* param)
 {
@@ -439,8 +458,8 @@ int SqliteStatement::GetColumnCount()
 
 std::string SqliteStatement::GetTextColumn(int col)
 {
-	LPCSTR val = (LPCSTR) sqlite3_column_text(_stmt, col);
-	return (val == NULL ? "" : val);
+	const LPCSTR val = (LPCSTR) sqlite3_column_text(_stmt, col);
+	return (val == nullptr ? "" : val);
 }
 
 std::string SqliteStatement::GetTextColumn(std::string col)
@@ -450,8 +469,8 @@ std::string SqliteStatement::GetTextColumn(std::string col)
 
 std::wstring SqliteStatement::GetWTextColumn(int col)
 {
-	LPCWSTR val = (LPCWSTR) sqlite3_column_text16(_stmt, col);
-	return (val == NULL ? L"" : val);
+	const LPCWSTR val = (LPCWSTR) sqlite3_column_text16(_stmt, col);
+	return (val == nullptr ? L"" : val);
 }
 
 std::wstring SqliteStatement::GetWTextColumn(std::string col)

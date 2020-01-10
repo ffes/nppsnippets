@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 // SqliteDB Classes                                                        //
-// Version 1.1, 27-May-2015                                                //
+// Version 1.1, 16-Nov-2015                                                //
 //                                                                         //
 // Copyright (c) 2013-2015, Frank Fesevur <http://www.fesevur.com>         //
 // All rights reserved.                                                    //
@@ -37,8 +37,6 @@
 #include <stdexcept>
 #include "sqlite3.h"
 
-typedef std::map<std::string, int> StrIntMap;
-
 class SqliteException : public std::runtime_error
 {
 public:
@@ -64,10 +62,10 @@ public:
 	void Detach(LPCWSTR alias);
 
 	void SetFilename(LPCWSTR file);
-	void SetUserVersion(long version, const char* dbname = NULL);
+	void SetUserVersion(long version, const char* dbname = nullptr);
 
-	LPCWSTR GetFilename() { return _dbFile; };
-	long GetUserVersion(const char* dbname = NULL);
+	const std::wstring GetFilename() { return _dbFile; };
+	long GetUserVersion(const char* dbname = nullptr);
 	bool TableExists(const char* table);
 	sqlite3* GetDB() { return _db; };
 
@@ -79,7 +77,7 @@ public:
 	void RollbackTransaction();
 
 protected:
-	WCHAR _dbFile[MAX_PATH];
+	std::wstring _dbFile;
 	sqlite3* _db;
 };
 
@@ -124,5 +122,5 @@ protected:
 
 	sqlite3* _db;
 	sqlite3_stmt* _stmt;
-	StrIntMap _colNames;
+	std::map<std::string, int> _colNames;
 };
