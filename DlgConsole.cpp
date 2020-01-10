@@ -24,6 +24,9 @@
 #include <stdio.h>
 #include <shlwapi.h>
 
+#include <locale>
+#include <codecvt>
+
 #include "NPP/PluginInterface.h"
 #include "NPP/menuCmdID.h"
 #include "NPP/Docking.h"
@@ -756,11 +759,13 @@ static void OnSnippetAddClipboard(HWND hWnd)
 	WCHAR* buffer = (WCHAR*) GlobalLock(hData);
 	if (buffer != NULL)
 	{
+		std::wstring buf = ConvertLineEnding(buffer, SC_EOL_CRLF);
+
 		// Create the new snippet and init some required members
 		Snippet* snip = new Snippet();
 		snip->SetLibraryID(s_curLibrary->GetLibraryID());
 		snip->SetSort(GetMaxSort() + 1);
-		snip->WSetBeforeSelection(buffer);
+		snip->WSetBeforeSelection(buf.c_str());
 		snip->GuessName();
 
 		// Let the user edit the new snippet
@@ -794,16 +799,23 @@ static void OnSnippetAddSelection(HWND hWnd)
 	char* pszText = new char[selsize + 2];
 	SendMsg(SCI_GETSELTEXT, 0, (LPARAM) pszText);
 
+	// Convert to a proper std::wstring
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	std::wstring wide = converter.from_bytes(pszText);
+	delete[] pszText;
+
+	// Convert the line ending of the selection
+	std::wstring txt = ConvertLineEnding(wide.c_str(), SC_EOL_CRLF);
+
 	// Create the new snippet and init some required members
 	Snippet* snip = new Snippet();
 	snip->SetLibraryID(s_curLibrary->GetLibraryID());
 	snip->SetSort(GetMaxSort() + 1);
-	snip->SetBeforeSelection(pszText);
+	snip->WSetBeforeSelection(txt.c_str());
 	snip->GuessName();
-	delete [] pszText;
 
 	// Let the user edit the new snippet
-	bool closedOK = ShowEditSnippetDlg(snip);
+	const bool closedOK = ShowEditSnippetDlg(snip);
 
 	// We don't need the object anymore, it was stored in the database if OK was pressed
 	delete snip;
