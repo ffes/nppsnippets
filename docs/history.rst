@@ -2,8 +2,8 @@ Release history
 ===============
 
 
-Next Version
-------------
+Version `1.5.1`_ (13 January 2020)
+----------------------------------
 
 -  Fix crash when ``Before Selection`` was left empty and a snippet was saved (`issue #16`_)
 
@@ -14,6 +14,7 @@ Next Version
 -  Upgrade to SQLite version 3.30.1
 
 
+.. _1.5.1: https://github.com/ffes/nppsnippets/releases/tag/v1.5.1
 .. _PR #25: https://github.com/ffes/nppsnippets/pull/25
 .. _issue #16: https://github.com/ffes/nppsnippets/issues/16
 .. _issue #27: https://github.com/ffes/nppsnippets/issues/27
