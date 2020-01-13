@@ -9,11 +9,14 @@ Next Version
 
 -  Make the Edit Snippet dialog bigger and add scrollbars (`PR #25`_)
 
+-  Make sure to use the proper line endings when creating a snippet from selection or clipboard (`issue #27`_)
+
 -  Upgrade to SQLite version 3.30.1
 
 
 .. _PR #25: https://github.com/ffes/nppsnippets/pull/25
 .. _issue #16: https://github.com/ffes/nppsnippets/issues/16
+.. _issue #27: https://github.com/ffes/nppsnippets/issues/27
 
 
 Version `1.5.0`_ (15 May 2019)
