@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //  NppSnippets - Code Snippets plugin for Notepad++                       //
-//  Copyright (C) 2010-2011 Frank Fesevur                                  //
+//  Copyright (C) 2010-2020 Frank Fesevur                                  //
 //                                                                         //
 //  This program is free software; you can redistribute it and/or modify   //
 //  it under the terms of the GNU General Public License as published by   //
@@ -1362,10 +1362,20 @@ void SnippetsConsole()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-//
+// Entry points from the Notepad++ menu or toolbar
 
 void CreateConsoleDlg()
 {
 	// Create the console window
 	s_hDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_SNIPPETS), g_nppData._nppHandle, (DLGPROC) DlgProcedure);
+}
+
+void FocusSnippetsList()
+{
+	SetFocus(s_hList);
+}
+
+void FocusLibraryCombo()
+{
+	SetFocus(s_hCombo);
 }

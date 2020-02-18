@@ -38,7 +38,7 @@
 #endif
 
 static const TCHAR PLUGIN_NAME[] = L"Snippets";
-static const int nbFunc = 5;
+static const int nbFunc = 8;
 static HBITMAP hbmpToolbar = NULL;
 
 HINSTANCE g_hInst;
@@ -351,6 +351,26 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
 			int index = 0;
 			g_funcItem[index]._pFunc = SnippetsConsole;
 			wcscpy(g_funcItem[index]._itemName, L"Snippets");
+			g_funcItem[index]._init2Check = false;
+			g_funcItem[index]._pShKey = NULL;
+			index++;
+
+			// Seperator
+			g_funcItem[index]._pFunc = NULL;
+			wcscpy(g_funcItem[index]._itemName, L"-SEPARATOR-");
+			g_funcItem[index]._init2Check = false;
+			g_funcItem[index]._pShKey = NULL;
+			index++;
+
+			// Focus the items in the snippets panel
+			g_funcItem[index]._pFunc = FocusLibraryCombo;
+			wcscpy(g_funcItem[index]._itemName, L"Focus List of Libraries");
+			g_funcItem[index]._init2Check = false;
+			g_funcItem[index]._pShKey = NULL;
+			index++;
+
+			g_funcItem[index]._pFunc = FocusSnippetsList;
+			wcscpy(g_funcItem[index]._itemName, L"Focus List of Snippets");
 			g_funcItem[index]._init2Check = false;
 			g_funcItem[index]._pShKey = NULL;
 			index++;

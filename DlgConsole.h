@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //  NppSnippets - Code Snippets plugin for Notepad++                       //
-//  Copyright (C) 2010 Frank Fesevur                                       //
+//  Copyright (C) 2010-2020 Frank Fesevur                                  //
 //                                                                         //
 //  This program is free software; you can redistribute it and/or modify   //
 //  it under the terms of the GNU General Public License as published by   //
@@ -25,3 +25,5 @@ extern void SnippetsConsole();
 extern void CreateConsoleDlg();
 extern void UpdateSnippetsList();
 extern void InvalidateListbox();
+extern void FocusLibraryCombo();
+extern void FocusSnippetsList();
