@@ -51,6 +51,7 @@
 static HWND s_hDlg = NULL;						// The HWND to the dialog
 static HWND s_hList = NULL;						// The HWND to the listbox
 static HWND s_hCombo = NULL;					// The HWND to the combo
+static WNDPROC s_hListboxProcOld = NULL;		// The HWND to the original procedure of the listbox
 static HICON s_hTabIcon = NULL;					// The icon on the docking tab
 static HBRUSH s_hbrBkgnd = NULL;				// The brush to paint the theme on the background of the listbox
 static int s_iHeightCombo = 20;					// This info should come from Windows
@@ -345,7 +346,7 @@ static void ShowContextMenu(HWND hwnd, UINT uResID, int xPos, int yPos)
 	if (hMenu == NULL)
 		return;
 
-	// TrackPopupMenu cannot display the menu bar so get a handle to the first shortcut menu. 
+	// TrackPopupMenu cannot display the menu bar so get a handle to the first shortcut menu.
 	HMENU hPopup = GetSubMenu(hMenu, 0);
 
 	// Disable various items of the snippet menu
@@ -392,7 +393,7 @@ static void SetFocusOnEditor()
 {
 	int currentEdit;
 	::SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM) &currentEdit);
-	SetFocus(getCurrentHScintilla(currentEdit));	
+	SetFocus(getCurrentHScintilla(currentEdit));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -484,24 +485,6 @@ static void OnContextMenu(HWND hWnd, int xPos, int yPos, HWND hChild)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-//
-
-static BOOL OnInitDialog(HWND hWnd)
-{
-	// Store the DlgItems
-	s_hList = GetDlgItem(hWnd, IDC_LIST);
-	s_hCombo = GetDlgItem(hWnd, IDC_NAME);
-
-	// Get the height of the combobox
-	RECT rc;
-	GetWindowRect(s_hCombo, &rc);
-	s_iHeightCombo = rc.bottom - rc.top;
-
-	// Let windows set focus
-	return TRUE;
-}
-
-/////////////////////////////////////////////////////////////////////////////
 // Cleanup the mess
 
 static void OnClose(HWND hWnd)
@@ -523,10 +506,10 @@ static void OnClose(HWND hWnd)
 
 static std::string utf8_encode(const std::wstring &wstr)
 {
-    int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), NULL, 0, NULL, NULL);
-    std::string strTo(size_needed, 0);
-    WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), &strTo[0], size_needed, NULL, NULL);
-    return strTo;
+	const int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), NULL, 0, NULL, NULL);
+	std::string strTo(size_needed, 0);
+	WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), &strTo[0], size_needed, NULL, NULL);
+	return strTo;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1089,11 +1072,59 @@ static void OnLibraryExport(HWND hWnd)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Double clicking the item inserts it as well
+// Process the message that go through the listbox
 
-static void OnDblClk_List(HWND hWnd)
+static LRESULT CALLBACK ListboxProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	OnSnippetInsert(hWnd);
+	switch (uMsg)
+	{
+		case WM_KEYDOWN:
+		{
+			// Was the Enter-key pressed?
+			if (wParam == VK_RETURN)
+			{
+				OnSnippetInsert(s_hDlg);
+				return TRUE;
+			}
+			break;
+		}
+		case WM_GETDLGCODE:
+		{
+			// All the other message go through the original WindProc
+			LRESULT lRet = CallWindowProc((WNDPROC)s_hListboxProcOld, hWnd, uMsg, wParam, lParam);
+			if (lParam)
+			{
+				MSG* pMsg = (MSG*)lParam;
+				if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN)
+					lRet |= DLGC_WANTALLKEYS;
+			}
+			return lRet;
+		}
+		default:
+			break;
+	}
+	return(CallWindowProc((WNDPROC)s_hListboxProcOld, hWnd, uMsg, wParam, lParam));
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+static BOOL OnInitDialog(HWND hWnd)
+{
+	// Store the DlgItems
+	s_hList = GetDlgItem(hWnd, IDC_LIST);
+	s_hCombo = GetDlgItem(hWnd, IDC_NAME);
+
+	// Get the height of the combobox
+	RECT rc;
+	GetWindowRect(s_hCombo, &rc);
+	s_iHeightCombo = rc.bottom - rc.top;
+
+	// Use our own ListboxProc to intercept the ENTER-key
+	s_hListboxProcOld = (WNDPROC)SetWindowLong(s_hList, GWL_WNDPROC, (LONG)(WNDPROC)ListboxProc);
+
+	// Let windows set focus
+	return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1108,7 +1139,8 @@ static void OnCommand(HWND hWnd, int ResID, int msg)
 			switch (msg)
 			{
 				case LBN_DBLCLK:
-					OnDblClk_List(hWnd);
+					// Double clicking the item inserts it as well
+					OnSnippetInsert(hWnd);
 					break;
 			}
 			break;
@@ -1322,7 +1354,7 @@ void SnippetsConsole()
 				MsgBox("Unable to find the database, check your installation!");
 				return;
 			}
-			
+
 			// Check if we have a version of Notepad++ that supports NPPM_GETLANGUAGENAME
 			DWORD ver = (DWORD) SendMessage(g_nppData._nppHandle, NPPM_GETNPPVERSION, (WPARAM) 0, (LPARAM) 0);
 			g_HasLangMsgs = (ver >= MAKELONG(93, 5));
