@@ -35,9 +35,7 @@ NppOptions::NppOptions() noexcept
 	SendMessage(g_nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)&szPath);
 
 	_IniPath = szPath;
-	_IniPath += L"\\";
-	_IniPath += getName();
-	_IniPath += L".ini";
+	_IniPath += L"\\NppSnippets.ini";
 }
 
 /////////////////////////////////////////////////////////////////////////////
