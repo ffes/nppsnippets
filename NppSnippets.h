@@ -22,14 +22,12 @@
 #pragma once
 
 #include <string>
-#include <map>
 
 extern HWND getCurrentHScintilla(int which);
 extern LRESULT SendMsg(UINT Msg, WPARAM wParam = 0, LPARAM lParam = 0, int count = 1);
 extern void MsgBox(const WCHAR* msg);
 extern void MsgBox(const char* msg);
 extern bool MsgBoxYesNo(const WCHAR* msg);
-extern void MsgBoxf(const char* szFmt, ...);
 extern void CenterWindow(HWND hDlg);
 extern std::wstring GetDlgText(HWND hDlg, UINT uID);
 extern int GetDlgTextLength(HWND hDlg, UINT uID);
@@ -47,8 +45,3 @@ extern bool g_HasLangMsgs;
 
 class Options;
 extern Options *g_Options;
-
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#define snwprintf swprintf
-#endif

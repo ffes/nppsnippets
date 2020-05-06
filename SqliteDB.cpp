@@ -34,12 +34,6 @@
 #include <stdio.h>
 #include "SqliteDB.h"
 
-#ifdef _MSC_VER
-#define snprintf _snprintf
-#define snwprintf swprintf
-#define wunlink _wunlink
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 //
 

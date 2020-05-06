@@ -22,8 +22,6 @@
 #include <windows.h>
 #include <assert.h>
 #include <commctrl.h>
-#include <stdio.h>
-#include <stdarg.h>
 
 #include "NPP/PluginInterface.h"
 #include "Resource.h"
@@ -248,19 +246,6 @@ void MsgBox(const char* msg)
 bool MsgBoxYesNo(const WCHAR* msg)
 {
 	return (MessageBox(g_nppData._nppHandle, msg, PLUGIN_NAME, MB_YESNO) == IDYES);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// MessageBox function with printf
-
-void MsgBoxf(const char* szFmt, ...)
-{
-	char szTmp[1024];
-	va_list argp;
-	va_start(argp, szFmt);
-	vsprintf(szTmp, szFmt, argp);
-	va_end(argp);
-	MsgBox(szTmp);
 }
 
 /////////////////////////////////////////////////////////////////////////////
