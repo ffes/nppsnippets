@@ -38,11 +38,11 @@ static WCHAR s_szDBFile[]			= L"DBFile";
 /////////////////////////////////////////////////////////////////////////////
 // Constructor: read the settings
 
-Options::Options() : NppOptions()
+Options::Options() noexcept : NppOptions()
 {
 	// First make sure the paths are empty
-	_szPrevVersion[0] = 0;
-	_szDBFile[0] = 0;
+	_prevVersion.clear();
+	_DBFile.clear();
 
 	// Read the settings from the file
 	Read();
@@ -73,13 +73,13 @@ void Options::Read()
 {
 	showConsoleDlg = GetBool(s_szOptions, s_szShow, true);
 	toolbarIcon = GetBool(s_szOptions, s_szToolbarIcon, true);
-	GetString(s_szOptions, s_szVersion, _szPrevVersion, MAX_PATH, L"");
+	_prevVersion = GetString(s_szOptions, s_szVersion, L"");
 
 	// Did the user specify a special path for the database?
-	GetString(s_szOptions, s_szDBFile, _szDBFile, MAX_PATH, L"");
-	if (wcslen(_szDBFile) == 0)
+	_DBFile = GetString(s_szOptions, s_szDBFile, L"");
+	if (_DBFile.length() == 0)
 	{
 		// Try the old name of this entry
-		GetString(s_szOptions, s_szDBPath, _szDBFile, MAX_PATH, L"");
+		_DBFile = GetString(s_szOptions, s_szDBPath, L"");
 	}
 }

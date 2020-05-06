@@ -274,9 +274,9 @@ static bool GetDatabaseFile()
 {
 
 	// First see if there is a user-defined path for the database
-	if (PathFileExists(g_Options->GetDBFile()))
+	if (PathFileExists(g_Options->GetDBFile().c_str()))
 	{
-		g_db->SetFilename(g_Options->GetDBFile());
+		g_db->SetFilename(g_Options->GetDBFile().c_str());
 		return true;
 	}
 

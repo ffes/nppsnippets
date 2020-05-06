@@ -29,19 +29,19 @@
 class Options : public NppOptions
 {
 public:
-	Options();
+	Options() noexcept;
 	~Options();
 
 	bool showConsoleDlg;
 	bool toolbarIcon;
 
-	WCHAR* GetPrevVersion() { return _szPrevVersion; };
-	WCHAR* GetDBFile() { return _szDBFile; };
+	std::wstring GetPrevVersion() { return _prevVersion; };
+	std::wstring GetDBFile() { return _DBFile; };
 
 	void Write();
 	void Read();
 
 private:
-	WCHAR _szPrevVersion[MAX_PATH];
-	WCHAR _szDBFile[MAX_PATH];
+	std::wstring _prevVersion;
+	std::wstring _DBFile;
 };

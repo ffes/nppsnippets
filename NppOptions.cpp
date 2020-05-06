@@ -20,7 +20,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
-#include <stdio.h>
 #include "NppOptions.h"
 #include "NPP/PluginInterface.h"
 #include "NppSnippets.h"
@@ -28,62 +27,67 @@
 /////////////////////////////////////////////////////////////////////////////
 // Constructor: read the settings
 
-NppOptions::NppOptions()
+NppOptions::NppOptions() noexcept
 {
-	// First make sure the path is empty
-	_szIniPath[0] = 0;
-
 	// Get the directory from NP++ and add the filename of the settings file
-	SendMessage(g_nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM) &_szIniPath);
-	wcsncat(_szIniPath, L"\\NppSnippets.ini", MAX_PATH);
+	WCHAR szPath[_MAX_PATH];
+	szPath[0] = 0;
+	SendMessage(g_nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)&szPath);
+
+	_IniPath = szPath;
+	_IniPath += L"\\";
+	_IniPath += getName();
+	_IniPath += L".ini";
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Read a boolean from the ini file
 
-bool NppOptions::GetBool(WCHAR* szAppName, WCHAR* szKeyName, bool def)
+bool NppOptions::GetBool(const WCHAR* szAppName, const WCHAR* szKeyName, const bool def) noexcept
 {
-	return(GetPrivateProfileInt(szAppName, szKeyName, def ? 1 : 0, _szIniPath) > 0);
+	return(GetPrivateProfileInt(szAppName, szKeyName, def ? 1 : 0, _IniPath.c_str()) > 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Read a int from the ini file
 
-int NppOptions::GetInt(WCHAR* szAppName, WCHAR* szKeyName, int def)
+int NppOptions::GetInt(const WCHAR* szAppName, const WCHAR* szKeyName, const int def) noexcept
 {
-	return GetPrivateProfileInt(szAppName, szKeyName, def, _szIniPath);
+	return GetPrivateProfileInt(szAppName, szKeyName, def, _IniPath.c_str());
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Read a string from the ini file
 
-void NppOptions::GetString(WCHAR* szAppName, WCHAR* szKeyName, WCHAR* szReturnedString, DWORD nSize, WCHAR* def)
+std::wstring NppOptions::GetString(const WCHAR* szAppName, const WCHAR* szKeyName, const WCHAR* def) noexcept
 {
-	GetPrivateProfileString(szAppName, szKeyName, def, szReturnedString, nSize, _szIniPath);
+	WCHAR szRet[_MAX_PATH];
+	GetPrivateProfileString(szAppName, szKeyName, def, szRet, _MAX_PATH, _IniPath.c_str());
+	return szRet;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Write a boolean to the ini file
 
-void NppOptions::WriteBool(WCHAR* szAppName, WCHAR* szKeyName, bool val)
+void NppOptions::WriteBool(const WCHAR* szAppName, const WCHAR* szKeyName, const bool val) noexcept
 {
-	WritePrivateProfileString(szAppName, szKeyName, val ? L"1" : L"0", _szIniPath);
+	WritePrivateProfileString(szAppName, szKeyName, val ? L"1" : L"0", _IniPath.c_str());
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Write an integer to the ini file
 
-void NppOptions::WriteInt(WCHAR* szAppName, WCHAR* szKeyName, int val)
+void NppOptions::WriteInt(const WCHAR* szAppName, const WCHAR* szKeyName, const int val) noexcept
 {
 	WCHAR temp[256];
-	snwprintf(temp, 256, L"%d", val);
-	WritePrivateProfileString(szAppName, szKeyName, temp, _szIniPath);
+	swprintf(temp, _countof(temp), L"%d", val);
+	WritePrivateProfileString(szAppName, szKeyName, temp, _IniPath.c_str());
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // Write a string to the ini file
 
-void NppOptions::WriteString(WCHAR* szAppName, WCHAR* szKeyName, WCHAR* val)
+void NppOptions::WriteString(const WCHAR* szAppName, const WCHAR* szKeyName, const WCHAR* val) noexcept
 {
-	WritePrivateProfileString(szAppName, szKeyName, val, _szIniPath);
+	WritePrivateProfileString(szAppName, szKeyName, val, _IniPath.c_str());
 }

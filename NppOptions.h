@@ -21,22 +21,24 @@
 
 #pragma once
 
+#include <string>
+
 /////////////////////////////////////////////////////////////////////////////
 //
 
 class NppOptions
 {
 public:
-	NppOptions();
+	NppOptions() noexcept;
 
 protected:
-	bool GetBool(WCHAR* szAppName, WCHAR* szKeyName, bool def);
-	int GetInt(WCHAR* szAppName, WCHAR* szKeyName, int def);
-	void GetString(WCHAR* szAppName, WCHAR* szKeyName, WCHAR* szReturnedString, DWORD nSize, WCHAR* def);
+	bool GetBool(const WCHAR* szAppName, const WCHAR* szKeyName, const bool def) noexcept;
+	int GetInt(const WCHAR* szAppName, const WCHAR* szKeyName, const int def) noexcept;
+	std::wstring GetString(const WCHAR* szAppName, const WCHAR* szKeyName, const WCHAR* def) noexcept;
 
-	void WriteBool(WCHAR* szAppName, WCHAR* szKeyName, bool val);
-	void WriteInt(WCHAR* szAppName, WCHAR* szKeyName, int val);
-	void WriteString(WCHAR* szAppName, WCHAR* szKeyName, WCHAR* val);
+	void WriteBool(const WCHAR* szAppName, const WCHAR* szKeyName, const bool val) noexcept;
+	void WriteInt(const WCHAR* szAppName, const WCHAR* szKeyName, const int val) noexcept;
+	void WriteString(const WCHAR* szAppName, const WCHAR* szKeyName, const WCHAR* val) noexcept;
 
-	WCHAR _szIniPath[MAX_PATH];
+	std::wstring _IniPath;
 };
