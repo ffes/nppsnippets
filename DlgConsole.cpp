@@ -1121,7 +1121,7 @@ static BOOL OnInitDialog(HWND hWnd)
 	s_iHeightCombo = rc.bottom - rc.top;
 
 	// Use our own ListboxProc to intercept the ENTER-key
-	s_hListboxProcOld = (WNDPROC)SetWindowLong(s_hList, GWL_WNDPROC, (LONG)(WNDPROC)ListboxProc);
+	s_hListboxProcOld = (WNDPROC)SetWindowLongPtr(s_hList, GWLP_WNDPROC, (LONG_PTR)ListboxProc);
 
 	// Let windows set focus
 	return TRUE;
