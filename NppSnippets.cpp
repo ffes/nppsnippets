@@ -184,7 +184,7 @@ std::wstring ConvertLineEnding(LPCWSTR from, int toLineEnding)
 
 	// Get the line ending of the current document
 	if (toLineEnding < 0)
-		toLineEnding = SendMsg(SCI_GETEOLMODE);
+		toLineEnding = (int) SendMsg(SCI_GETEOLMODE);
 
 	// Determine the new line ending
 	std::wstring lineend = L"\r\n";
@@ -236,7 +236,7 @@ std::wstring ConvertLineEnding(LPCWSTR from, int toLineEnding)
 
 void MsgBox(const WCHAR* msg)
 {
-	::MessageBox(g_nppData._nppHandle, msg, PLUGIN_NAME, MB_OK);
+	MessageBox(g_nppData._nppHandle, msg, PLUGIN_NAME, MB_OK);
 }
 
 void MsgBox(const char* msg)
@@ -270,10 +270,10 @@ void MsgBoxf(const char* szFmt, ...)
 LRESULT SendMsg(UINT Msg, WPARAM wParam, LPARAM lParam, int count)
 {
 	int currentEdit;
-	::SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM) &currentEdit);
+	SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM) &currentEdit);
 	LRESULT res = 0;
 	for (int i = 0; i < count; i++)
-		res = ::SendMessage(getCurrentHScintilla(currentEdit), Msg, wParam, lParam);
+		res = SendMessage(getCurrentHScintilla(currentEdit), Msg, wParam, lParam);
 	return res;
 }
 
@@ -286,16 +286,14 @@ void CenterWindow(HWND hDlg)
 	GetClientRect(g_nppData._nppHandle, &rc);
 
 	POINT center;
-	int w = rc.right - rc.left;
-	int h = rc.bottom - rc.top;
-	center.x = rc.left + (w / 2);
-	center.y = rc.top + (h / 2);
+	center.x = rc.left + ((rc.right - rc.left) / 2);
+	center.y = rc.top + ((rc.bottom - rc.top) / 2);
 	ClientToScreen(g_nppData._nppHandle, &center);
 
 	RECT dlgRect;
 	GetClientRect(hDlg, &dlgRect);
-	int x = center.x - ((dlgRect.right - dlgRect.left) / 2);
-	int y = center.y - ((dlgRect.bottom - dlgRect.top) / 2);
+	const int x = center.x - ((dlgRect.right - dlgRect.left) / 2);
+	const int y = center.y - ((dlgRect.bottom - dlgRect.top) / 2);
 
 	SetWindowPos(hDlg, HWND_TOP, x, y, -1, -1, SWP_NOSIZE | SWP_SHOWWINDOW);
 }
