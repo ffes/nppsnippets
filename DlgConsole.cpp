@@ -395,11 +395,11 @@ static void SetFocusOnEditor()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Start a new document. Does not work yet, therefore only in debug-builds
+// Start a new document
 
 static void StartNewDocument(LangType lang)
 {
-	// Start a new document, if not empty
+	// Start a new document, if the current document is not empty
 	if (SendMsg(SCI_GETLENGTH) > 0)
 		SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_FILE_NEW);
 
