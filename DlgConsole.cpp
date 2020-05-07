@@ -412,6 +412,49 @@ static void StartNewDocument(LangType lang)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// Indent the lines where the new snippet has just been inserted
+
+static void IndentSnippet(int firstLine, int lastLine)
+{
+	// If there was only one line insert, nothing to do
+	if (firstLine == lastLine)
+		return;
+
+	// If disabled, nothing to do
+	if (!g_Options->indentSnippet)
+		return;
+
+	// Get the tab width
+	const int tabWidth = (int) SendMsg(SCI_GETTABWIDTH);
+
+	// Go through the lines
+	for (int line = firstLine; line <= lastLine; line++)
+	{
+		// Are we inside a folding block?
+		const int foldParent = (int) SendMsg(SCI_GETFOLDPARENT, line);
+		if (foldParent < 0)
+			continue;
+
+		// What is the folding level of this block?
+		const int parentIndent = (int) SendMsg(SCI_GETLINEINDENTATION, foldParent);
+		const int lastChild = (int) SendMsg(SCI_GETLASTCHILD, foldParent, -1);
+
+		if (foldParent == 0)
+		{
+			SendMsg(SCI_SETLINEINDENTATION, line, 0);
+		}
+		else if (line == lastChild)
+		{
+			SendMsg(SCI_SETLINEINDENTATION, line, parentIndent);
+		}
+		else
+		{
+			SendMsg(SCI_SETLINEINDENTATION, line, parentIndent + tabWidth);
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
 //
 
 #define SPACER 4
@@ -517,7 +560,7 @@ static std::string utf8_encode(const std::wstring &wstr)
 static void OnSnippetInsert(HWND hWnd)
 {
 	// Get the current item and its snippet
-	int item = (int) SendDlgItemMessage(hWnd, IDC_LIST, LB_GETCURSEL, 0, 0L);
+	const int item = (int) SendDlgItemMessage(hWnd, IDC_LIST, LB_GETCURSEL, 0, 0L);
 
 	// Was there an item selected?
 	if (item == LB_ERR)
@@ -534,11 +577,8 @@ static void OnSnippetInsert(HWND hWnd)
 	// Start an undo action, to make sure this insert is one action to undo
 	SendMsg(SCI_BEGINUNDOACTION);
 
-	//SCI_GETSELECTIONS
-	//SCI_GETSELECTIONNSTART(int selection)
-
 	// Get the text in current selection
-	int selsize = (int) SendMsg(SCI_GETSELECTIONEND) - (int) SendMsg(SCI_GETSELECTIONSTART);
+	const int selsize = (int) SendMsg(SCI_GETSELECTIONEND) - (int) SendMsg(SCI_GETSELECTIONSTART);
 	char* pszText = NULL;
 	if (selsize != 0)
 	{
@@ -553,7 +593,8 @@ static void OnSnippetInsert(HWND hWnd)
 	std::string strTo = utf8_encode(wstr);
 	SendMsg(SCI_REPLACESEL, 0, (LPARAM) strTo.c_str());
 
-	int beforeSel = (int) SendMsg(SCI_GETCURRENTPOS);
+	const int beforeSel = (int) SendMsg(SCI_GETCURRENTPOS);
+	const int beforeSelLine = (int) SendMsg(SCI_LINEFROMPOSITION, beforeSel);
 
 	// Put back the selection (if any)
 	if (pszText != NULL)
@@ -563,12 +604,12 @@ static void OnSnippetInsert(HWND hWnd)
 		delete [] pszText;
 	}
 
-	int afterSel = (int) SendMsg(SCI_GETCURRENTPOS);
+	const int afterSel = (int) SendMsg(SCI_GETCURRENTPOS);
 
 	// Is there a select part of the snippet to add?
 	if (snip.WGetAfterSelection() != NULL)
 	{
-		size_t len = wcslen(snip.WGetAfterSelection());
+		const size_t len = wcslen(snip.WGetAfterSelection());
 		if (len > 0)
 		{
 			wstr = ConvertLineEnding(snip.WGetAfterSelection());
@@ -577,9 +618,16 @@ static void OnSnippetInsert(HWND hWnd)
 		}
 	}
 
+	// Get the position and line number after fully inserting the snippet
+	const int position = (int) SendMsg(SCI_GETCURRENTPOS);
+	const int afterInsertLine = (int) SendMsg(SCI_LINEFROMPOSITION, position);
+
 	// Restore the cursor position and selection
 	SendMsg(SCI_SETANCHOR, beforeSel);
 	SendMsg(SCI_SETCURRENTPOS, afterSel);
+
+	// Try to indent the inserted snippet
+	IndentSnippet(beforeSelLine, afterInsertLine);
 
 	// End the undo action
 	SendMsg(SCI_ENDUNDOACTION);

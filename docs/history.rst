@@ -5,6 +5,10 @@ Release history
 Next Version (XX XXXXX XXXX)
 ----------------------------
 
+-  Indent the snippet when it is inserted. Since this is a new feature and
+   I can't test it for all possible programming languages indenting
+   may not always works as indented, so you can disable it in the :ref:`options`.
+
 -  Make the plugin more keyboard friendly (`issue #31`_).
    It adds two menu items to the ``Plugins`` menu to set the focus to the lists of libraries and the lists snippets.
    In ``Settings``, ``Shortcut Mapper...`` you can assign your own key shortcuts to these actions.

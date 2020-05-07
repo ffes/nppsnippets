@@ -34,6 +34,7 @@ public:
 
 	bool showConsoleDlg;
 	bool toolbarIcon;
+	bool indentSnippet;
 
 	std::wstring GetPrevVersion() { return _prevVersion; };
 	std::wstring GetDBFile() { return _DBFile; };

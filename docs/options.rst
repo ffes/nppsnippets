@@ -16,10 +16,13 @@ These are the default settings:
     [Options]
     Show=1
     ToolbarIcon=1
+    Indent=1
 
 When ``Show`` is set to ``0`` the tree will not be shown.
 
 When ``ToolbarIcon`` is set to ``0`` no icon will be shown on the toolbar.
+
+When ``Indent`` is set to ``0`` the snippet will not be indented when it is inserted.
 
 ``DBFile`` can be used to override the default location of the database
 ``NppSnippets.sqlite`` by specifying the full path name of the database.

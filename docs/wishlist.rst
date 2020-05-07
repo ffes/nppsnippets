@@ -23,8 +23,6 @@ The wish list is in random order.
 
 -  Copy a certain snippet to another library.
 
--  Properly indent the snippet when inserting.
-
 -  Make the snippets aware of the replace tabs with spaces setting of the
    current document.
 

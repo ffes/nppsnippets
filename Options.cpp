@@ -31,6 +31,7 @@
 static WCHAR s_szOptions[]			= L"Options";
 static WCHAR s_szShow[]				= L"Show";
 static WCHAR s_szToolbarIcon[]		= L"ToolbarIcon";
+static WCHAR s_szIndent[]			= L"Indent";
 static WCHAR s_szVersion[]			= L"Version";
 static WCHAR s_szDBPath[]			= L"DBPath";
 static WCHAR s_szDBFile[]			= L"DBFile";
@@ -63,6 +64,7 @@ void Options::Write()
 {
 	WriteBool(s_szOptions, s_szShow, showConsoleDlg);
 	WriteBool(s_szOptions, s_szToolbarIcon, toolbarIcon);
+	WriteBool(s_szOptions, s_szIndent, indentSnippet);
 	WriteString(s_szOptions, s_szVersion, VERSION_NUMBER_WSTR);
 }
 
@@ -73,6 +75,7 @@ void Options::Read()
 {
 	showConsoleDlg = GetBool(s_szOptions, s_szShow, true);
 	toolbarIcon = GetBool(s_szOptions, s_szToolbarIcon, true);
+	indentSnippet = GetBool(s_szOptions, s_szIndent, true);
 	_prevVersion = GetString(s_szOptions, s_szVersion, L"");
 
 	// Did the user specify a special path for the database?
