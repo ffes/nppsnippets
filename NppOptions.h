@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //  NppSnippets - Code Snippets plugin for Notepad++                       //
-//  Copyright (C) 2010-2016 Frank Fesevur                                  //
+//  Copyright (C) 2010-2020 Frank Fesevur                                  //
 //                                                                         //
 //  This program is free software; you can redistribute it and/or modify   //
 //  it under the terms of the GNU General Public License as published by   //
@@ -30,6 +30,7 @@ class NppOptions
 {
 public:
 	NppOptions() noexcept;
+	NppOptions(std::wstring filename);
 
 protected:
 	bool GetBool(const WCHAR* szAppName, const WCHAR* szKeyName, const bool def) noexcept;

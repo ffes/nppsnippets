@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //  NppSnippets - Code Snippets plugin for Notepad++                       //
-//  Copyright (C) 2010-2016 Frank Fesevur                                  //
+//  Copyright (C) 2010-2020 Frank Fesevur                                  //
 //                                                                         //
 //  This program is free software; you can redistribute it and/or modify   //
 //  it under the terms of the GNU General Public License as published by   //
@@ -25,7 +25,7 @@
 #include "NppSnippets.h"
 
 /////////////////////////////////////////////////////////////////////////////
-// Constructor: read the settings
+// Constructor
 
 NppOptions::NppOptions() noexcept
 {
@@ -35,7 +35,24 @@ NppOptions::NppOptions() noexcept
 	SendMessage(g_nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)&szPath);
 
 	_IniPath = szPath;
-	_IniPath += L"\\NppSnippets.ini";
+	_IniPath += L"\\";
+	_IniPath += getName();
+	_IniPath += L".ini";
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// Constructor with .ini filename
+
+NppOptions::NppOptions(std::wstring filename)
+{
+	// Get the directory from NP++ and add the filename of the settings file
+	WCHAR szPath[_MAX_PATH];
+	szPath[0] = 0;
+	SendMessage(g_nppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)&szPath);
+
+	_IniPath = szPath;
+	_IniPath += L"\\";
+	_IniPath += filename;
 }
 
 /////////////////////////////////////////////////////////////////////////////

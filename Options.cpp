@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //  NppSnippets - Code Snippets plugin for Notepad++                       //
-//  Copyright (C) 2010-2016 Frank Fesevur                                  //
+//  Copyright (C) 2010-2020 Frank Fesevur                                  //
 //                                                                         //
 //  This program is free software; you can redistribute it and/or modify   //
 //  it under the terms of the GNU General Public License as published by   //
@@ -41,10 +41,12 @@ static WCHAR s_szDBFile[]			= L"DBFile";
 
 Options::Options() noexcept : NppOptions()
 {
-	// First make sure the paths are empty
-	_prevVersion.clear();
-	_DBFile.clear();
+	// Read the settings from the file
+	Read();
+}
 
+Options::Options(std::wstring filename) : NppOptions(filename)
+{
 	// Read the settings from the file
 	Read();
 }

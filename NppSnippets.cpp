@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
 //  NppSnippets - Code Snippets plugin for Notepad++                       //
-//  Copyright (C) 2010 Frank Fesevur                                       //
+//  Copyright (C) 2010-2020 Frank Fesevur                                  //
 //                                                                         //
 //  This program is free software; you can redistribute it and/or modify   //
 //  it under the terms of the GNU General Public License as published by   //
@@ -114,7 +114,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 		case NPPN_TBMODIFICATION:
 		{
 			// First initialize the options
-			g_Options = new Options();
+			g_Options = new Options(L"NppSnippets.ini");
 
 			// Do we need to load the toolbar icon?
 			if (g_Options->toolbarIcon)
