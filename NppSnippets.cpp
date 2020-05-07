@@ -74,9 +74,11 @@ extern "C" __declspec(dllexport) FuncItem* getFuncsArray(int *nbF)
 /////////////////////////////////////////////////////////////////////////////
 //
 
-HWND getCurrentHScintilla(int which)
+HWND getCurrentScintilla()
 {
-	return (which == 0) ? g_nppData._scintillaMainHandle : g_nppData._scintillaSecondHandle;
+	int current = -1;
+	SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&current);
+	return (current == 0) ? g_nppData._scintillaMainHandle : g_nppData._scintillaSecondHandle;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -254,11 +256,9 @@ bool MsgBoxYesNo(const WCHAR* msg)
 
 LRESULT SendMsg(UINT Msg, WPARAM wParam, LPARAM lParam, int count)
 {
-	int currentEdit;
-	SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM) &currentEdit);
 	LRESULT res = 0;
 	for (int i = 0; i < count; i++)
-		res = SendMessage(getCurrentHScintilla(currentEdit), Msg, wParam, lParam);
+		res = SendMessage(getCurrentScintilla(), Msg, wParam, lParam);
 	return res;
 }
 

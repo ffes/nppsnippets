@@ -391,9 +391,7 @@ static void ShowContextMenu(HWND hwnd, UINT uResID, int xPos, int yPos)
 
 static void SetFocusOnEditor()
 {
-	int currentEdit;
-	::SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM) &currentEdit);
-	SetFocus(getCurrentHScintilla(currentEdit));
+	SetFocus(getCurrentScintilla());
 }
 
 /////////////////////////////////////////////////////////////////////////////

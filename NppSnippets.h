@@ -23,7 +23,7 @@
 
 #include <string>
 
-extern HWND getCurrentHScintilla(int which);
+extern HWND getCurrentScintilla();
 extern LRESULT SendMsg(UINT Msg, WPARAM wParam = 0, LPARAM lParam = 0, int count = 1);
 extern void MsgBox(const WCHAR* msg);
 extern void MsgBox(const char* msg);
