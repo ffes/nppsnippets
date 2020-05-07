@@ -1394,13 +1394,7 @@ void SnippetsConsole()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// Entry points from the Notepad++ menu or toolbar
-
-void CreateConsoleDlg()
-{
-	// Create the console window
-	s_hDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_SNIPPETS), g_nppData._nppHandle, (DLGPROC) DlgProcedure);
-}
+// Entry points from the "Focus" menu items
 
 void FocusSnippetsList()
 {
@@ -1410,4 +1404,12 @@ void FocusSnippetsList()
 void FocusLibraryCombo()
 {
 	SetFocus(s_hCombo);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Create the dockable Snippets dialog
+
+void CreateConsoleDlg()
+{
+	s_hDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_SNIPPETS), g_nppData._nppHandle, (DLGPROC) DlgProcedure);
 }
