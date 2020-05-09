@@ -1,0 +1,39 @@
+name: Build
+
+on: [ push, pull_request ]
+
+jobs:
+
+  build:
+    runs-on: windows-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        build_configuration: [ Release ]
+        build_platform: [ x64, Win32 ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.0
+
+      - name: Show MSBuild version
+        run: msbuild -version
+
+      - name: Run MSBuild
+        run: msbuild NppSnippets.vcxproj /m /p:configuration="${{ matrix.build_configuration }}" /p:platform="${{ matrix.build_platform }}"
+
+      - name: Archive artifacts for x64
+        if: matrix.build_platform == 'x64'
+        uses: actions/upload-artifact@v2
+        with:
+          name: plugin_dll_x64
+          path: ${{ matrix.build_platform }}/${{ matrix.build_configuration }}/NppSnippets.dll
+
+      - name: Archive artifacts for x32
+        if: matrix.build_platform == 'Win32'
+        uses: actions/upload-artifact@v2
+        with:
+          name: plugin_dll_x32
+          path: ${{ matrix.build_platform }}/${{ matrix.build_configuration }}/NppSnippets.dll
