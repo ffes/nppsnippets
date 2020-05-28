@@ -7,8 +7,9 @@ Obviously the paid versions work as well.
 To compile with newer versions of Visual Studio you can convert an existing
 project file.
 
-There is also a `MinGW-w64`_ makefile, using their 32-bit compilers. It can
-be used from `Cygwin`_ and MSYS2.
+There is also a `MinGW-w64`_ makefile, using their 64-bit compilers. It can
+be used from `Cygwin`_, MSYS2 and various Linux distributions including WSL.
+It compiles, but the resulting dll is not recognized by Notepad++.
 
 .. _Visual Studio: https://www.visualstudio.com/
 .. _MinGW-w64: https://mingw-w64.org/

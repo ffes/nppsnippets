@@ -4,13 +4,8 @@
 #                                                                           #
 #############################################################################
 
-# apt install \
-#		binutils-mingw-w64-i686 gcc-mingw-w64-i686 g++-mingw-w64-i686 \
-#		binutils-mingw-w64-x86-64 gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64
-
 .SUFFIXES: .dll .o .c .cpp .rc .h
 
-#ARCH = i686-w64-mingw32
 ARCH = x86_64-w64-mingw32
 CC = $(ARCH)-gcc
 CXX = $(ARCH)-g++
