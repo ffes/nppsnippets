@@ -1,4 +1,4 @@
-name: Build
+name: MSBuild
 
 on: [ push, pull_request ]
 
