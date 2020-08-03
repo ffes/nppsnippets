@@ -28,7 +28,14 @@ import sphinx_rtd_theme
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = [
+    'sphinxcontrib.mermaid'
+]
+
+# Need at least mermaid 8.5.0 because in that version entity relationship diagrams
+# were added. sphinxcontrib.mermaid has 8.4.x at the moment. Once they've updated
+# this `mermaid_version` can go.
+mermaid_version = "8.6.4"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = []

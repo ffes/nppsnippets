@@ -42,6 +42,13 @@ It is possible to have multiple libraries per language and one library can be
 used for many languages. For every library at least one record in the
 LibraryLang and Snippets tables is needed.
 
+.. mermaid::
+
+   erDiagram
+      Library ||--o{ Snippets : has
+      Library ||--o{ LibraryLang : has
+      Library ||--|| LangLastUsed : has-one
+
 The current schema version of the database is stored in  ``user_version`` and is 3.
 
 
