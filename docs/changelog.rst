@@ -1,5 +1,5 @@
-Release history
-===============
+Changelog
+=========
 
 
 Next Version (XX XXXXX XXXX)

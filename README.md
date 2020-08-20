@@ -8,4 +8,4 @@ The documentation of this plug-in can be found at [Read the Docs](https://nppsni
 * Instructions [how to install](https://nppsnippets.readthedocs.io/en/latest/installation.html)
 * Instructions [how to use](https://nppsnippets.readthedocs.io/en/latest/usage.html)
 * Instructions [how to build](https://nppsnippets.readthedocs.io/en/latest/compile.html)
-* A complete [release history](https://nppsnippets.readthedocs.io/en/latest/history.html)
+* A complete [changelog](https://nppsnippets.readthedocs.io/en/latest/changelog.html)

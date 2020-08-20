@@ -21,7 +21,7 @@ Contents:
     contact.rst
     compile.rst
     license.rst
-    history.rst
+    changelog.rst
     gpl-2.rst
 
 ******************
