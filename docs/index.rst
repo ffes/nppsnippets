@@ -1,8 +1,7 @@
 .. NppSnippets documentation master file
 
-**************************************
 Welcome to NppSnippets' documentation!
-**************************************
+======================================
 
 Contents:
 
@@ -23,11 +22,3 @@ Contents:
     license.rst
     changelog.rst
     gpl-2.rst
-
-******************
-Indices and tables
-******************
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
