@@ -16,6 +16,8 @@ Next Version (XX XXXXX XXXX)
 
 -  Add more images to the page :ref:`usage`.
 
+-  Upgrade to SQLite version 3.33.0
+
 .. _issue #31: https://github.com/ffes/nppsnippets/issues/31
 
 
