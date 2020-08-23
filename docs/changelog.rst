@@ -14,6 +14,8 @@ Next Version (XX XXXXX XXXX)
    In ``Settings``, ``Shortcut Mapper...`` you can assign your own key shortcuts to these actions.
    Apart from these menu items the plugin is generally more keyboard friendly.
 
+-  Add more images to the page :ref:`usage`.
+
 .. _issue #31: https://github.com/ffes/nppsnippets/issues/31
 
 
