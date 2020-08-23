@@ -11,7 +11,7 @@ Next Version (XX XXXXX XXXX)
 
 -  Make the plugin more keyboard friendly (`issue #31`_).
    It adds two menu items to the ``Plugins`` menu to set the focus to the lists of libraries and the lists snippets.
-   In ``Settings``, ``Shortcut Mapper...`` you can assign your own key shortcuts to these actions.
+   In ``Settings``, ``Shortcut Mapper...`` you can assign your own keyboard shortcuts to these actions.
    Apart from these menu items the plugin is generally more keyboard friendly.
 
 -  Add more images to the page :ref:`usage`.
