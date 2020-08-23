@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-Next Version (XX XXXXX XXXX)
-----------------------------
+Version `1.6.0`_ (23 August 2020)
+---------------------------------
 
 -  Indent the snippet when it is inserted. Since this is a new feature and
    I can't test it for all possible programming languages indenting
@@ -18,6 +18,7 @@ Next Version (XX XXXXX XXXX)
 
 -  Upgrade to SQLite version 3.33.0
 
+.. _1.6.0: https://github.com/ffes/nppsnippets/releases/tag/v1.6.0
 .. _issue #31: https://github.com/ffes/nppsnippets/issues/31
 
 
@@ -31,7 +32,6 @@ Version `1.5.1`_ (13 January 2020)
 -  Make sure to use the proper line endings when creating a snippet from selection or clipboard (`issue #27`_)
 
 -  Upgrade to SQLite version 3.30.1
-
 
 .. _1.5.1: https://github.com/ffes/nppsnippets/releases/tag/v1.5.1
 .. _PR #25: https://github.com/ffes/nppsnippets/pull/25
@@ -53,6 +53,7 @@ Version `1.5.0`_ (15 May 2019)
 .. _1.5.0: https://github.com/ffes/nppsnippets/releases/tag/v1.5.0
 .. _issue #14: https://github.com/ffes/nppsnippets/issues/14
 .. _issue #20: https://github.com/ffes/nppsnippets/issues/20
+
 
 Version `1.4.0`_ (24 May 2017)
 ------------------------------
