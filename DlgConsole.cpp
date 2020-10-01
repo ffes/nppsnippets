@@ -50,11 +50,13 @@
 
 static HWND s_hDlg = NULL;						// The HWND to the dialog
 static HWND s_hList = NULL;						// The HWND to the listbox
+static HWND s_hFilter = NULL;					// The HWND to the filter editbox
 static HWND s_hCombo = NULL;					// The HWND to the combo
 static WNDPROC s_hListboxProcOld = NULL;		// The HWND to the original procedure of the listbox
 static HICON s_hTabIcon = NULL;					// The icon on the docking tab
 static HBRUSH s_hbrBkgnd = NULL;				// The brush to paint the theme on the background of the listbox
 static int s_iHeightCombo = 20;					// This info should come from Windows
+static int s_iHeightFilter = 20;				// This info should come from Windows
 static bool s_bConsoleInitialized = false;		// Is the console initialized?
 static bool s_bConsoleVisible = false;			// Is the console visible?
 static Library* s_curLibrary = NULL;			// The currently selected lib
@@ -462,8 +464,17 @@ static void IndentSnippet(int firstLine, int lastLine)
 static void OnSize(HWND hWnd, int iWidth, int iHeight)
 {
 	UNREFERENCED_PARAMETER(hWnd);
-	SetWindowPos(s_hList, 0, 0, s_iHeightCombo + SPACER, iWidth, iHeight - s_iHeightCombo - SPACER, SWP_NOACTIVATE | SWP_NOZORDER);
+
+	// Position the languages combobox
 	SetWindowPos(s_hCombo, 0, 0, 0, iWidth, s_iHeightCombo, SWP_NOACTIVATE | SWP_NOZORDER);
+
+	// Position the filter editbox
+	const int iFilterX = s_iHeightCombo + SPACER;
+	SetWindowPos(s_hFilter, 0, 0, iFilterX, iWidth, s_iHeightFilter, SWP_NOACTIVATE | SWP_NOZORDER);
+
+	// Position the list of snippets
+	const int iListX = iFilterX + s_iHeightFilter + SPACER;
+	SetWindowPos(s_hList, 0, 0, iListX, iWidth, iHeight - iListX, SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1160,11 +1171,16 @@ static BOOL OnInitDialog(HWND hWnd)
 	// Store the DlgItems
 	s_hList = GetDlgItem(hWnd, IDC_LIST);
 	s_hCombo = GetDlgItem(hWnd, IDC_NAME);
+	s_hFilter = GetDlgItem(hWnd, IDC_FILTER);
 
-	// Get the height of the combobox
+	// Get the height of the languages combobox
 	RECT rc;
 	GetWindowRect(s_hCombo, &rc);
 	s_iHeightCombo = rc.bottom - rc.top;
+
+	// Get the height of the filter editbox
+	GetWindowRect(s_hFilter, &rc);
+	s_iHeightFilter = rc.bottom - rc.top;
 
 	// Use our own ListboxProc to intercept the ENTER-key
 	s_hListboxProcOld = (WNDPROC)SetWindowLongPtr(s_hList, GWLP_WNDPROC, (LONG_PTR)ListboxProc);

@@ -1,7 +1,7 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
 
-#ifndef IDC_STATIC 
+#ifndef IDC_STATIC
 #define IDC_STATIC -1
 #endif
 
@@ -16,7 +16,8 @@
 // Snippets Console/Main dialog
 #define	IDD_SNIPPETS				3000
 #define	IDC_LIST					3001
-#define	IDC_NAME					3002
+#define	IDC_FILTER					3002
+#define	IDC_NAME					3003
 
 // Edit Snippet dialog
 #define IDD_EDIT_SNIPPET			3100
