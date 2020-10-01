@@ -26,4 +26,5 @@ extern void CreateConsoleDlg();
 extern void UpdateSnippetsList();
 extern void InvalidateListbox();
 extern void FocusLibraryCombo();
+extern void FocusFilterSnippets();
 extern void FocusSnippetsList();

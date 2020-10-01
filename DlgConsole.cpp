@@ -1468,6 +1468,11 @@ void FocusLibraryCombo()
 	SetFocus(s_hCombo);
 }
 
+void FocusFilterSnippets()
+{
+	SetFocus(s_hFilter);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // Create the dockable Snippets dialog
 
