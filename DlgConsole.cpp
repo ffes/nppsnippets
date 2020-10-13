@@ -165,14 +165,28 @@ static bool AddListItems()
 		return false;
 
 	// Create the proper SQL-statement
-	std::string sql = "SELECT * FROM Snippets WHERE LibraryID = @libid ORDER BY ";
-	sql += (s_curLibrary->GetSortAlphabetic() ? "Name,Sort" : "Sort,Name");
+	std::string sql = "SELECT * FROM Snippets WHERE LibraryID = @libid ";
+
+	// Need to add the filter?
+	std::wstring filter = GetDlgText(s_hDlg, IDC_FILTER);
+	if (filter.length() >= 0)
+		sql += "AND Name LIKE @filter ";
+
+	// Order the list properly
+	sql += std::string("ORDER BY ") + (s_curLibrary->GetSortAlphabetic() ? "Name,Sort" : "Sort,Name");
 
 	// Prepare this statement
 	SqliteStatement stmt(g_db, sql.c_str());
 
 	// Bind the language-id to the statement
 	stmt.Bind("@libid", s_curLibrary->GetLibraryID());
+
+	// Bind the filter
+	if (filter.length() >= 0)
+	{
+		std::wstring s = std::wstring(L"%") + filter + std::wstring(L"%");
+		stmt.Bind("@filter", s.c_str());
+	}
 
 	// Go through the rows
 	while (stmt.GetNextRecord())
@@ -206,6 +220,9 @@ static void ClearComboItems()
 
 	// Now delete the items from the combobox
 	SendDlgItemMessage(s_hDlg, IDC_NAME, CB_RESETCONTENT, (WPARAM) 0, (LPARAM) 0);
+
+	// And empty the filter
+	SetDlgItemText(s_hDlg, IDC_FILTER, L"");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -493,6 +510,9 @@ static void OnSelChange_Combo(HWND hWnd)
 	if (prevLibID == s_curLibrary->GetLibraryID())
 		return;
 
+	// Empty the filter
+	SetDlgItemText(s_hDlg, IDC_FILTER, L"");
+
 	// Open the database
 	g_db->Open();
 
@@ -505,6 +525,20 @@ static void OnSelChange_Combo(HWND hWnd)
 	ClearListItems();
 	AddListItems();
 
+	g_db->Close();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+static void OnChange_Filter()
+{
+	WaitCursor wait;
+
+	ClearListItems();
+
+	g_db->Open();
+	AddListItems();
 	g_db->Close();
 }
 
@@ -1216,6 +1250,17 @@ static void OnCommand(HWND hWnd, int ResID, int msg)
 					break;
 			}
 			break;
+		}
+		case IDC_FILTER:
+		{
+			switch (msg)
+			{
+				case EN_CHANGE:
+					OnChange_Filter();
+					break;
+				default:
+					break;
+			}
 		}
 		case IDC_SNIPPET_INSERT:
 		{
