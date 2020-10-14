@@ -53,6 +53,7 @@ static HWND s_hList = NULL;						// The HWND to the listbox
 static HWND s_hFilter = NULL;					// The HWND to the filter editbox
 static HWND s_hCombo = NULL;					// The HWND to the combo
 static WNDPROC s_hListboxProcOld = NULL;		// The HWND to the original procedure of the listbox
+static WNDPROC s_hFilterProcOld = NULL;			// The HWND to the original procedure of the filter textbox
 static HICON s_hTabIcon = NULL;					// The icon on the docking tab
 static HBRUSH s_hbrBkgnd = NULL;				// The brush to paint the theme on the background of the listbox
 static int s_iHeightCombo = 20;					// This info should come from Windows
@@ -1182,7 +1183,7 @@ static LRESULT CALLBACK ListboxProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 		case WM_GETDLGCODE:
 		{
 			// All the other message go through the original WindProc
-			LRESULT lRet = CallWindowProc((WNDPROC)s_hListboxProcOld, hWnd, uMsg, wParam, lParam);
+			LRESULT lRet = CallWindowProc(s_hListboxProcOld, hWnd, uMsg, wParam, lParam);
 			if (lParam)
 			{
 				MSG* pMsg = (MSG*)lParam;
@@ -1194,7 +1195,64 @@ static LRESULT CALLBACK ListboxProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 		default:
 			break;
 	}
-	return(CallWindowProc((WNDPROC)s_hListboxProcOld, hWnd, uMsg, wParam, lParam));
+	return(CallWindowProc(s_hListboxProcOld, hWnd, uMsg, wParam, lParam));
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+
+static LRESULT CALLBACK FilterProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+		case WM_KEYDOWN:
+		{
+			switch (wParam)
+			{
+				case VK_UP:
+				{
+					// Get the current selected item in the list
+					int item = (int) SendDlgItemMessage(s_hDlg, IDC_LIST, LB_GETCURSEL, 0, 0);
+
+					// Was there an item selected?
+					if (item == LB_ERR)
+						item = 0;
+					else if (item > 0)
+						item--;
+
+					SendDlgItemMessage(s_hDlg, IDC_LIST, LB_SETCURSEL, item, 0);
+					return TRUE;
+				}
+				case VK_DOWN:
+				{
+					// Get the current selected item in the list
+					int item = (int) SendDlgItemMessage(s_hDlg, IDC_LIST, LB_GETCURSEL, 0, 0);
+
+					// Was there an item selected?
+					if (item == LB_ERR)
+						item = 0;
+					else
+					{
+						const int count = (int) SendDlgItemMessage(s_hDlg, IDC_LIST, LB_GETCOUNT, 0, 0);
+						if (item < count)
+							item++;
+					}
+
+					SendDlgItemMessage(s_hDlg, IDC_LIST, LB_SETCURSEL, item, 0);
+					return TRUE;
+				}
+				case VK_RETURN:
+					OnSnippetInsert(s_hDlg);
+					return TRUE;
+
+				default:
+					break;
+			}
+		}
+		default:
+			break;
+	}
+	return(CallWindowProc(s_hFilterProcOld, hWnd, uMsg, wParam, lParam));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1218,6 +1276,9 @@ static BOOL OnInitDialog(HWND hWnd)
 
 	// Use our own ListboxProc to intercept the ENTER-key
 	s_hListboxProcOld = (WNDPROC)SetWindowLongPtr(s_hList, GWLP_WNDPROC, (LONG_PTR)ListboxProc);
+
+	// Use our own FilterProc to intercept various keys
+	s_hFilterProcOld = (WNDPROC)SetWindowLongPtr(s_hFilter, GWLP_WNDPROC, (LONG_PTR)FilterProc);
 
 	// Let windows set focus
 	return TRUE;
@@ -1261,6 +1322,7 @@ static void OnCommand(HWND hWnd, int ResID, int msg)
 				default:
 					break;
 			}
+			break;
 		}
 		case IDC_SNIPPET_INSERT:
 		{
