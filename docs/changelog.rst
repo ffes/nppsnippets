@@ -2,6 +2,14 @@ Changelog
 =========
 
 
+Next Version
+------------
+
+-  Add box above the list of snippets to filter that list (`issue #32`_).
+
+.. _issue #32: https://github.com/ffes/nppsnippets/issues/32
+
+
 Version `1.6.0`_ (23 August 2020)
 ---------------------------------
 
