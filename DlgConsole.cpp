@@ -1578,6 +1578,9 @@ void FocusLibraryCombo()
 void FocusFilterSnippets()
 {
 	SetFocus(s_hFilter);
+
+	// Select the old filter text, so the user can easily replace the text
+	SendMessage(s_hFilter, EM_SETSEL, 0, -1);
 }
 
 /////////////////////////////////////////////////////////////////////////////
