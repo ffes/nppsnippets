@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.0
+        uses: microsoft/setup-msbuild@v1
 
       - name: Show MSBuild version
         run: msbuild -version
@@ -30,12 +30,12 @@ jobs:
         if: matrix.build_platform == 'x64'
         uses: actions/upload-artifact@v2
         with:
-          name: plugin_dll_x64
+          name: nppsnippets_dll_x64
           path: ${{ matrix.build_platform }}/${{ matrix.build_configuration }}/NppSnippets.dll
 
       - name: Archive artifacts for x32
         if: matrix.build_platform == 'Win32'
         uses: actions/upload-artifact@v2
         with:
-          name: plugin_dll_x32
+          name: nppsnippets_dll_x32
           path: ${{ matrix.build_platform }}/${{ matrix.build_configuration }}/NppSnippets.dll
