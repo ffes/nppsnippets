@@ -26,8 +26,6 @@ The wish list is in random order.
 -  Make the snippets aware of the replace tabs with spaces setting of the
    current document.
 
--  Options dialog to edit the location of the database.
-
 -  Libraries can be hard to find when there is something wrong with the
    languages that are set for this library.
 
