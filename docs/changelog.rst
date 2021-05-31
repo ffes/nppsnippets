@@ -12,6 +12,7 @@ Next Version
 -  Modernize some snippets in the Template database (`issue #35`_).
 
 .. _issue #32: https://github.com/ffes/nppsnippets/issues/32
+.. _issue #35: https://github.com/ffes/nppsnippets/issues/35
 
 
 Version `1.6.0`_ (23 August 2020)
