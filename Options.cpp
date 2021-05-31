@@ -33,7 +33,6 @@ static WCHAR s_szShow[]				= L"Show";
 static WCHAR s_szToolbarIcon[]		= L"ToolbarIcon";
 static WCHAR s_szIndent[]			= L"Indent";
 static WCHAR s_szVersion[]			= L"Version";
-static WCHAR s_szDBPath[]			= L"DBPath";
 static WCHAR s_szDBFile[]			= L"DBFile";
 
 /////////////////////////////////////////////////////////////////////////////
@@ -80,12 +79,5 @@ void Options::Read()
 	_toolbarIcon = GetBool(s_szOptions, s_szToolbarIcon, true);
 	_indentSnippet = GetBool(s_szOptions, s_szIndent, true);
 	_prevVersion = GetString(s_szOptions, s_szVersion, L"");
-
-	// Did the user specify a special path for the database?
 	_DBFile = GetString(s_szOptions, s_szDBFile, L"");
-	if (_DBFile.length() == 0)
-	{
-		// Try the old name of this entry
-		_DBFile = GetString(s_szOptions, s_szDBPath, L"");
-	}
 }
