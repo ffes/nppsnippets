@@ -67,6 +67,7 @@ void Options::Write()
 	WriteBool(s_szOptions, s_szShow, _showConsoleDlg);
 	WriteBool(s_szOptions, s_szToolbarIcon, _toolbarIcon);
 	WriteBool(s_szOptions, s_szIndent, _indentSnippet);
+	WriteString(s_szOptions, s_szDBFile, _DBFile.c_str());
 	WriteString(s_szOptions, s_szVersion, VERSION_NUMBER_WSTR);
 }
 
