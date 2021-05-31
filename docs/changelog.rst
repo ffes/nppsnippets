@@ -9,6 +9,8 @@ Next Version
 
 -  Add options dialog
 
+-  Modernize some snippets in the Template database (`issue #35`_).
+
 .. _issue #32: https://github.com/ffes/nppsnippets/issues/32
 
 
