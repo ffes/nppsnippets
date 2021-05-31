@@ -190,6 +190,7 @@
     <ClCompile Include="DlgEditLibrary.cpp" />
     <ClCompile Include="DlgEditSnippet.cpp" />
     <ClCompile Include="DlgImportLibrary.cpp" />
+    <ClCompile Include="DlgOptions.cpp" />
     <ClCompile Include="Language.cpp" />
     <ClCompile Include="Library.cpp" />
     <ClCompile Include="NppOptions.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="DlgEditLibrary.h" />
     <ClInclude Include="DlgEditSnippet.h" />
     <ClInclude Include="DlgImportLibrary.h" />
+    <ClInclude Include="DlgOptions.h" />
     <ClInclude Include="Language.h" />
     <ClInclude Include="Library.h" />
     <ClInclude Include="NppOptions.h" />

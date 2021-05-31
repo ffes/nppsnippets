@@ -441,7 +441,7 @@ static void IndentSnippet(int firstLine, int lastLine)
 		return;
 
 	// If disabled, nothing to do
-	if (!g_Options->indentSnippet)
+	if (!g_Options->GetIndentSnippet())
 		return;
 
 	// Get the tab width
@@ -1484,7 +1484,7 @@ static BOOL CALLBACK DlgProcedure(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 		case WM_CLOSE:
 		{
 			OnClose(hWnd);
-			g_Options->showConsoleDlg = s_bConsoleVisible;
+			g_Options->SetShowConsoleDlg(s_bConsoleVisible);
 			break;
 		}
 
@@ -1559,7 +1559,7 @@ void SnippetsConsole()
 	}
 
 	// Store the visiblity in the options
-	g_Options->showConsoleDlg = s_bConsoleVisible;
+	g_Options->SetShowConsoleDlg(s_bConsoleVisible);
 }
 
 /////////////////////////////////////////////////////////////////////////////

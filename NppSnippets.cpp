@@ -28,6 +28,7 @@
 #include "NppSnippets.h"
 #include "DlgAbout.h"
 #include "DlgConsole.h"
+#include "DlgOptions.h"
 #include "Options.h"
 #include "SnippetsDB.h"
 
@@ -36,7 +37,7 @@
 #endif
 
 static const TCHAR PLUGIN_NAME[] = L"Snippets";
-static const int nbFunc = 9;
+static const int nbFunc = 11;
 static HBITMAP hbmpToolbar = NULL;
 
 HINSTANCE g_hInst;
@@ -101,7 +102,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 			// Initialize the database
 			g_db = new SnippetsDB();
 
-			if (g_Options->showConsoleDlg)
+			if (g_Options->GetShowConsoleDlg())
 				SnippetsConsole();
 			break;
 		}
@@ -117,7 +118,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 			g_Options = new Options(L"NppSnippets.ini");
 
 			// Do we need to load the toolbar icon?
-			if (g_Options->toolbarIcon)
+			if (g_Options->GetToolbarIcon())
 			{
 				// Add the button to the toolbar
 				toolbarIcons tbiFolder;
@@ -360,6 +361,20 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
 
 			g_funcItem[index]._pFunc = FocusSnippetsList;
 			wcscpy(g_funcItem[index]._itemName, L"Focus List of Snippets");
+			g_funcItem[index]._init2Check = false;
+			g_funcItem[index]._pShKey = NULL;
+			index++;
+
+			// Seperator
+			g_funcItem[index]._pFunc = NULL;
+			wcscpy(g_funcItem[index]._itemName, L"-SEPARATOR-");
+			g_funcItem[index]._init2Check = false;
+			g_funcItem[index]._pShKey = NULL;
+			index++;
+
+			// Open Options dialog
+			g_funcItem[index]._pFunc = ShowOptionsDlg;
+			wcscpy(g_funcItem[index]._itemName, L"Options...");
 			g_funcItem[index]._init2Check = false;
 			g_funcItem[index]._pShKey = NULL;
 			index++;

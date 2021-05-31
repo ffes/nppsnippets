@@ -42,6 +42,13 @@
 // Import Library dailog
 #define IDD_IMPORT_LIBRARY			3400
 
+// Options dailog
+#define IDD_OPTIONS					3500
+#define IDC_TOOLBAR_ICON			3501
+#define IDC_INDENT_SNIPPET			3502
+#define IDC_DBFILE					3503
+#define IDC_BROWSE					3504
+
 // Context Menu Snippet
 #define IDCM_SNIPPET				4000
 #define IDC_SNIPPET_INSERT			4001

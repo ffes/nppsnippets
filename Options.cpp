@@ -64,9 +64,9 @@ Options::~Options()
 
 void Options::Write()
 {
-	WriteBool(s_szOptions, s_szShow, showConsoleDlg);
-	WriteBool(s_szOptions, s_szToolbarIcon, toolbarIcon);
-	WriteBool(s_szOptions, s_szIndent, indentSnippet);
+	WriteBool(s_szOptions, s_szShow, _showConsoleDlg);
+	WriteBool(s_szOptions, s_szToolbarIcon, _toolbarIcon);
+	WriteBool(s_szOptions, s_szIndent, _indentSnippet);
 	WriteString(s_szOptions, s_szVersion, VERSION_NUMBER_WSTR);
 }
 
@@ -75,9 +75,9 @@ void Options::Write()
 
 void Options::Read()
 {
-	showConsoleDlg = GetBool(s_szOptions, s_szShow, true);
-	toolbarIcon = GetBool(s_szOptions, s_szToolbarIcon, true);
-	indentSnippet = GetBool(s_szOptions, s_szIndent, true);
+	_showConsoleDlg = GetBool(s_szOptions, s_szShow, true);
+	_toolbarIcon = GetBool(s_szOptions, s_szToolbarIcon, true);
+	_indentSnippet = GetBool(s_szOptions, s_szIndent, true);
 	_prevVersion = GetString(s_szOptions, s_szVersion, L"");
 
 	// Did the user specify a special path for the database?

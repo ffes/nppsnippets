@@ -7,6 +7,8 @@ Next Version
 
 -  Add box above the list of snippets to filter that list (`issue #32`_).
 
+-  Add options dialog
+
 .. _issue #32: https://github.com/ffes/nppsnippets/issues/32
 
 
