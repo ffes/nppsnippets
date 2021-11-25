@@ -5,7 +5,7 @@ Options
 
 To edit the settings of the plug-in, select ``Options...`` from the ``Plugin`` menu.
 
-You can also edit the is an ini-file that you can edit manually to do some settings.
+You can also edit the ini-file manually to change the settings.
 This ini-file is normally found in your "Application Data" directory and is named ``NppSnippets.ini``.
 On my Windows 10 machine this directory is ``C:\Users\Frank\AppData\Roaming\Notepad++\plugins\config``.
 

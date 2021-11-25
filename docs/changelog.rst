@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-Next Version
-------------
+Version `1.7.0`_ (25 November 2021)
+-----------------------------------
 
 -  Add box above the list of snippets to filter that list (`issue #32`_).
 
@@ -13,6 +13,7 @@ Next Version
 
 -  Upgrade to SQLite version 3.36.0
 
+.. _1.7.0: https://github.com/ffes/nppsnippets/releases/tag/v1.7.0
 .. _issue #32: https://github.com/ffes/nppsnippets/issues/32
 .. _issue #35: https://github.com/ffes/nppsnippets/issues/35
 
