@@ -22,7 +22,7 @@ all: clean now
 CFLAGS = -DUNICODE
 CXXFLAGS = $(CFLAGS) -Wno-write-strings --std=c++11
 LIBS = -static -lshlwapi -lgdi32 -lcomdlg32 -lcomctl32
-LDFLAGS = -Wl,--out-implib,$(TARGET) -shared
+LDFLAGS = -shared -Wl,--dll
 
 # Default target is RELEASE, otherwise DEBUG=1
 DEBUG ?= 0
