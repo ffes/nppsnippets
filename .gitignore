@@ -1,9 +1,10 @@
+.vs/
 _build/
-*.user
+ARM64/
 Win32/
 x64/
 *.d
 *.o
+*.user
 NppSnippets.dll
 version_git.h
-.vs/
