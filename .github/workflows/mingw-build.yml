@@ -33,14 +33,14 @@ jobs:
   
       - name: Archive artifacts for x86
         if: matrix.build_platform == '32'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
             name: nppsnippets_dll_linux_x32
             path: NppSnippets.dll
 
       - name: Archive artifacts for x64
         if: matrix.build_platform == '64'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
             name: nppsnippets_dll_linux_x64
             path: NppSnippets.dll
