@@ -1539,7 +1539,7 @@ void SnippetsConsole()
 			tbd.pszModuleName = L"Snippets";				// name of the dll this dialog belongs to
 			tbd.pszName = L"Snippets";						// Name for titlebar
 			tbd.hClient = s_hDlg;							// HWND Handle of window this dock belongs to
-			tbd.uMask = DWS_DF_CONT_RIGHT | DWS_ICONTAB;	// Put it on the right
+			tbd.uMask = DWS_DF_CONT_RIGHT | DWS_ICONTAB | DWS_USEOWNDARKMODE;	// Put it on the right
 			tbd.hIconTab = s_hTabIcon;						// Put the icon in
 			SendMessage(g_nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM) &tbd);	// Register it
 
