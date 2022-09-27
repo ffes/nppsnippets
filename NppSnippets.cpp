@@ -121,11 +121,12 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 			if (g_Options->GetToolbarIcon())
 			{
 				// Add the button to the toolbar
-				toolbarIcons tbiFolder;
+				toolbarIconsWithDarkMode tbiFolder;
 				hbmpToolbar = CreateMappedBitmap(g_hInst, IDB_SNIPPETS, 0, 0, 0);
 				tbiFolder.hToolbarBmp = hbmpToolbar;
 				tbiFolder.hToolbarIcon = NULL;
-				SendMessage((HWND) notifyCode->nmhdr.hwndFrom, NPPM_ADDTOOLBARICON, (WPARAM) g_funcItem[0]._cmdID, (LPARAM) &tbiFolder);
+				tbiFolder.hToolbarIconDarkMode = NULL;
+				SendMessage((HWND) notifyCode->nmhdr.hwndFrom, NPPM_ADDTOOLBARICON_FORDARKMODE, (WPARAM) g_funcItem[0]._cmdID, (LPARAM) &tbiFolder);
 			}
 			break;
 		}
