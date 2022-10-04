@@ -2,6 +2,19 @@ Changelog
 =========
 
 
+Version `1.7.1`_ (4 October 2022)
+---------------------------------
+
+-  ARM64 build (`pr #37`_).
+
+-  Keep using the plugins dark mode to `workaround bug`_ introduced in Notepad++ 8.4.3 (`issue #45`_).
+
+.. _1.7.1: https://github.com/ffes/nppsnippets/releases/tag/v1.7.1
+.. _pr #37: https://github.com/ffes/nppsnippets/pull/37
+.. _issue #45: https://github.com/ffes/nppsnippets/issues/45
+.. _workaround bug: https://github.com/notepad-plus-plus/notepad-plus-plus/issues/12007
+
+
 Version `1.7.0`_ (25 November 2021)
 -----------------------------------
 
