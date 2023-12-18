@@ -28,21 +28,21 @@ jobs:
 
       - name: Archive artifacts for x64
         if: matrix.build_platform == 'x64'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nppsnippets_dll_x64
           path: ${{ matrix.build_platform }}/${{ matrix.build_configuration }}/NppSnippets.dll
 
       - name: Archive artifacts for x32
         if: matrix.build_platform == 'Win32'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nppsnippets_dll_x32
           path: ${{ matrix.build_platform }}/${{ matrix.build_configuration }}/NppSnippets.dll
 
       - name: Archive artifacts for ARM64
         if: matrix.build_platform == 'ARM64'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nppsnippets_dll_arm64
           path: ${{ matrix.build_platform }}/${{ matrix.build_configuration }}/NppSnippets.dll
