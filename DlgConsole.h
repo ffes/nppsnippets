@@ -25,6 +25,7 @@ extern void SnippetsConsole();
 extern void CreateConsoleDlg();
 extern void UpdateSnippetsList();
 extern void InvalidateListbox();
+extern void HandleConsoleDarkModeChange();
 extern void FocusLibraryCombo();
 extern void FocusFilterSnippets();
 extern void FocusSnippetsList();

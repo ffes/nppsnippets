@@ -150,6 +150,7 @@ static BOOL OnInitDialog(HWND hDlg)
 /////////////////////////////////////////////////////////////////////////////
 //
 
+
 static BOOL CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(lParam);
@@ -158,6 +159,13 @@ static BOOL CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 	{
 		case WM_INITDIALOG:
 		{
+			// Apply dark mode theming using official API
+			if ((bool)::SendMessage(g_nppData._nppHandle, NPPM_ISDARKMODEENABLED, 0, 0))
+			{
+				::SendMessage(g_nppData._nppHandle, NPPM_DARKMODESUBCLASSANDTHEME, 
+				              static_cast<WPARAM>(0x0000000BUL), 
+				              reinterpret_cast<LPARAM>(hDlg));
+			}
 			return OnInitDialog(hDlg);
 		}
 		case WM_COMMAND:
@@ -172,6 +180,7 @@ static BOOL CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 			}
 			return FALSE;
 		}
+
 	}
 	return FALSE;
 }

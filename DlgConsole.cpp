@@ -41,6 +41,8 @@
 #include "Options.h"
 #include "WaitCursor.h"
 
+extern NppData g_nppData;
+
 #ifdef _MSC_VER
 #pragma comment(lib, "shlwapi.lib")
 #endif
@@ -1417,6 +1419,19 @@ void InvalidateListbox()
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// Handle dark mode changes
+
+void HandleConsoleDarkModeChange()
+{
+	if (s_bConsoleVisible && s_hDlg)
+	{
+		// For docking panels, Notepad++ handles dark mode automatically
+		// We just need to invalidate our custom listbox
+		InvalidateListbox();
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
 //
 
 static HBRUSH OnCtlColorListbox(HWND hWnd, HWND hwndList, HDC hdc)
@@ -1488,6 +1503,33 @@ static BOOL CALLBACK DlgProcedure(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 			break;
 		}
 
+		case WM_CTLCOLORDLG:
+		case WM_CTLCOLORSTATIC:
+		{
+			if ((bool)::SendMessage(g_nppData._nppHandle, NPPM_ISDARKMODEENABLED, 0, 0))
+			{
+				static HBRUSH dlgBrush = nullptr;
+				if (!dlgBrush) dlgBrush = CreateSolidBrush(RGB(32, 32, 32));
+				SetTextColor((HDC)wParam, RGB(224, 224, 224));
+				SetBkColor((HDC)wParam, RGB(32, 32, 32));
+				return (LRESULT)dlgBrush;
+			}
+			break;
+		}
+
+		case WM_CTLCOLOREDIT:
+		{
+			if ((bool)::SendMessage(g_nppData._nppHandle, NPPM_ISDARKMODEENABLED, 0, 0))
+			{
+				static HBRUSH editBrush = nullptr;
+				if (!editBrush) editBrush = CreateSolidBrush(RGB(64, 64, 64));
+				SetTextColor((HDC)wParam, RGB(224, 224, 224));
+				SetBkColor((HDC)wParam, RGB(64, 64, 64));
+				return (LRESULT)editBrush;
+			}
+			break;
+		}
+
 		case WM_CTLCOLORLISTBOX:
 			return (UINT_PTR) OnCtlColorListbox(hWnd, (HWND) lParam, (HDC) wParam);
 
@@ -1539,7 +1581,7 @@ void SnippetsConsole()
 			tbd.pszModuleName = L"Snippets";				// name of the dll this dialog belongs to
 			tbd.pszName = L"Snippets";						// Name for titlebar
 			tbd.hClient = s_hDlg;							// HWND Handle of window this dock belongs to
-			tbd.uMask = DWS_DF_CONT_RIGHT | DWS_ICONTAB | DWS_USEOWNDARKMODE;	// Put it on the right
+			tbd.uMask = DWS_DF_CONT_RIGHT | DWS_ICONTAB;	// Put it on the right
 			tbd.hIconTab = s_hTabIcon;						// Put the icon in
 			SendMessage(g_nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM) &tbd);	// Register it
 

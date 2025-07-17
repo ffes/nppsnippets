@@ -62,6 +62,8 @@ endif
 	$(V_RES) $(WINDRES) -o $@ -i $<
 
 PROGRAM_SRCS_CPP = \
+	DarkMode.cpp \
+	NppDarkMode.cpp \
 	DlgAbout.cpp \
 	DlgConsole.cpp \
 	DlgEditSnippet.cpp \

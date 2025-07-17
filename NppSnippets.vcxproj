@@ -264,6 +264,8 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DarkMode.cpp" />
+    <ClCompile Include="NppDarkMode.cpp" />
     <ClCompile Include="DlgAbout.cpp" />
     <ClCompile Include="DlgConsole.cpp" />
     <ClCompile Include="DlgEditLanguages.cpp" />

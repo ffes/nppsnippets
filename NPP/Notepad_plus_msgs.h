@@ -533,6 +533,21 @@ enum Platform { PF_UNKNOWN, PF_X86, PF_X64, PF_IA64, PF_ARM64 };
 	// Note: in the case of calling failure ("false" is returned), you may need to change NppDarkMode::Colors structure to:
 	// https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/PowerEditor/src/NppDarkMode.h#L32
 
+	#define NPPM_DARKMODESUBCLASSANDTHEME (NPPMSG + 112)
+	namespace NppDarkMode
+	{
+		// Standard flags for main parent after its children are initialized.
+		constexpr ULONG dmfInit = 0x0000000BUL;
+
+		// Standard flags for main parent usually used in NPPN_DARKMODECHANGED.
+		constexpr ULONG dmfHandleChange = 0x0000000CUL;
+	};
+	// ULONG NPPM_DARKMODESUBCLASSANDTHEME(ULONG dmFlags, HWND hwnd)
+	// Add support for generic dark mode to plugin dialog. Subclassing is applied automatically unless DWS_USEOWNDARKMODE flag is used.
+	// wParam[in]: dmFlags has 2 possible value dmfInit (0x0000000BUL) & dmfHandleChange (0x0000000CUL)
+	// lParam[in]: hwnd is the dialog handle of plugin - Docking panels don't need to call NPPM_DARKMODESUBCLASSANDTHEME
+	// Returns successful combinations of flags.
+
 	#define NPPM_GETCURRENTCMDLINE (NPPMSG + 109)
 	// INT NPPM_GETCURRENTCMDLINE(size_t strLen, TCHAR *commandLineStr)
 	// Get the Current Command Line string.
