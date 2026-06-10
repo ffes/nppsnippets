@@ -99,10 +99,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification* notifyCode)
 	{
 		case NPPN_READY:
 		{
-			// Initialize the database
-			g_db = new SnippetsDB();
-
-			if (g_Options->GetShowConsoleDlg())
+			if (!IsVisible() && g_Options->GetShowConsoleDlg())
 				SnippetsConsole();
 			break;
 		}

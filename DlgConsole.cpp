@@ -1515,6 +1515,10 @@ void SnippetsConsole()
 		// Set it now already so other routines work properly
 		s_bConsoleVisible = true;
 
+		// Initialize the database
+		if (g_db == nullptr)
+			g_db = new SnippetsDB();
+
 		if (!s_bConsoleInitialized)
 		{
 			// Get the right database filename
@@ -1535,8 +1539,8 @@ void SnippetsConsole()
 			// Initialize everything for the console window
 			tTbData tbd;
 			ZeroMemory(&tbd, sizeof(tTbData));
-			tbd.dlgID = -1;									// Nr of menu item to assign (!= _cmdID, beware)
-			tbd.pszModuleName = L"Snippets";				// name of the dll this dialog belongs to
+			tbd.dlgID = 0;									// Nr of menu item to assign (!= _cmdID, beware)
+			tbd.pszModuleName = L"NppSnippets.dll";				// name of the dll this dialog belongs to
 			tbd.pszName = L"Snippets";						// Name for titlebar
 			tbd.hClient = s_hDlg;							// HWND Handle of window this dock belongs to
 			tbd.uMask = DWS_DF_CONT_RIGHT | DWS_ICONTAB | DWS_USEOWNDARKMODE;	// Put it on the right
@@ -1589,4 +1593,12 @@ void FocusFilterSnippets()
 void CreateConsoleDlg()
 {
 	s_hDlg = CreateDialog(g_hInst, MAKEINTRESOURCE(IDD_SNIPPETS), g_nppData._nppHandle, (DLGPROC) DlgProcedure);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Check if dialog is currently visible
+
+bool IsVisible()
+{
+	return static_cast<bool>(IsWindowVisible(s_hDlg));
 }

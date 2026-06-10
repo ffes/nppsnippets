@@ -28,3 +28,4 @@ extern void InvalidateListbox();
 extern void FocusLibraryCombo();
 extern void FocusFilterSnippets();
 extern void FocusSnippetsList();
+extern bool IsVisible();
