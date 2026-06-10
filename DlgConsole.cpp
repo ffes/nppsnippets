@@ -30,6 +30,7 @@
 #include "NPP/PluginInterface.h"
 #include "NPP/menuCmdID.h"
 #include "NPP/Docking.h"
+#include "NPP/dockingResource.h"
 #include "NppSnippets.h"
 #include "Library.h"
 #include "Snippets.h"
@@ -1485,6 +1486,18 @@ static BOOL CALLBACK DlgProcedure(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 		{
 			OnClose(hWnd);
 			g_Options->SetShowConsoleDlg(s_bConsoleVisible);
+			break;
+		}
+
+		case WM_NOTIFY:
+		{
+			LPNMHDR	pnmh = reinterpret_cast<LPNMHDR>(lParam);
+			if (LOWORD(pnmh->code) == DMN_CLOSE)
+			{
+				SendMessage(g_nppData._nppHandle, NPPM_DMMHIDE, 0, (LPARAM) s_hDlg);
+				SendMessage(g_nppData._nppHandle, NPPM_SETMENUITEMCHECK, (WPARAM) g_funcItem[0]._cmdID, (LPARAM) FALSE);
+				s_bConsoleVisible = false;
+			}
 			break;
 		}
 
